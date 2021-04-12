@@ -18,6 +18,12 @@ namespace WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(
+                    (hostingContext, builder) =>
+                    {
+                        builder.AddFile("../../../../../Logs/log-{Date}.txt"); // the hardcoded path will be replaced with the value from the configuration in the nearest future
+                    }
+                )
                 .ConfigureWebHostDefaults(
                     webBuilder =>
                     {
