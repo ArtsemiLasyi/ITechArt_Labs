@@ -21,7 +21,7 @@ namespace WebAPI
                 .ConfigureLogging(
                     (hostingContext, builder) =>
                     {
-                        builder.AddFile("../../temp/log-{Date}.txt");
+                        builder.AddFile("../../../../../Logs/log-{Date}.txt"); // the hardcoded path will be replaced with the value from the configuration in the nearest future
                     }
                 )
                 .ConfigureWebHostDefaults(
