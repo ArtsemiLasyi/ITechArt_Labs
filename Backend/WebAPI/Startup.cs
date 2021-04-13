@@ -27,17 +27,12 @@ namespace WebAPI
                     builder.AddFile(Configuration.GetSection("Logging"));
                 }
             );
-            services.AddSpaStaticFiles(
-                configuration =>
-                {
-                    configuration.RootPath = Configuration.GetSection("Frontend:RootPath").Value;
-                }
-            );
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
+            IApplicationBuilder app,
             IWebHostEnvironment env)
         {
 
@@ -53,6 +48,16 @@ namespace WebAPI
                 app.UseSpaStaticFiles();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseCors(
+                builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("Frontend:Host").Value);
+                }
+            );
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -62,20 +67,6 @@ namespace WebAPI
                     endpoints =>
                     {
                         endpoints.MapControllers();
-                    }
-                );
-
-            app
-                .UseSpa(
-                    spa =>
-                    {
-
-                        spa.Options.SourcePath = Configuration.GetSection("Frontend:SourcePath").Value;
-
-                        if (env.IsDevelopment())
-                        {
-                            spa.UseAngularCliServer(npmScript: "start");
-                        }
                     }
                 );
         }
