@@ -44,7 +44,7 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
 
-            string staticContentPath = Configuration.GetSection("Frontend:RootPath").Value;
+            string staticContentPath = Path.Combine(env.ContentRootPath, Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
             DefaultFilesOptions options = new()
@@ -65,7 +65,7 @@ namespace WebAPI
             app.UseCors(
                 builder =>
                 {
-                    builder.WithOrigins(Configuration.GetSection("Cors:AllowedOrigins").Value);
+                    builder.WithOrigins(Configuration.GetSection("Cors:AllowedOrigins:0").Value);
                 }
             );
 
