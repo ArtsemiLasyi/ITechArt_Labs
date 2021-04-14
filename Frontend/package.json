@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.json",
-    "build": "ng build --prod --output-path ../Backend/WebAPI/wwwroot"
+    "start": "ng serve",
+    "build": "ng build"
   },
   "private": true,
   "dependencies": {

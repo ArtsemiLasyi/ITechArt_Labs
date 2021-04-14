@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace WebAPI
 {
@@ -43,18 +44,28 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
 
-            if (!env.IsDevelopment())
+            string staticContentPath = Configuration.GetSection("Frontend:RootPath").Value;
+            IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
+
+            DefaultFilesOptions options = new()
             {
-                app.UseSpaStaticFiles();
-            }
+                FileProvider = fileProvider
+            };
+            options.DefaultFileNames.Clear();
+            options.DefaultFileNames.Add("index.html");
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(
+                new StaticFileOptions
+                {
+                    FileProvider = fileProvider
+                }
+            );
 
             app.UseCors(
                 builder =>
                 {
-                    builder.WithOrigins(Configuration.GetSection("Frontend:Host").Value);
+                    builder.WithOrigins(Configuration.GetSection("Cors:AllowedOrigins").Value);
                 }
             );
 
