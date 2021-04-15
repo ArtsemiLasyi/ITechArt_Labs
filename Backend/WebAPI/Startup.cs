@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace WebAPI
@@ -62,10 +64,21 @@ namespace WebAPI
                 }
             );
 
+            var originsSection = Configuration.GetSection("Cors:AllowedOrigins").AsEnumerable();
+            string[] originsArray = new string[0];
+            foreach(var origin in originsSection)
+            {
+                if (origin.Value != null)
+                {
+                    Array.Resize(ref originsArray, originsArray.Length + 1);
+                    originsArray[originsArray.Length - 1] = origin.Value;
+                }
+            }
+
             app.UseCors(
                 builder =>
                 {
-                    builder.WithOrigins(Configuration.GetSection("Cors:AllowedOrigins:0").Value);
+                    builder.WithOrigins(originsArray);
                 }
             );
 
