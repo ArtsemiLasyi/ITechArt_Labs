@@ -64,16 +64,7 @@ namespace WebAPI
                 }
             );
 
-            var originsSection = Configuration.GetSection("Cors:AllowedOrigins").AsEnumerable();
-            string[] originsArray = new string[0];
-            foreach(var origin in originsSection)
-            {
-                if (origin.Value != null)
-                {
-                    Array.Resize(ref originsArray, originsArray.Length + 1);
-                    originsArray[originsArray.Length - 1] = origin.Value;
-                }
-            }
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();          
 
             app.UseCors(
                 builder =>
