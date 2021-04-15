@@ -44,7 +44,7 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
 
-            string staticContentPath = Path.Combine(env.ContentRootPath, Configuration.GetSection("Frontend:RootPath").Value);
+            string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
             DefaultFilesOptions options = new()
@@ -54,7 +54,7 @@ namespace WebAPI
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("index.html");
 
-            app.UseDefaultFiles();
+            app.UseDefaultFiles(options);
             app.UseStaticFiles(
                 new StaticFileOptions
                 {
