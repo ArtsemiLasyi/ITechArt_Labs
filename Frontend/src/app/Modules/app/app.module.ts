@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from '../../Components/app/app.component';
 
+import * as Config from '../../../../config.json';
+
 @NgModule({
   declarations: [
     AppComponent
