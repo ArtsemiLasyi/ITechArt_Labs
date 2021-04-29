@@ -11,8 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Contexts;
 using System.Text;
+using WebAPI.DAL.Contexts;
+using WebAPI.BBL.Interfaces;
+using WebAPI.BBL.Services;
+using WebAPI.DAL.Interfaces;
+using WebAPI.DAL.Repositories;
 
 namespace WebAPI
 {
@@ -28,6 +32,8 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddControllers();
             services.AddLogging(
                 builder =>
@@ -57,8 +63,8 @@ namespace WebAPI
             services.AddControllersWithViews();
             services.AddCors();
 
-            services.AddDbContext<UsersContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("UsersContext")));
+            services.AddDbContext<CinemabooContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

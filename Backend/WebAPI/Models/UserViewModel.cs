@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    public class User
+    public class UserViewModel
     {
         public int Id { get; set; }
 
