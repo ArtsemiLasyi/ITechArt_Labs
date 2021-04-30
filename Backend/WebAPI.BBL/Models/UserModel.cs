@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebAPI.BBL.DTOs
+namespace BusinessLogic.Models
 {
-    public class UserDTO
+    public class UserModel
     {
         public int Id { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
     }
 }

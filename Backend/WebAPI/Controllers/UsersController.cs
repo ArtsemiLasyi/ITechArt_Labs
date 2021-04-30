@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WebAPI.BBL.DTOs;
-using WebAPI.BBL.Interfaces;
-using WebAPI.DAL.Contexts;
+using BusinessLogic.Models;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -20,7 +21,7 @@ namespace WebAPI.Controllers
     [Route("/users")]
     public class UsersController : Controller
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
         
         public UsersController(IUserService service)
@@ -31,7 +32,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int? id)
         {
-            UserDTO user = _userService.GetUser(id);
+            UserModel user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
@@ -43,13 +44,12 @@ namespace WebAPI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserViewModel user)
         {
-            UserDTO userDto = new UserDTO
+            UserModel userModel = new UserModel
             {
                 Id = user.Id,
-                Email = user.Email,
-                Password = user.Password
+                Email = user.Email
             };
-            _userService.EditUser(userDto);
+            _userService.EditUser(userModel, user.Password);
             return Ok();
         }
 
@@ -57,15 +57,13 @@ namespace WebAPI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            UserDTO user = _userService.GetUser(id);
+            UserModel user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
             _userService.DeleteUser(id);
             return Ok();
-        }
-
-       
+        }    
     }
 }

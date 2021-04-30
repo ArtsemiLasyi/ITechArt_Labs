@@ -12,11 +12,11 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using WebAPI.DAL.Contexts;
-using WebAPI.BBL.Interfaces;
-using WebAPI.BBL.Services;
-using WebAPI.DAL.Interfaces;
-using WebAPI.DAL.Repositories;
+using DataAccess.Contexts;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+using DataAccess.Interfaces;
+using DataAccess.Repositories;
 
 namespace WebAPI
 {
@@ -32,6 +32,7 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IAuthentificationService, AuthentificationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddControllers();
@@ -42,29 +43,35 @@ namespace WebAPI
                 }
             );
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        string key = Configuration.GetSection("JWTToken:Key").Value;
-                        options.TokenValidationParameters = new TokenValidationParameters
+                    .AddJwtBearer(
+                        options =>
                         {
-                            ValidateIssuer = true,
-                            ValidIssuer = Configuration.GetSection("JWTToken:Issuer").Value,
+                            options.RequireHttpsMetadata = false;
+                            string key = Configuration.GetSection("JWTToken:Key").Value;
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidIssuer = Configuration.GetSection("JWTToken:Issuer").Value,
 
-                            ValidateAudience = true,
-                            ValidAudience = Configuration.GetSection("JWTToken:Audience").Value,
+                                ValidateAudience = true,
+                                ValidAudience = Configuration.GetSection("JWTToken:Audience").Value,
 
-                            ValidateLifetime = true,
+                                ValidateLifetime = true,
 
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                            ValidateIssuerSigningKey = true,
-                        };
-                    });
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                                ValidateIssuerSigningKey = true,
+                            };
+                        }
+                    );
             services.AddControllersWithViews();
             services.AddCors();
 
-            services.AddDbContext<CinemabooContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext")));
+            services.AddDbContext<CinemabooContext>(
+                options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

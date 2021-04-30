@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebAPI.BBL.DTOs;
+using BusinessLogic.Models;
 
-namespace WebAPI.BBL.Interfaces
+namespace BusinessLogic.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
-        void SignUpUser(UserDTO userDto);
-        bool SignInUser(UserDTO userDto);
-        UserDTO GetUser(int? id);
-        IEnumerable<UserDTO> GetUsers();
+        UserModel GetUser(int? id);
+        IEnumerable<UserModel> GetUsers();
         bool DeleteUser(int? id);
-        bool EditUser(UserDTO userDto);
-        void Dispose();
+        bool EditUser(UserModel user, string password);
     }
 }

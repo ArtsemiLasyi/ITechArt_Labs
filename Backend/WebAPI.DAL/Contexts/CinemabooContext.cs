@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebAPI.DAL.Contexts
+namespace DataAccess.Contexts
 {
     public class CinemabooContext : DbContext
     {
@@ -13,8 +13,8 @@ namespace WebAPI.DAL.Contexts
         {
         }
 
-        public DbSet<WebAPI.DAL.Entities.UserEntity> Users { get; set; }
+        public DbSet<DataAccess.Entities.UserEntity> Users { get; set; }
 
-        public DbSet<WebAPI.DAL.Entities.UserRoleEntity> UserRoles { get; set; }
+        public DbSet<DataAccess.Entities.UserRoleEntity> UserRoles { get; set; }
     }
 }

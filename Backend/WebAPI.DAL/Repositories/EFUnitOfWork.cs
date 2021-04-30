@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebAPI.DAL.Contexts;
-using WebAPI.DAL.Entities;
-using WebAPI.DAL.Interfaces;
+using DataAccess.Contexts;
+using DataAccess.Entities;
+using DataAccess.Interfaces;
 
-namespace WebAPI.DAL.Repositories
+namespace DataAccess.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private CinemabooContext _context;
+        private readonly CinemabooContext _context;
         private EFUserRepository userRepository;
         private bool _disposed = false;
 
@@ -20,12 +20,15 @@ namespace WebAPI.DAL.Repositories
         {
             _context = new CinemabooContext(options);
         }
+
         public IRepository<UserEntity> Users
         {
             get
             {
                 if (userRepository == null)
+                {
                     userRepository = new EFUserRepository(_context);
+                }
                 return userRepository;
             }
         }

@@ -1,69 +1,25 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using WebAPI.BBL.BusinessModels;
-using WebAPI.BBL.DTOs;
-using WebAPI.BBL.Interfaces;
-using WebAPI.DAL.Entities;
-using WebAPI.DAL.Interfaces;
+using BusinessLogic.Utils;
+using BusinessLogic.Models;
+using BusinessLogic.Interfaces;
+using DataAccess.Entities;
+using DataAccess.Interfaces;
+using Mapster;
 
-namespace WebAPI.BBL.Services
+namespace BusinessLogic.Services
 {
     public class UserService : IUserService
     {
-        IUnitOfWork Database { get; set; }
+        private IUnitOfWork Database { get; set; }
 
         public UserService(IUnitOfWork unitofwork)
         {
             Database = unitofwork;
-        }
-
-        public bool SignInUser(UserDTO userDto)
-        {
-            SHA256 mySHA256 = SHA256.Create();
-
-            UserEntity userEntity = Database.Users.FindFirst(
-                user =>
-                {
-                    return user.Email == userDto.Email;
-                }
-            );
-            if (userEntity == null)
-            {
-                return false;
-            }
-
-            string salt = userEntity.Salt;
-            byte[] bytePassword = Encoding.ASCII.GetBytes(userDto.Password + salt);
-            byte[] hashValue = mySHA256.ComputeHash(bytePassword);
-
-            bool equal = AuthentificationUtils.CompareHashes(
-                hashValue, 
-                userEntity.PasswordHash
-            );
-            return equal;
-        }
-
-        public void SignUpUser(UserDTO userDto)
-        {
-            SHA256 mySHA256 = SHA256.Create();
-            byte[] salt = AuthentificationUtils.GenerateSalt();
-            string saltStr = Encoding.Unicode.GetString(salt);
-            byte[] bytePassword = Encoding.ASCII.GetBytes(userDto.Password + salt);
-            byte[] hashValue = mySHA256.ComputeHash(bytePassword);
-
-            UserEntity userEntity = new UserEntity
-            {
-                Email = userDto.Email,
-                PasswordHash = hashValue,
-                Salt = saltStr,
-                RoleId = (int)UserRoleDTO.CommonUser
-            };
-            Database.Users.Create(userEntity);
         }
 
         public void Dispose()
@@ -71,30 +27,24 @@ namespace WebAPI.BBL.Services
             Database.Dispose();
         }
 
-        public UserDTO GetUser(int? id)
+        public UserModel GetUser(int? id)
         {
             UserEntity user = Database.Users.FindFirst(user => id == user.Id);
             if (user == null)
             {
                 return null;
             }
-            return new UserDTO { Id = user.Id, Email = user.Email };
+            return new UserModel { Id = user.Id, Email = user.Email };
         }
 
-        public IEnumerable<UserDTO> GetUsers()
+        public IEnumerable<UserModel> GetUsers()
         {
-            IMapper mapper = new MapperConfiguration(
-                cfg =>
-                { 
-                    cfg.CreateMap<UserEntity, UserDTO>();
-                }
-            ).CreateMapper();
-            return mapper.Map<IEnumerable<UserEntity>, List<UserDTO>>(Database.Users.GetAll());
+            return Database.Users.GetAll().Adapt<IEnumerable<UserModel>>();
         }
 
-        bool IUserService.DeleteUser(int? id)
+        public bool DeleteUser(int? id)
         {
-            UserDTO user = GetUser(id);
+            UserModel user = GetUser(id);
             if (user == null)
             {
                 return false;
@@ -103,20 +53,20 @@ namespace WebAPI.BBL.Services
             return true;
         }
 
-        bool IUserService.EditUser(UserDTO userDto)
+        public bool EditUser(UserModel user, string password)
         {
             SHA256 mySHA256 = SHA256.Create();
             byte[] salt = AuthentificationUtils.GenerateSalt();
             string saltStr = Encoding.Unicode.GetString(salt);
-            byte[] bytePassword = Encoding.ASCII.GetBytes(userDto.Password + salt);
+            byte[] bytePassword = Encoding.ASCII.GetBytes(password + salt);
             byte[] hashValue = mySHA256.ComputeHash(bytePassword);
 
             UserEntity userEntity = new UserEntity
             {
-                Email = userDto.Email,
+                Email = user.Email,
                 PasswordHash = hashValue,
                 Salt = saltStr,
-                RoleId = (int)UserRoleDTO.CommonUser
+                RoleId = (int)UserRoleModel.CommonUser
             };
             Database.Users.Update(userEntity);
             return true;

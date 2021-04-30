@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.DAL.Entities
+namespace DataAccess.Entities
 {
     public class UserEntity
     {

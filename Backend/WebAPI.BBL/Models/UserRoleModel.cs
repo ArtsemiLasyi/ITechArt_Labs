@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.BBL.DTOs
+namespace BusinessLogic.Models
 {
-    public enum UserRoleDTO
+    public enum UserRoleModel
     {
-        Administrator = 1,
-        CommonUser = 2
+        CommonUser = 0,
+        Administrator = 1
     }
 }

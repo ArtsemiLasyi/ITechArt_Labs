@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebAPI.DAL.Contexts;
-using WebAPI.DAL.Entities;
-using WebAPI.DAL.Interfaces;
+using DataAccess.Contexts;
+using DataAccess.Entities;
+using DataAccess.Interfaces;
 
-namespace WebAPI.DAL.Repositories
+namespace DataAccess.Repositories
 {
     public class EFUserRepository : IRepository<Entities.UserEntity>
     {

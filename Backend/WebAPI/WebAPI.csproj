@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebAPI.BBL\WebAPI.BBL.csproj" />
-    <ProjectReference Include="..\WebAPI.DAL\WebAPI.DAL.csproj" />
+    <ProjectReference Include="..\WebAPI.BBL\BusinessLogic.csproj" />
+    <ProjectReference Include="..\WebAPI.DAL\DataAccess.csproj" />
   </ItemGroup>
 
 

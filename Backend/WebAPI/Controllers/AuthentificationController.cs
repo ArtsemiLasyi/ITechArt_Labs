@@ -5,52 +5,50 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using WebAPI.BBL.DTOs;
-using WebAPI.BBL.Interfaces;
-using WebAPI.DAL.Contexts;
+using BusinessLogic.Models;
+using DataAccess.Contexts;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("/users")]
+    [Route("/authentification")]
     public class AuthentificationController : Controller
     {
-        private IUserService userService;
+        private readonly IAuthentificationService authentificationService;
         private readonly ILogger<UsersController> _logger;
 
-        public AuthentificationController(IUserService service)
+        public AuthentificationController(IAuthentificationService service)
         {
-            userService = service;
+            authentificationService = service;
         }
 
         [HttpPost("/signup")]
         public async Task<IActionResult> SignUp(UserViewModel user)
         {
-            UserDTO userDto = new UserDTO
+            AuthentificationModel model = new AuthentificationModel
             {
-                Id = user.Id,
                 Email = user.Email,
                 Password = user.Password
             };
-            userService.SignUpUser(userDto);
+            authentificationService.SignUp(model);
             return Ok();
         }
 
         [HttpPost("/signin")]
         public async Task<IActionResult> SignIn(UserViewModel user)
         {
-            UserDTO userDto = new UserDTO
+            AuthentificationModel model = new AuthentificationModel
             {
-                Id = user.Id,
                 Email = user.Email,
                 Password = user.Password
             };
-            if (!userService.SignInUser(userDto))
+            if (!authentificationService.SignIn(model))
             {
                 return BadRequest(new { errortext = "Invalid email or password!" });
             }
