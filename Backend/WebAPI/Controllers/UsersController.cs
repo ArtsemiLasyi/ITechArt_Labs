@@ -42,14 +42,14 @@ namespace WebAPI.Controllers
 
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserViewModel user)
+        public async Task<IActionResult> Edit(UserViewModel user, string password)
         {
             UserModel userModel = new UserModel
             {
                 Id = user.Id,
                 Email = user.Email
             };
-            _userService.EditUser(userModel, user.Password);
+            _userService.EditUser(userModel, password);
             return Ok();
         }
 

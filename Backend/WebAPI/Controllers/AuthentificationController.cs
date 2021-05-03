@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("/signup")]
-        public async Task<IActionResult> SignUp(UserViewModel user)
+        public async Task<IActionResult> SignUp(AuthentificationViewModel user)
         {
             AuthentificationModel model = new AuthentificationModel
             {
@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("/signin")]
-        public async Task<IActionResult> SignIn(UserViewModel user)
+        public async Task<IActionResult> SignIn(AuthentificationViewModel user)
         {
             AuthentificationModel model = new AuthentificationModel
             {
