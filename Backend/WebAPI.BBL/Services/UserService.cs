@@ -1,35 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using BusinessLogic.Utils;
 using BusinessLogic.Models;
-using BusinessLogic.Interfaces;
 using DataAccess.Entities;
-using DataAccess.Interfaces;
 using Mapster;
+using DataAccess.Repositories;
 
 namespace BusinessLogic.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
-        private IUnitOfWork Database { get; set; }
+        private readonly UserRepository _userRepository;
 
-        public UserService(IUnitOfWork unitofwork)
+        public UserService(UserRepository userRepository)
         {
-            Database = unitofwork;
-        }
-
-        public void Dispose()
-        {
-            Database.Dispose();
+            _userRepository = userRepository;
         }
 
         public UserModel GetUser(int? id)
         {
-            UserEntity user = Database.Users.FindFirst(user => id == user.Id);
+            UserEntity user = _userRepository.FindFirst(
+                user =>
+                {
+                    return id == user.Id;
+                }
+            );
             if (user == null)
             {
                 return null;
@@ -39,7 +35,7 @@ namespace BusinessLogic.Services
 
         public IEnumerable<UserModel> GetUsers()
         {
-            return Database.Users.GetAll().Adapt<IEnumerable<UserModel>>();
+            return _userRepository.GetAll().Adapt<IEnumerable<UserModel>>();
         }
 
         public bool DeleteUser(int? id)
@@ -49,26 +45,23 @@ namespace BusinessLogic.Services
             {
                 return false;
             }
-            Database.Users.Delete(id.Value);
+            _userRepository.Delete(id.Value);
             return true;
         }
 
-        public bool EditUser(UserModel user, string password)
+        public async Task<bool> EditUser(AuthentificationModel model)
         {
-            SHA256 mySHA256 = SHA256.Create();
             byte[] salt = AuthentificationUtils.GenerateSalt();
-            string saltStr = Encoding.Unicode.GetString(salt);
-            byte[] bytePassword = Encoding.ASCII.GetBytes(password + salt);
-            byte[] hashValue = mySHA256.ComputeHash(bytePassword);
+            byte[] hash = AuthentificationUtils.ComputeHash(model.Password, salt);
 
             UserEntity userEntity = new UserEntity
             {
-                Email = user.Email,
-                PasswordHash = hashValue,
-                Salt = saltStr,
+                Email = model.Email,
+                PasswordHash = hash,
+                Salt = salt,
                 RoleId = (int)UserRoleModel.CommonUser
             };
-            Database.Users.Update(userEntity);
+            await _userRepository.Update(userEntity);
             return true;
         }
     }

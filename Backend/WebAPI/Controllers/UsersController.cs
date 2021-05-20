@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
-using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
+using Mapster;
 
 using WebAPI.Models;
 
@@ -19,37 +19,33 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("/users")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly UserService _userService;
         private readonly ILogger<UsersController> _logger;
         
-        public UsersController(IUserService service)
+        public UsersController(UserService service)
         {
             _userService = service;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int? id)
+        public async Task<IActionResult> Get(int id)
         {
             UserModel user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return Json(new UserViewModel { Id = user.Id, Email = user.Email });
+            return Ok(new UserViewModel { Id = user.Id, Email = user.Email });
         }
 
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserViewModel user, string password)
+        public async Task<IActionResult> Edit([FromBody] AuthentificationViewModel model)
         {
-            UserModel userModel = new UserModel
-            {
-                Id = user.Id,
-                Email = user.Email
-            };
-            _userService.EditUser(userModel, password);
+            AuthentificationModel authModel = model.Adapt<AuthentificationModel>();
+            _userService.EditUser(authModel);
             return Ok();
         }
 

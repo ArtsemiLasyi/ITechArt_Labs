@@ -6,20 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.Entities;
-using DataAccess.Interfaces;
 
 namespace DataAccess.Repositories
 {
-    public class EFUserRepository : IRepository<Entities.UserEntity>
+    public class UserRepository
     {
         private readonly CinemabooContext _context;
 
-        public EFUserRepository(CinemabooContext context)
+        public UserRepository(CinemabooContext context)
         {
             _context = context;
         }
 
-        public async void Create(UserEntity user)
+        public async Task Create(UserEntity user)
         {
             _context
                 .Users
@@ -27,12 +26,13 @@ namespace DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             UserEntity user = _context.Users.Find(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
             }
         }
 
@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
             return _context.Users;
         }
 
-        public async void Update(UserEntity user)
+        public async Task Update(UserEntity user)
         {
             _context.Update(user);
             await _context.SaveChangesAsync();

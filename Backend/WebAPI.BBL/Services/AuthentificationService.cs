@@ -1,68 +1,80 @@
-﻿using BusinessLogic.Interfaces;
-using BusinessLogic.Models;
+﻿using BusinessLogic.Models;
 using BusinessLogic.Utils;
+using DataAccess.Contexts;
 using DataAccess.Entities;
-using DataAccess.Interfaces;
+using DataAccess.Repositories;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 
 namespace BusinessLogic.Services
 {
-    public class AuthentificationService : IAuthentificationService
+    public class AuthentificationService
     {
-        private IUnitOfWork Database { get; set; }
+        private readonly UserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
-        public AuthentificationService(IUnitOfWork unitofwork)
+        public AuthentificationService(UserRepository userRepository, IConfiguration configuration)
         {
-            Database = unitofwork;
+            _userRepository = userRepository;
+            _configuration = configuration;
+        }
+
+        private UserEntity GetUserByEmail(string email)
+        {
+            UserEntity userEntity = _userRepository.FindFirst(
+                user =>
+                {
+                    return user.Email == email;
+                }
+            );
+            return userEntity;
         }
 
         public bool SignIn(AuthentificationModel model)
         {
-            SHA256 mySHA256 = SHA256.Create();
 
-            UserEntity userEntity = Database.Users.FindFirst(
-                user =>
-                {
-                    return user.Email == model.Email;
-                }
-            );
+            UserEntity userEntity = GetUserByEmail(model.Email);
             if (userEntity == null)
             {
                 return false;
             }
 
-            string salt = userEntity.Salt;
-            byte[] bytePassword = Encoding.ASCII.GetBytes(model.Password + salt);
-            byte[] hashValue = mySHA256.ComputeHash(bytePassword);
-
-            bool equal = AuthentificationUtils.CompareHashes(
-                hashValue,
-                userEntity.PasswordHash
-            );
+            byte[] hash = AuthentificationUtils.ComputeHash(model.Password, userEntity.Salt);
+            bool equal = Enumerable.SequenceEqual(hash, userEntity.PasswordHash);
+            UserModel userModel = userEntity.Adapt<UserModel>();
+            if (equal)
+            {
+                AuthentificationUtils.GenerateJwtToken(userModel, _configuration);
+            }
             return equal;
         }
 
-        public void SignUp(AuthentificationModel model)
+        public async Task<bool> SignUp(AuthentificationModel model)
         {
-            SHA256 mySHA256 = SHA256.Create();
-            byte[] salt = AuthentificationUtils.GenerateSalt();
-            string saltStr = Encoding.Unicode.GetString(salt);
-            byte[] bytePassword = Encoding.ASCII.GetBytes(model.Password + salt);
-            byte[] hashValue = mySHA256.ComputeHash(bytePassword);
+            UserEntity userEntity = GetUserByEmail(model.Email);
+            if (userEntity != null)
+            {
+                return false;
+            }
 
-            UserEntity userEntity = new UserEntity
+            byte[] salt = AuthentificationUtils.GenerateSalt();
+            byte[] hash = AuthentificationUtils.ComputeHash(model.Password, salt);
+
+            userEntity = new UserEntity
             {
                 Email = model.Email,
-                PasswordHash = hashValue,
-                Salt = saltStr,
+                PasswordHash = hash,
+                Salt = salt,
                 RoleId = (int)UserRoleModel.CommonUser
             };
-            Database.Users.Create(userEntity);
+            await _userRepository.Create(userEntity);
+            return true;
         }
     }
 }

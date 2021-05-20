@@ -13,9 +13,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using DataAccess.Contexts;
-using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
-using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
 namespace WebAPI
@@ -32,10 +30,11 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IAuthentificationService, AuthentificationService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
-            services.AddControllers();
+            services.AddTransient<AuthentificationService>();
+            services.AddTransient<UserService>();
+
+            services.AddTransient<UserRepository>();
+
             services.AddLogging(
                 builder =>
                 {
@@ -63,9 +62,8 @@ namespace WebAPI
                             };
                         }
                     );
-            services.AddControllersWithViews();
             services.AddCors();
-
+            services.AddControllers();
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
@@ -105,7 +103,7 @@ namespace WebAPI
                 }
             );
 
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();          
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
             app.UseCors(
                 builder =>
