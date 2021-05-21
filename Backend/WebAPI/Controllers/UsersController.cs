@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
-
-using WebAPI.Models;
+using WebAPI.Requests;
+using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
@@ -30,35 +22,40 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [ValidateAntiForgeryToken]
+        public IActionResult Get(int id)
         {
-            UserModel user = _userService.GetUser(id);
+            UserModel? user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(new UserViewModel { Id = user.Id, Email = user.Email });
+            return Ok(new UserResponse { Id = user.Id, Email = user.Email });
         }
 
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromBody] AuthentificationViewModel model)
+        public async Task<IActionResult> EditAsync(int id,[FromForm] UserRequest request)
         {
-            AuthentificationModel authModel = model.Adapt<AuthentificationModel>();
-            _userService.EditUser(authModel);
+            UserModel? user = _userService.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userService.EditUser(user, request.Password);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            UserModel user = _userService.GetUser(id);
+            UserModel? user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            _userService.DeleteUser(id);
+            await _userService.DeleteUser(id);
             return Ok();
         }    
     }

@@ -30,10 +30,11 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<AuthentificationService>();
-            services.AddTransient<UserService>();
+            services.AddScoped<SignInService>();
+            services.AddScoped<SignUpService>();
+            services.AddScoped<UserService>();
 
-            services.AddTransient<UserRepository>();
+            services.AddScoped<UserRepository>();
 
             services.AddLogging(
                 builder =>
@@ -46,14 +47,14 @@ namespace WebAPI
                         options =>
                         {
                             options.RequireHttpsMetadata = false;
-                            string key = Configuration.GetSection("JWTToken:Key").Value;
+                            string key = Configuration.GetSection("JwToken:Key").Value;
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
                                 ValidateIssuer = true,
-                                ValidIssuer = Configuration.GetSection("JWTToken:Issuer").Value,
+                                ValidIssuer = Configuration.GetSection("JwToken:Issuer").Value,
 
                                 ValidateAudience = true,
-                                ValidAudience = Configuration.GetSection("JWTToken:Audience").Value,
+                                ValidAudience = Configuration.GetSection("JwToken:Audience").Value,
 
                                 ValidateLifetime = true,
 

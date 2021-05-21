@@ -36,6 +36,14 @@ namespace DataAccess.Repositories
             }
         }
 
+        public UserEntity? GetByEmail(string email)
+        {
+            UserEntity? userEntity = _context.Users.FirstOrDefault(
+                user => user.Email == email
+            );
+            return userEntity;
+        }
+
         public IEnumerable<UserEntity> Find(Func<UserEntity, bool> predicate)
         {
             return _context

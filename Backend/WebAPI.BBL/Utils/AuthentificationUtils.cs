@@ -38,7 +38,7 @@ namespace BusinessLogic.Utils
         public static JwtSecurityToken GenerateJwtToken(UserModel userInfo, IConfiguration configuration)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-                Encoding.Unicode.GetBytes(configuration["JwtToken:Key"])
+                Encoding.Unicode.GetBytes(configuration["JwToken:Key"])
             );
             SigningCredentials credentials = new SigningCredentials(
                 securityKey,
@@ -57,10 +57,14 @@ namespace BusinessLogic.Utils
             };
 
             var token = new JwtSecurityToken(
-                configuration["JwtToken:Issuer"],
-                configuration["JwtToken:Audience"],
+                configuration["JwToken:Issuer"],
+                configuration["JwToken:Audience"],
                 claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)),
+                expires: DateTime.UtcNow.Add(
+                    TimeSpan.Parse(
+                        configuration.GetSection("JwToken:LifetimeMinutes").Value
+                    )
+                ),
                 signingCredentials: credentials
             );
             return token;

@@ -18,7 +18,7 @@ namespace BusinessLogic.Services
             _userRepository = userRepository;
         }
 
-        public UserModel GetUser(int? id)
+        public UserModel? GetUser(int id)
         {
             UserEntity user = _userRepository.FindFirst(
                 user =>
@@ -38,28 +38,27 @@ namespace BusinessLogic.Services
             return _userRepository.GetAll().Adapt<IEnumerable<UserModel>>();
         }
 
-        public bool DeleteUser(int? id)
+        public async Task<bool> DeleteUser(int id)
         {
-            UserModel user = GetUser(id);
+            UserModel? user = GetUser(id);
             if (user == null)
             {
                 return false;
             }
-            _userRepository.Delete(id.Value);
+            await _userRepository.Delete(id);
             return true;
         }
 
-        public async Task<bool> EditUser(AuthentificationModel model)
+        public async Task<bool> EditUser(UserModel model, string password)
         {
             byte[] salt = AuthentificationUtils.GenerateSalt();
-            byte[] hash = AuthentificationUtils.ComputeHash(model.Password, salt);
+            byte[] hash = AuthentificationUtils.ComputeHash(password, salt);
 
             UserEntity userEntity = new UserEntity
             {
                 Email = model.Email,
                 PasswordHash = hash,
-                Salt = salt,
-                RoleId = (int)UserRoleModel.CommonUser
+                Salt = salt
             };
             await _userRepository.Update(userEntity);
             return true;

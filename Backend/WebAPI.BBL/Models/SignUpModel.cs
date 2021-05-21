@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Models
 {
-    public class UserModel
+    public class SignUpModel
     {
-        public int Id { get; set; }
         public string Email { get; set; }
-        public UserRoleModel Role { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.Models
+namespace WebAPI.Requests
 {
-    public class AuthentificationViewModel
+    public class SignUpRequest
     {
-        [EmailAddress(ErrorMessage = "Invalid address")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password mustn't be empty")]
+        [Required(ErrorMessage = "Password must not be empty")]
         public string Password { get; set; }
     }
 }

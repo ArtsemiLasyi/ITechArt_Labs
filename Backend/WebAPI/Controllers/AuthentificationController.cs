@@ -6,14 +6,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
-using DataAccess.Contexts;
-using WebAPI.Models;
+using WebAPI.Requests;
 using Mapster;
 using BusinessLogic.Services;
+using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
@@ -21,34 +19,49 @@ namespace WebAPI.Controllers
     [Route("/account")]
     public class AuthentificationController : ControllerBase
     {
-        private readonly AuthentificationService authentificationService;
+        private readonly SignInService _signInService;
+        private readonly SignUpService _signUpService;
         private readonly ILogger<UsersController> _logger;
 
-        public AuthentificationController(AuthentificationService service)
+        public AuthentificationController(
+            SignInService signin,
+            SignUpService signup)
         {
-            authentificationService = service;
+            _signInService = signin;
+            _signUpService = signup;
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromForm] AuthentificationViewModel user)
+        public IActionResult SignUp([FromForm] SignUpRequest request)
         { 
-            AuthentificationModel model = user.Adapt<AuthentificationModel>();
-            if (!authentificationService.SignUp(model).Result)
+            SignUpModel model = request.Adapt<SignUpModel>();
+            if (!_signUpService.SignUp(model).Result)
             {
-                return BadRequest(new { errortext = "User is already exists!" });
+                return Unauthorized(new { errortext = "User is already exists!" });
             }
             return Ok();
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromForm] AuthentificationViewModel user)
+        public IActionResult SignIn([FromForm] SignInRequest request)
         {
-            AuthentificationModel model = user.Adapt<AuthentificationModel>();
-            if (!authentificationService.SignIn(model))
+            SignInModel model = request.Adapt<SignInModel>();
+            (bool, string) tuple = _signInService.SignIn(model);
+            if (!tuple.Item1)
             {
-                return BadRequest(new { errortext = "Invalid email or password!" });
+                return Unauthorized(new { errortext = "Invalid email or password!" });
             }
+            Response.Cookies.Append(
+                "token",
+                tuple.Item2,
+                new Microsoft.AspNetCore.Http.CookieOptions 
+                { 
+                    HttpOnly = true 
+                }
+            );
             return Ok();
         }
     }
 }
+
+
