@@ -44,11 +44,12 @@ namespace DataAccess.Repositories
             return userEntity;
         }
 
-        public IEnumerable<UserEntity> Find(Func<UserEntity, bool> predicate)
+        public UserEntity? GetById(int id)
         {
-            return _context
-                .Users
-                .Where(predicate);
+            UserEntity? userEntity = _context.Users.FirstOrDefault(
+                user => user.Id == id
+            );
+            return userEntity;
         }
 
         public UserEntity Get(int id)
@@ -62,13 +63,6 @@ namespace DataAccess.Repositories
         {
             _context.Update(user);
             await _context.SaveChangesAsync();
-        }
-
-        public UserEntity FindFirst(Func<UserEntity, bool> predicate)
-        {
-            return _context
-                .Users
-                .FirstOrDefault(predicate);
         }
     }
 }

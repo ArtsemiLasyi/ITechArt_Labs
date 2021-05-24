@@ -11,7 +11,7 @@ namespace WebAPI.Requests
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password must not be empty")]
+        [MinLength(6, ErrorMessage = "Password must not be less than 6 symbols")]
         public string Password { get; set; }
     }
 }

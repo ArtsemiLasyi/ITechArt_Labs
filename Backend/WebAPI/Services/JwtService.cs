@@ -1,44 +1,37 @@
 ﻿using BusinessLogic.Models;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic.Utils
+namespace WebAPI.Services
 {
-    public static class AuthentificationUtils
+    public class JwtService
     {
-        public static readonly int SALT_LENGTH = 20;
+        private readonly IConfiguration _configuration;
 
-        public static byte[] GenerateSalt()
+        public JwtService(IConfiguration configuration)
         {
-            RNGCryptoServiceProvider rncCsp = new RNGCryptoServiceProvider();
-            byte[] salt = new byte[20];
-            rncCsp.GetBytes(salt);
-            rncCsp.Dispose();
-            return salt;
+            _configuration = configuration;
         }
 
-        public static byte[] ComputeHash(string password, byte[] salt)
+        public string GetJwToken(UserModel userInfo)
         {
-            SHA256 mySHA256 = SHA256.Create();
-            byte[] passwordByte = Encoding.ASCII.GetBytes(password);
-            byte[] passwordWithSalt = passwordByte.Concat(salt).ToArray();
-            byte[] hash = mySHA256.ComputeHash(passwordWithSalt);
-            mySHA256.Dispose();
-            return hash;
+            JwtSecurityToken jwtSecurityToken = GenerateJwtToken(userInfo);
+            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        public static JwtSecurityToken GenerateJwtToken(UserModel userInfo, IConfiguration configuration)
+
+
+        private JwtSecurityToken GenerateJwtToken(UserModel userInfo)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-                Encoding.Unicode.GetBytes(configuration["JwToken:Key"])
+                Encoding.Unicode.GetBytes(_configuration["JwToken:Key"])
             );
             SigningCredentials credentials = new SigningCredentials(
                 securityKey,
@@ -58,12 +51,12 @@ namespace BusinessLogic.Utils
             };
 
             JwtSecurityToken? token = new JwtSecurityToken(
-                configuration["JwToken:Issuer"],
-                configuration["JwToken:Audience"],
+                _configuration["JwToken:Issuer"],
+                _configuration["JwToken:Audience"],
                 claims,
                 expires: DateTime.UtcNow.Add(
                     TimeSpan.Parse(
-                        configuration.GetSection("JwToken:LifetimeMinutes").Value
+                        _configuration.GetSection("JwToken:LifetimeMinutes").Value          // Will be optimized
                     )
                 ),
                 signingCredentials: credentials

@@ -8,6 +8,7 @@ namespace WebAPI.Requests
 {
     public class UserRequest
     {
-        public string Password { get; set; }
+        [MinLength(6, ErrorMessage = "Password must not be less than 6 symbols")]
+        public string? Password { get; set; }
     }
 }

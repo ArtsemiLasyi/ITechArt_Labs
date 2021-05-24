@@ -14,11 +14,13 @@ namespace WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly PasswordService _passwordService;
         private readonly ILogger<UsersController> _logger;
         
-        public UsersController(UserService service)
+        public UsersController(UserService userService, PasswordService passwordService)
         {
-            _userService = service;
+            _userService = userService;
+            _passwordService = passwordService;
         }
 
         [HttpGet("{id}")]
@@ -30,19 +32,28 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(new UserResponse { Id = user.Id, Email = user.Email });
+            return Ok(
+                new UserResponse
+                {
+                    Id = user.Id,
+                    Email = user.Email 
+                }
+            );
         }
 
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,[FromForm] UserRequest request)
+        public async Task<IActionResult> Edit(int id, [FromForm] UserRequest request)
         {
             UserModel? user = _userService.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            await _userService.EditUser(user, request.Password);
+            if (request.Password != null)
+            {
+                await _passwordService.SetPassword(id, request.Password);
+            }
             return Ok();
         }
 

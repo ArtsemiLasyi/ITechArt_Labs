@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.Models;
-using BusinessLogic.Utils;
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using System;
@@ -13,10 +12,17 @@ namespace BusinessLogic.Services
     public class SignUpService
     {
         private readonly UserRepository _userRepository;
+        private readonly PasswordRepository _passwordRepository;
+        private readonly PasswordService _passwordService;
 
-        public SignUpService(UserRepository userRepository)
+        public SignUpService(
+            UserRepository userRepository,
+            PasswordRepository passwordRepository,
+            PasswordService passwordService)
         {
             _userRepository = userRepository;
+            _passwordRepository = passwordRepository;
+            _passwordService = passwordService;
         }
 
         public async Task<bool> SignUpAsync(SignUpModel model)
@@ -27,17 +33,22 @@ namespace BusinessLogic.Services
                 return false;
             }
 
-            byte[] salt = AuthentificationUtils.GenerateSalt();
-            byte[] hash = AuthentificationUtils.ComputeHash(model.Password, salt);
+            PasswordModel passwordModel = _passwordService.GetPasswordModel(model.Password);
 
             userEntity = new UserEntity
             {
                 Email = model.Email,
-                PasswordHash = hash,
-                Salt = salt,
                 RoleId = (int)UserRoleModel.CommonUser
             };
+            UserPasswordEntity passwordEntity = new UserPasswordEntity
+            {
+                UserId = userEntity.Id,
+                PasswordHash = passwordModel.PasswordHash,
+                Salt = passwordModel.Salt
+            };
+
             await _userRepository.CreateAsync(userEntity);
+            await _passwordRepository.CreateAsync(passwordEntity);
             return true;
         }
     }

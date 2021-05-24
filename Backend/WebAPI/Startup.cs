@@ -15,6 +15,7 @@ using System.Text;
 using DataAccess.Contexts;
 using BusinessLogic.Services;
 using DataAccess.Repositories;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -33,8 +34,12 @@ namespace WebAPI
             services.AddScoped<SignInService>();
             services.AddScoped<SignUpService>();
             services.AddScoped<UserService>();
+            services.AddScoped<PasswordService>();
 
             services.AddScoped<UserRepository>();
+            services.AddScoped<PasswordRepository>();
+
+            services.AddSingleton<JwtService>();
 
             services.AddLogging(
                 builder =>

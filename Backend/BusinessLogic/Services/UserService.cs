@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BusinessLogic.Utils;
 using BusinessLogic.Models;
 using DataAccess.Entities;
 using Mapster;
@@ -20,12 +19,16 @@ namespace BusinessLogic.Services
 
         public UserModel? GetUser(int id)
         {
-            UserEntity user = _userRepository.FindFirst(user => id == user.Id);
+            UserEntity? user = _userRepository.GetById(id);
             if (user == null)
             {
                 return null;
             }
-            return new UserModel { Id = user.Id, Email = user.Email };
+            return new UserModel 
+            { 
+                Id = user.Id,
+                Email = user.Email
+            };
         }
 
         public async Task<bool> DeleteUser(int id)
@@ -39,16 +42,11 @@ namespace BusinessLogic.Services
             return true;
         }
 
-        public async Task<bool> EditUser(UserModel model, string password)
+        public async Task<bool> EditUser(UserModel model)
         {
-            byte[] salt = AuthentificationUtils.GenerateSalt();
-            byte[] hash = AuthentificationUtils.ComputeHash(password, salt);
-
             UserEntity userEntity = new UserEntity
             {
-                Email = model.Email,
-                PasswordHash = hash,
-                Salt = salt
+                Email = model.Email
             };
             await _userRepository.UpdateAsync(userEntity);
             return true;
