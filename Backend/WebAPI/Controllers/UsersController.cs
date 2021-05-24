@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
 
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(int id,[FromForm] UserRequest request)
+        public async Task<IActionResult> Edit(int id,[FromForm] UserRequest request)
         {
             UserModel? user = _userService.GetUser(id);
             if (user == null)
@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
 
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             UserModel? user = _userService.GetUser(id);
             if (user == null)

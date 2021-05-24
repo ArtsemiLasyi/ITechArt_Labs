@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task Create(UserEntity user)
+        public async Task CreateAsync(UserEntity user)
         {
             _context
                 .Users
@@ -26,7 +26,7 @@ namespace DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             UserEntity user = _context.Users.Find(id);
             if (user != null)
@@ -58,12 +58,7 @@ namespace DataAccess.Repositories
                 .Find(id);
         }
 
-        public IEnumerable<UserEntity> GetAll()
-        {
-            return _context.Users;
-        }
-
-        public async Task Update(UserEntity user)
+        public async Task UpdateAsync(UserEntity user)
         {
             _context.Update(user);
             await _context.SaveChangesAsync();

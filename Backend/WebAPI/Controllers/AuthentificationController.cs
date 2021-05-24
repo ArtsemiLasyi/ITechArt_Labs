@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         public IActionResult SignUp([FromForm] SignUpRequest request)
         { 
             SignUpModel model = request.Adapt<SignUpModel>();
-            if (!_signUpService.SignUp(model).Result)
+            if (!_signUpService.SignUpAsync(model).Result)
             {
                 return Unauthorized(new { errortext = "User is already exists!" });
             }

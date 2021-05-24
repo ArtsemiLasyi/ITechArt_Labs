@@ -49,14 +49,15 @@ namespace BusinessLogic.Utils
             {
                 new Claim(
                     JwtRegisteredClaimNames.Sub,
-                    userInfo.Id.ToString()),
+                    userInfo.Id.ToString()
+                ),
                 new Claim(
                     "email",
                     userInfo.Email
                 )
             };
 
-            var token = new JwtSecurityToken(
+            JwtSecurityToken? token = new JwtSecurityToken(
                 configuration["JwToken:Issuer"],
                 configuration["JwToken:Audience"],
                 claims,

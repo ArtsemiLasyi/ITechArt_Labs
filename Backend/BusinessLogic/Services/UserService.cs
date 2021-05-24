@@ -20,22 +20,12 @@ namespace BusinessLogic.Services
 
         public UserModel? GetUser(int id)
         {
-            UserEntity user = _userRepository.FindFirst(
-                user =>
-                {
-                    return id == user.Id;
-                }
-            );
+            UserEntity user = _userRepository.FindFirst(user => id == user.Id);
             if (user == null)
             {
                 return null;
             }
             return new UserModel { Id = user.Id, Email = user.Email };
-        }
-
-        public IEnumerable<UserModel> GetUsers()
-        {
-            return _userRepository.GetAll().Adapt<IEnumerable<UserModel>>();
         }
 
         public async Task<bool> DeleteUser(int id)
@@ -45,7 +35,7 @@ namespace BusinessLogic.Services
             {
                 return false;
             }
-            await _userRepository.Delete(id);
+            await _userRepository.DeleteAsync(id);
             return true;
         }
 
@@ -60,7 +50,7 @@ namespace BusinessLogic.Services
                 PasswordHash = hash,
                 Salt = salt
             };
-            await _userRepository.Update(userEntity);
+            await _userRepository.UpdateAsync(userEntity);
             return true;
         }
     }

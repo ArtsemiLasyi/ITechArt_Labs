@@ -7,9 +7,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Databa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{2B776F00-D3BC-4380-9253-03F77EE9401B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "WebAPI.DAL\DataAccess.csproj", "{C8804D1E-1F00-4382-B2AA-8EABAFC2D6CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{C8804D1E-1F00-4382-B2AA-8EABAFC2D6CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "WebAPI.BBL\BusinessLogic.csproj", "{E4F394A3-5A76-44E7-A203-EF5031C6B366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{E4F394A3-5A76-44E7-A203-EF5031C6B366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

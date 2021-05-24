@@ -19,7 +19,7 @@ namespace BusinessLogic.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool> SignUp(SignUpModel model)
+        public async Task<bool> SignUpAsync(SignUpModel model)
         {
             UserEntity? userEntity = _userRepository.GetByEmail(model.Email);
             if (userEntity != null)
@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
                 Salt = salt,
                 RoleId = (int)UserRoleModel.CommonUser
             };
-            await _userRepository.Create(userEntity);
+            await _userRepository.CreateAsync(userEntity);
             return true;
         }
     }
