@@ -28,7 +28,7 @@ namespace DataAccess.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            UserEntity user = _context.Users.Find(id);
+            UserEntity? user = _context.Users.Find(id);
             if (user != null)
             {
                 _context.Users.Remove(user);

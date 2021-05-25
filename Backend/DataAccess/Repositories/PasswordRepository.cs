@@ -27,7 +27,7 @@ namespace DataAccess.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            UserPasswordEntity entity = _context.UserPasswords.Find(id);
+            UserPasswordEntity? entity = _context.UserPasswords.Find(id);
             if (entity != null)
             {
                 _context.UserPasswords.Remove(entity);
