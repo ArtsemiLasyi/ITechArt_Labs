@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
 using WebAPI.Requests;
 using Mapster;
 using BusinessLogic.Services;
-using WebAPI.Responses;
-using BusinessLogic.Results;
 using WebAPI.Services;
 
 namespace WebAPI.Controllers
@@ -51,17 +42,13 @@ namespace WebAPI.Controllers
         public IActionResult SignIn([FromForm] SignInRequest request)
         {
             SignInModel model = request.Adapt<SignInModel>();
-            BusinessLogic.Results.SignInResult result = _signInService.SignIn(model);
-            if (!result.IsSuccessful)
+            UserModel? user = _signInService.SignIn(model);
+            if (user == null)
             {
                 return Unauthorized(new { errortext = "Invalid email or password!" });
             }
-            if (result.User == null)
-            {
-                return NotFound();
-            }
-            string? token = _jwtService.GetJwToken(result.User);
-            return Ok(new SignInResponse { Token = token });
+            string? token = _jwtService.GetJwToken(user);
+            return Ok(token);
         }
     }
 }

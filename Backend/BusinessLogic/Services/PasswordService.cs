@@ -1,8 +1,6 @@
 ﻿using BusinessLogic.Models;
 using DataAccess.Entities;
 using DataAccess.Repositories;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,6 +11,7 @@ namespace BusinessLogic.Services
     public class PasswordService
     {
         public static readonly int SALT_LENGTH = 20;
+
         private readonly PasswordRepository _passwordRepository;
 
         public PasswordService(PasswordRepository repository)
@@ -20,9 +19,35 @@ namespace BusinessLogic.Services
             _passwordRepository = repository;
         }
 
-        public async Task SetPassword(int id, string password)
+        public async Task CreatePasswordAsync(int id, string password)
         {
-            PasswordModel model = GetPasswordModel(password);
+            UserPasswordModel passwordModel = GetPasswordModel(password);
+            UserPasswordEntity passwordEntity = new UserPasswordEntity
+            {
+                UserId = id,
+                PasswordHash = passwordModel.PasswordHash,
+                Salt = passwordModel.Salt
+            };
+
+            await _passwordRepository.CreateAsync(passwordEntity);
+        }
+
+        public bool CheckPassword(int id, string password)
+        {
+            UserPasswordEntity? passwordEntity = _passwordRepository.GetById(id);
+            if (passwordEntity == null)
+            {
+                return false;
+            }
+
+            byte[] hash = ComputeHash(password, passwordEntity.Salt);
+            bool equal = Enumerable.SequenceEqual(hash, passwordEntity.PasswordHash);
+            return equal;
+        }
+
+        public async Task UpdatePassword(int id, string password)
+        {
+            UserPasswordModel model = GetPasswordModel(password);
             UserPasswordEntity entity = new UserPasswordEntity
             {
                 UserId = id,
@@ -32,19 +57,19 @@ namespace BusinessLogic.Services
             await _passwordRepository.UpdateAsync(entity);
         }
 
-        public PasswordModel GetPasswordModel(string password)
+        private UserPasswordModel GetPasswordModel(string password)
         {
             byte[] salt = GenerateSalt();
             byte[] hash = ComputeHash(password, salt);
 
-            return new PasswordModel
+            return new UserPasswordModel
             {
                 PasswordHash = hash,
                 Salt = salt
             };
         }
 
-        private static byte[] GenerateSalt()
+        private byte[] GenerateSalt()
         {
             using (RNGCryptoServiceProvider rncCsp = new RNGCryptoServiceProvider())
             {
@@ -54,7 +79,7 @@ namespace BusinessLogic.Services
             }
         }
 
-        public static byte[] ComputeHash(string password, byte[] salt)
+        private byte[] ComputeHash(string password, byte[] salt)
         {
             using (SHA256 mySHA256 = SHA256.Create())
             {

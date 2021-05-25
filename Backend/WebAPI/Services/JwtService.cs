@@ -26,8 +26,6 @@ namespace WebAPI.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-
-
         private JwtSecurityToken GenerateJwtToken(UserModel userInfo)
         {
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
@@ -55,9 +53,7 @@ namespace WebAPI.Services
                 _configuration["JwToken:Audience"],
                 claims,
                 expires: DateTime.UtcNow.Add(
-                    TimeSpan.Parse(
-                        _configuration.GetSection("JwToken:LifetimeMinutes").Value          // Will be optimized
-                    )
+                    _configuration.GetValue<TimeSpan>("JwToken:LifetimeMinutes")
                 ),
                 signingCredentials: credentials
             );

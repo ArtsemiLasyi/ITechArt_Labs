@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BusinessLogic.Models
+﻿namespace BusinessLogic.Models
 {
     public class UserModel
     {
         public int Id { get; set; }
         public string Email { get; set; }
-        public UserRoleModel Role { get; set; }
+        public UserRole Role { get; set; }
     }
 }

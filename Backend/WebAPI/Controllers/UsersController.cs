@@ -32,13 +32,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(
-                new UserResponse
-                {
-                    Id = user.Id,
-                    Email = user.Email 
-                }
-            );
+            return Ok(user.Adapt<UserResponse>());
         }
 
         [HttpPut("{id}")]
@@ -52,7 +46,7 @@ namespace WebAPI.Controllers
             }
             if (request.Password != null)
             {
-                await _passwordService.SetPassword(id, request.Password);
+                await _passwordService.UpdatePassword(id, request.Password);
             }
             return Ok();
         }
@@ -66,7 +60,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            await _userService.DeleteUser(id);
+            await _userService.DeleteUserAsync(id);
             return Ok();
         }    
     }

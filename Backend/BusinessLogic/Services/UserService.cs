@@ -24,30 +24,18 @@ namespace BusinessLogic.Services
             {
                 return null;
             }
-            return new UserModel 
-            { 
-                Id = user.Id,
-                Email = user.Email
-            };
+            return user.Adapt<UserModel>(); 
         }
 
-        public async Task<bool> DeleteUser(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            UserModel? user = GetUser(id);
-            if (user == null)
-            {
-                return false;
-            }
             await _userRepository.DeleteAsync(id);
             return true;
         }
 
         public async Task<bool> EditUser(UserModel model)
         {
-            UserEntity userEntity = new UserEntity
-            {
-                Email = model.Email
-            };
+            UserEntity userEntity = model.Adapt<UserEntity>();
             await _userRepository.UpdateAsync(userEntity);
             return true;
         }
