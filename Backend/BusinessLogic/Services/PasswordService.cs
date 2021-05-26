@@ -19,12 +19,12 @@ namespace BusinessLogic.Services
             _passwordRepository = repository;
         }
 
-        public async Task CreatePasswordAsync(int id, string password)
+        public async Task CreatePasswordAsync(int userId, string password)
         {
             UserPasswordModel passwordModel = GetPasswordModel(password);
             UserPasswordEntity passwordEntity = new UserPasswordEntity
             {
-                UserId = id,
+                UserId = userId,
                 PasswordHash = passwordModel.PasswordHash,
                 Salt = passwordModel.Salt
             };
@@ -32,9 +32,9 @@ namespace BusinessLogic.Services
             await _passwordRepository.CreateAsync(passwordEntity);
         }
 
-        public bool CheckPassword(int id, string password)
+        public bool CheckPasswordMatch(int userId, string password)
         {
-            UserPasswordEntity? passwordEntity = _passwordRepository.GetById(id);
+            UserPasswordEntity? passwordEntity = _passwordRepository.Get(userId);
             if (passwordEntity == null)
             {
                 return false;
@@ -45,12 +45,12 @@ namespace BusinessLogic.Services
             return equal;
         }
 
-        public async Task UpdatePassword(int id, string password)
+        public async Task UpdatePassword(int userId, string password)
         {
             UserPasswordModel model = GetPasswordModel(password);
             UserPasswordEntity entity = new UserPasswordEntity
             {
-                UserId = id,
+                UserId = userId,
                 PasswordHash = model.PasswordHash,
                 Salt = model.Salt
             };
@@ -71,7 +71,7 @@ namespace BusinessLogic.Services
 
         private byte[] GenerateSalt()
         {
-            using (RNGCryptoServiceProvider rncCsp = new RNGCryptoServiceProvider())
+            using (RNGCryptoServiceProvider rncCsp = new ())
             {
                 byte[] salt = new byte[SALT_LENGTH];
                 rncCsp.GetBytes(salt);

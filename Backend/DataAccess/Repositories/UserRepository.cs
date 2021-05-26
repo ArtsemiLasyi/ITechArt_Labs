@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
@@ -18,12 +15,13 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(UserEntity user)
+        public async Task<UserEntity> CreateAsync(UserEntity user)
         {
             _context
                 .Users
                 .Add(user);
             await _context.SaveChangesAsync();
+            return Get(user.Email);
         }
 
         public async Task DeleteAsync(int id)
@@ -36,7 +34,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public UserEntity? GetByEmail(string email)
+        public UserEntity? Get(string email)
         {
             UserEntity? userEntity = _context.Users.FirstOrDefault(
                 user => user.Email == email
@@ -44,19 +42,12 @@ namespace DataAccess.Repositories
             return userEntity;
         }
 
-        public UserEntity? GetById(int id)
+        public UserEntity? Get(int id)
         {
             UserEntity? userEntity = _context.Users.FirstOrDefault(
                 user => user.Id == id
             );
             return userEntity;
-        }
-
-        public UserEntity Get(int id)
-        {
-            return _context
-                .Users
-                .Find(id);
         }
 
         public async Task UpdateAsync(UserEntity user)

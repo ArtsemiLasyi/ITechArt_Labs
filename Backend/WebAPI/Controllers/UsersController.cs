@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
     {
         private readonly UserService _userService;
         private readonly PasswordService _passwordService;
-        private readonly ILogger<UsersController> _logger;
         
         public UsersController(UserService userService, PasswordService passwordService)
         {
@@ -24,10 +23,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [ValidateAntiForgeryToken]
         public IActionResult Get(int id)
         {
-            UserModel? user = _userService.GetUser(id);
+            UserModel? user = _userService.Get(id);
             if (user == null)
             {
                 return NotFound();
@@ -36,10 +34,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm] UserRequest request)
+        public async Task<IActionResult> Edit(int id, [FromForm] UserEditRequest request)
         {
-            UserModel? user = _userService.GetUser(id);
+            UserModel? user = _userService.Get(id);
             if (user == null)
             {
                 return NotFound();
@@ -52,15 +49,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            UserModel? user = _userService.GetUser(id);
+            UserModel? user = _userService.Get(id);
             if (user == null)
             {
                 return NotFound();
             }
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteAsync(id);
             return Ok();
         }    
     }

@@ -7,30 +7,29 @@ namespace BusinessLogic.Services
 {
     public class SignInService
     {
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly PasswordService _passwordService;
 
         public SignInService(
-            UserRepository userRepository,
+            UserService userService,
             PasswordService passwordService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _passwordService = passwordService;
         }
 
         public UserModel? SignIn(SignInModel model)
         {
-            UserEntity? userEntity = _userRepository.GetByEmail(model.Email);
-            if (userEntity == null)
+            UserModel? user = _userService.Get(model.Email);
+            if (user == null)
             {
                 return null;
             }
 
-            bool equal = _passwordService.CheckPassword(userEntity.Id, model.Password);
+            bool equal = _passwordService.CheckPasswordMatch(user.Id, model.Password);
             if (equal)
             {
-                UserModel userModel = userEntity.Adapt<UserModel>();
-                return userModel;
+                return user;
             }
             return null;
         }

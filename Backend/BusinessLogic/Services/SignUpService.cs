@@ -7,32 +7,31 @@ namespace BusinessLogic.Services
 {
     public class SignUpService
     {
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly PasswordService _passwordService;
 
         public SignUpService(
-            UserRepository userRepository,
+            UserService userService,
             PasswordService passwordService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _passwordService = passwordService;
         }
 
         public async Task<bool> SignUpAsync(SignUpModel model)
         {
-            UserEntity? userEntity = _userRepository.GetByEmail(model.Email);
-            if (userEntity != null)
+            UserModel? user = _userService.Get(model.Email);
+            if (user != null)
             {
                 return false;
             }
 
-            userEntity = new UserEntity
+            user = new UserModel
             {
-                Email = model.Email,
-                RoleId = (int)UserRole.CommonUser
+                Email = model.Email
             };
-            await _userRepository.CreateAsync(userEntity);
-            await _passwordService.CreatePasswordAsync(userEntity.Id, model.Password);
+            user = await _userService.CreateAsync(user);
+            await _passwordService.CreatePasswordAsync(user.Id, model.Password);
             
             return true;
         }

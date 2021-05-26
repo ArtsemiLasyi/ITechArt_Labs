@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
         private readonly SignInService _signInService;
         private readonly SignUpService _signUpService;
         private readonly JwtService _jwtService;
-        private readonly ILogger<UsersController> _logger;
 
         public AuthentificationController(
             SignInService signin,

@@ -7,8 +7,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -16,6 +14,8 @@ using DataAccess.Contexts;
 using BusinessLogic.Services;
 using DataAccess.Repositories;
 using WebAPI.Services;
+using FluentValidation.AspNetCore;
+using WebAPI.Options;
 
 namespace WebAPI
 {
@@ -40,7 +40,7 @@ namespace WebAPI
             services.AddScoped<PasswordRepository>();
 
             services.AddSingleton<JwtService>();
-
+            services.AddSingleton<JwtOptions>();
             services.AddLogging(
                 builder =>
                 {
@@ -52,14 +52,14 @@ namespace WebAPI
                         options =>
                         {
                             options.RequireHttpsMetadata = false;
-                            string key = Configuration.GetSection("JwToken:Key").Value;
+                            string key = Configuration["JwToken:Key"];
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
                                 ValidateIssuer = true,
-                                ValidIssuer = Configuration.GetSection("JwToken:Issuer").Value,
+                                ValidIssuer = Configuration["JwToken:Issuer"],
 
                                 ValidateAudience = true,
-                                ValidAudience = Configuration.GetSection("JwToken:Audience").Value,
+                                ValidAudience = Configuration["JwToken:Audience"],
 
                                 ValidateLifetime = true,
 
@@ -69,12 +69,15 @@ namespace WebAPI
                         }
                     );
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
                 }
+            );
+            services.Configure<JwtOptions>(
+                Configuration.GetSection(JwtOptions.JwToken)
             );
         }
 

@@ -25,9 +25,9 @@ namespace DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int userId)
         {
-            UserPasswordEntity? entity = _context.UserPasswords.Find(id);
+            UserPasswordEntity? entity = _context.UserPasswords.Find(userId);
             if (entity != null)
             {
                 _context.UserPasswords.Remove(entity);
@@ -35,19 +35,12 @@ namespace DataAccess.Repositories
             }
         }
 
-        public UserPasswordEntity? GetById(int id)
+        public UserPasswordEntity? Get(int userId)
         {
             UserPasswordEntity? userPasswordEntity = _context.UserPasswords.FirstOrDefault(
-                entity => entity.UserId == id
+                entity => entity.UserId == userId
             );
             return userPasswordEntity;
-        }
-
-        public UserPasswordEntity Get(int id)
-        {
-            return _context
-                .UserPasswords
-                .Find(id);
         }
 
         public async Task UpdateAsync(UserPasswordEntity entity)

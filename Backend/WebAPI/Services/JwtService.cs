@@ -2,22 +2,20 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using WebAPI.Options;
 
 namespace WebAPI.Services
 {
     public class JwtService
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtOptions _jwtOptions;
 
-        public JwtService(IConfiguration configuration)
+        public JwtService(JwtOptions jwtOptions)
         {
-            _configuration = configuration;
+            _jwtOptions = jwtOptions;
         }
 
         public string GetJwToken(UserModel userInfo)
@@ -28,15 +26,16 @@ namespace WebAPI.Services
 
         private JwtSecurityToken GenerateJwtToken(UserModel userInfo)
         {
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-                Encoding.Unicode.GetBytes(_configuration["JwToken:Key"])
+   
+            SymmetricSecurityKey securityKey = new (
+                Encoding.Unicode.GetBytes(_jwtOptions.Key)
             );
-            SigningCredentials credentials = new SigningCredentials(
+            SigningCredentials credentials = new (
                 securityKey,
                 SecurityAlgorithms.HmacSha256
             );
 
-            Claim[] claims = new Claim[]
+            Claim[] claims = new []
             {
                 new Claim(
                     JwtRegisteredClaimNames.Sub,
@@ -48,12 +47,12 @@ namespace WebAPI.Services
                 )
             };
 
-            JwtSecurityToken? token = new JwtSecurityToken(
-                _configuration["JwToken:Issuer"],
-                _configuration["JwToken:Audience"],
+            JwtSecurityToken token = new (
+                _jwtOptions.Issuer,
+                _jwtOptions.Audience,
                 claims,
                 expires: DateTime.UtcNow.Add(
-                    _configuration.GetValue<TimeSpan>("JwToken:LifetimeMinutes")
+                    TimeSpan.Parse(_jwtOptions.Lifetime)
                 ),
                 signingCredentials: credentials
             );

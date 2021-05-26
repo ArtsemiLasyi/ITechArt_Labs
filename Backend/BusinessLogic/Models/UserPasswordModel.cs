@@ -2,7 +2,7 @@
 {
     public class UserPasswordModel
     {
-        public byte[] PasswordHash { get; set; }
-        public byte[] Salt { get; set; }
+        public byte[] PasswordHash { get; set; } = null!;
+        public byte[] Salt { get; set; } = null!;
     }
 }

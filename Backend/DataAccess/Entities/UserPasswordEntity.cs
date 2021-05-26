@@ -5,10 +5,8 @@ namespace DataAccess.Entities
 {
     public partial class UserPasswordEntity
     {
-        public byte[] PasswordHash { get; set; }
-        public byte[] Salt { get; set; }
+        public byte[] PasswordHash { get; set; } = null!;
+        public byte[] Salt { get; set; } = null!;
         public int UserId { get; set; }
-
-        public virtual UserEntity User { get; set; }
     }
 }
