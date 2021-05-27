@@ -14,7 +14,6 @@ using DataAccess.Contexts;
 using BusinessLogic.Services;
 using DataAccess.Repositories;
 using WebAPI.Services;
-using FluentValidation.AspNetCore;
 using WebAPI.Options;
 
 namespace WebAPI
@@ -40,7 +39,7 @@ namespace WebAPI
             services.AddScoped<PasswordRepository>();
 
             services.AddSingleton<JwtService>();
-            services.AddSingleton<JwtOptions>();
+
             services.AddLogging(
                 builder =>
                 {
@@ -51,15 +50,18 @@ namespace WebAPI
                     .AddJwtBearer(
                         options =>
                         {
+                            JwtOptions jwtOptions = new JwtOptions();
+                            Configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
+
                             options.RequireHttpsMetadata = false;
-                            string key = Configuration["JwToken:Key"];
+                            string key = jwtOptions.Key;
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
                                 ValidateIssuer = true,
-                                ValidIssuer = Configuration["JwToken:Issuer"],
+                                ValidIssuer = jwtOptions.Issuer,
 
                                 ValidateAudience = true,
-                                ValidAudience = Configuration["JwToken:Audience"],
+                                ValidAudience = jwtOptions.Audience,
 
                                 ValidateLifetime = true,
 
@@ -69,15 +71,12 @@ namespace WebAPI
                         }
                     );
             services.AddCors();
-            services.AddControllers().AddFluentValidation();
+            services.AddControllers();
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
                 }
-            );
-            services.Configure<JwtOptions>(
-                Configuration.GetSection(JwtOptions.JwToken)
             );
         }
 

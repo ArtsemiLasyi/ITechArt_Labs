@@ -34,7 +34,7 @@ namespace BusinessLogic.Services
 
         public bool CheckPasswordMatch(int userId, string password)
         {
-            UserPasswordEntity? passwordEntity = _passwordRepository.Get(userId);
+            UserPasswordEntity? passwordEntity = _passwordRepository.GetBy(userId);
             if (passwordEntity == null)
             {
                 return false;
@@ -45,7 +45,7 @@ namespace BusinessLogic.Services
             return equal;
         }
 
-        public async Task UpdatePassword(int userId, string password)
+        public async Task UpdatePasswordAsync(int userId, string password)
         {
             UserPasswordModel model = GetPasswordModel(password);
             UserPasswordEntity entity = new UserPasswordEntity
@@ -55,6 +55,12 @@ namespace BusinessLogic.Services
                 Salt = model.Salt
             };
             await _passwordRepository.UpdateAsync(entity);
+        }
+
+        public async Task<bool> DeleteByAsync(int userId)
+        {
+            await _passwordRepository.DeleteByAsync(userId);
+            return true;
         }
 
         private UserPasswordModel GetPasswordModel(string password)
@@ -71,7 +77,7 @@ namespace BusinessLogic.Services
 
         private byte[] GenerateSalt()
         {
-            using (RNGCryptoServiceProvider rncCsp = new ())
+            using (RNGCryptoServiceProvider rncCsp = new())
             {
                 byte[] salt = new byte[SALT_LENGTH];
                 rncCsp.GetBytes(salt);

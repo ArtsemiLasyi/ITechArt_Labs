@@ -19,15 +19,15 @@ namespace BusinessLogic.Services
 
         public async Task<UserModel> CreateAsync(UserModel user)
         {
-            UserEntity? userEntity = new ();
+            UserEntity? userEntity = new();
             userEntity.RoleId = (int)UserRole.User;
             userEntity = await _userRepository.CreateAsync(userEntity);
             return userEntity.Adapt<UserModel>();
         }
 
-        public UserModel? Get(string email)
+        public UserModel? GetBy(string email)
         {
-            UserEntity? user = _userRepository.Get(email);
+            UserEntity? user = _userRepository.GetBy(email);
             if (user == null)
             {
                 return null;
@@ -35,9 +35,9 @@ namespace BusinessLogic.Services
             return user.Adapt<UserModel>();
         }
 
-        public UserModel? Get(int id)
+        public UserModel? GetBy(int id)
         {
-            UserEntity? user = _userRepository.Get(id);
+            UserEntity? user = _userRepository.GetBy(id);
             if (user == null)
             {
                 return null;
@@ -45,10 +45,9 @@ namespace BusinessLogic.Services
             return user.Adapt<UserModel>(); 
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteByAsync(int id)
         {
-            await _userRepository.DeleteAsync(id);
-            return true;
+            return await _userRepository.DeleteByAsync(id);
         }
 
         public async Task<bool> EditAsync(UserModel model)

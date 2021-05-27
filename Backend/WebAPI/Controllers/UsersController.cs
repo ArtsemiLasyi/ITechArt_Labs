@@ -6,6 +6,8 @@ using BusinessLogic.Services;
 using Mapster;
 using WebAPI.Requests;
 using WebAPI.Responses;
+using BusinessLogic.Validators;
+using FluentValidation.Results;
 
 namespace WebAPI.Controllers
 {
@@ -25,7 +27,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            UserModel? user = _userService.Get(id);
+            UserModel? user = _userService.GetBy(id);
             if (user == null)
             {
                 return NotFound();
@@ -36,27 +38,43 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromForm] UserEditRequest request)
         {
-            UserModel? user = _userService.Get(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            UserModel model = request.Adapt<UserModel>();
+            bool isPasswordWasChanged = false;
+
             if (request.Password != null)
             {
-                await _passwordService.UpdatePassword(id, request.Password);
+                PasswordValidator passwordValidator = new();
+                ValidationResult passwordResults = passwordValidator.Validate(request.Password);
+                if (!passwordResults.IsValid)
+                {
+                    return BadRequest();
+                }
+                isPasswordWasChanged = true;
             }
+
+            UserValidator userValidator = new();
+            ValidationResult results = userValidator.Validate(model);
+            if (!results.IsValid)
+            {
+                return BadRequest();
+            }
+            await _userService.EditAsync(model);
+            if (isPasswordWasChanged)
+            {
+                await _passwordService.UpdatePasswordAsync(model.Id, request.Password);
+            }
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            UserModel? user = _userService.Get(id);
-            if (user == null)
+            bool isSuccessful = await _userService.DeleteByAsync(id);
+            if (!isSuccessful)
             {
                 return NotFound();
             }
-            await _userService.DeleteAsync(id);
             return Ok();
         }    
     }

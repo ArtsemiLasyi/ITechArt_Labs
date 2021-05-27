@@ -5,6 +5,9 @@ using WebAPI.Requests;
 using Mapster;
 using BusinessLogic.Services;
 using WebAPI.Services;
+using System.Threading.Tasks;
+using BusinessLogic.Validators;
+using FluentValidation.Results;
 
 namespace WebAPI.Controllers
 {
@@ -27,10 +30,19 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("signup")]
-        public IActionResult SignUp([FromForm] SignUpRequest request)
+        public async Task<IActionResult> SignUp([FromForm] SignUpRequest request)
         {
             SignUpModel model = request.Adapt<SignUpModel>();
-            if (!_signUpService.SignUpAsync(model).Result)
+
+            SignUpValidator validator = new();
+            ValidationResult results = validator.Validate(model);
+            if (!results.IsValid)
+            {
+                return BadRequest();
+            }
+
+            bool isSuccessful = await _signUpService.SignUpAsync(model);
+            if (!isSuccessful)
             {
                 return BadRequest(new { errortext = "User is already exists!" });
             }
@@ -41,6 +53,14 @@ namespace WebAPI.Controllers
         public IActionResult SignIn([FromForm] SignInRequest request)
         {
             SignInModel model = request.Adapt<SignInModel>();
+
+            SignInValidator validator = new();
+            ValidationResult results = validator.Validate(model);
+            if (!results.IsValid)
+            {
+                return BadRequest();
+            }
+
             UserModel? user = _signInService.SignIn(model);
             if (user == null)
             {
@@ -51,5 +71,3 @@ namespace WebAPI.Controllers
         }
     }
 }
-
-

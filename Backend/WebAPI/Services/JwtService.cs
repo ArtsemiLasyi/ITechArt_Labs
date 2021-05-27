@@ -11,11 +11,11 @@ namespace WebAPI.Services
 {
     public class JwtService
     {
-        private readonly JwtOptions _jwtOptions;
+        private readonly IConfiguration _configuration;
 
-        public JwtService(JwtOptions jwtOptions)
+        public JwtService(IConfiguration configuration)
         {
-            _jwtOptions = jwtOptions;
+            _configuration = configuration;
         }
 
         public string GetJwToken(UserModel userInfo)
@@ -26,9 +26,11 @@ namespace WebAPI.Services
 
         private JwtSecurityToken GenerateJwtToken(UserModel userInfo)
         {
-   
+            JwtOptions jwtOptions = new JwtOptions();
+            _configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
+
             SymmetricSecurityKey securityKey = new (
-                Encoding.Unicode.GetBytes(_jwtOptions.Key)
+                Encoding.Unicode.GetBytes(jwtOptions.Key)
             );
             SigningCredentials credentials = new (
                 securityKey,
@@ -48,11 +50,11 @@ namespace WebAPI.Services
             };
 
             JwtSecurityToken token = new (
-                _jwtOptions.Issuer,
-                _jwtOptions.Audience,
+                jwtOptions.Issuer,
+                jwtOptions.Audience,
                 claims,
                 expires: DateTime.UtcNow.Add(
-                    TimeSpan.Parse(_jwtOptions.Lifetime)
+                    jwtOptions.Lifetime
                 ),
                 signingCredentials: credentials
             );

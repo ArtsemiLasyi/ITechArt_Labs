@@ -20,7 +20,7 @@ namespace BusinessLogic.Services
 
         public UserModel? SignIn(SignInModel model)
         {
-            UserModel? user = _userService.Get(model.Email);
+            UserModel? user = _userService.GetBy(model.Email);
             if (user == null)
             {
                 return null;

@@ -25,7 +25,7 @@ namespace DataAccess.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int userId)
+        public async Task DeleteByAsync(int userId)
         {
             UserPasswordEntity? entity = _context.UserPasswords.Find(userId);
             if (entity != null)
@@ -35,7 +35,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public UserPasswordEntity? Get(int userId)
+        public UserPasswordEntity? GetBy(int userId)
         {
             UserPasswordEntity? userPasswordEntity = _context.UserPasswords.FirstOrDefault(
                 entity => entity.UserId == userId
