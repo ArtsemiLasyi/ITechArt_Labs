@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
@@ -32,37 +31,17 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
+
             return Ok(user.Adapt<UserResponse>());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromForm] UserEditRequest request)
+        public async Task<IActionResult> Edit(int id, [FromBody] UserEditRequest request)
         {
             UserModel model = request.Adapt<UserModel>();
-            bool isPasswordWasChanged = false;
 
-            if (request.Password != null)
-            {
-                PasswordValidator passwordValidator = new();
-                ValidationResult passwordResults = passwordValidator.Validate(request.Password);
-                if (!passwordResults.IsValid)
-                {
-                    return BadRequest();
-                }
-                isPasswordWasChanged = true;
-            }
-
-            UserValidator userValidator = new();
-            ValidationResult results = userValidator.Validate(model);
-            if (!results.IsValid)
-            {
-                return BadRequest();
-            }
-            await _userService.EditAsync(model);
-            if (isPasswordWasChanged)
-            {
-                await _passwordService.UpdatePasswordAsync(model.Id, request.Password);
-            }
+            _userService.Edit(model);
+            _passwordService.Update(model.Id, request.Password);
 
             return Ok();
         }
@@ -70,8 +49,8 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            bool isSuccessful = await _userService.DeleteByAsync(id);
-            if (!isSuccessful)
+            bool successful = await _userService.DeleteByAsync(id);
+            if (!successful)
             {
                 return NotFound();
             }

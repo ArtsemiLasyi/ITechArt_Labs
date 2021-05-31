@@ -7,7 +7,7 @@ namespace BusinessLogic.Validators
     {
         public SignUpValidator()
         {
-            RuleFor(model => model.Email).SetValidator(new EmailValidator());
+            RuleFor(model => model.Email);
             RuleFor(model => model.Password).SetValidator(new PasswordValidator());
         }
     }

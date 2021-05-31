@@ -2,6 +2,7 @@
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
+using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
@@ -18,7 +19,7 @@ namespace BusinessLogic.Services
             _passwordService = passwordService;
         }
 
-        public UserModel? SignIn(SignInModel model)
+        public async Task<UserModel?> SignIn(SignInModel model)
         {
             UserModel? user = _userService.GetBy(model.Email);
             if (user == null)
@@ -26,7 +27,7 @@ namespace BusinessLogic.Services
                 return null;
             }
 
-            bool equal = _passwordService.CheckPasswordMatch(user.Id, model.Password);
+            bool equal = await _passwordService.MatchForUser(user.Id, model.Password);
             if (equal)
             {
                 return user;

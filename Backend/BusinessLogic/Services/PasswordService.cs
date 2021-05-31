@@ -19,7 +19,7 @@ namespace BusinessLogic.Services
             _passwordRepository = repository;
         }
 
-        public async Task CreatePasswordAsync(int userId, string password)
+        public void Create(int userId, string password)
         {
             UserPasswordModel passwordModel = GetPasswordModel(password);
             UserPasswordEntity passwordEntity = new UserPasswordEntity
@@ -29,12 +29,12 @@ namespace BusinessLogic.Services
                 Salt = passwordModel.Salt
             };
 
-            await _passwordRepository.CreateAsync(passwordEntity);
+            _passwordRepository.Create(passwordEntity);
         }
 
-        public bool CheckPasswordMatch(int userId, string password)
+        public async Task<bool> MatchForUser(int userId, string password)
         {
-            UserPasswordEntity? passwordEntity = _passwordRepository.GetBy(userId);
+            UserPasswordEntity? passwordEntity = await _passwordRepository.GetByAsync(userId);
             if (passwordEntity == null)
             {
                 return false;
@@ -45,7 +45,7 @@ namespace BusinessLogic.Services
             return equal;
         }
 
-        public async Task UpdatePasswordAsync(int userId, string password)
+        public void Update(int userId, string password)
         {
             UserPasswordModel model = GetPasswordModel(password);
             UserPasswordEntity entity = new UserPasswordEntity
@@ -54,13 +54,12 @@ namespace BusinessLogic.Services
                 PasswordHash = model.PasswordHash,
                 Salt = model.Salt
             };
-            await _passwordRepository.UpdateAsync(entity);
+            _passwordRepository.Update(entity);
         }
 
-        public async Task<bool> DeleteByAsync(int userId)
+        public void DeleteBy(int userId)
         {
-            await _passwordRepository.DeleteByAsync(userId);
-            return true;
+            _passwordRepository.DeleteByAsync(userId);
         }
 
         private UserPasswordModel GetPasswordModel(string password)

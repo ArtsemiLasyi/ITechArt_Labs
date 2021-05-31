@@ -30,42 +30,29 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromForm] SignUpRequest request)
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
             SignUpModel model = request.Adapt<SignUpModel>();
-
-            SignUpValidator validator = new();
-            ValidationResult results = validator.Validate(model);
-            if (!results.IsValid)
-            {
-                return BadRequest();
-            }
 
             bool isSuccessful = await _signUpService.SignUpAsync(model);
             if (!isSuccessful)
             {
                 return BadRequest(new { errortext = "User is already exists!" });
             }
+
             return Ok();
         }
 
         [HttpPost("signin")]
-        public IActionResult SignIn([FromForm] SignInRequest request)
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
             SignInModel model = request.Adapt<SignInModel>();
-
-            SignInValidator validator = new();
-            ValidationResult results = validator.Validate(model);
-            if (!results.IsValid)
-            {
-                return BadRequest();
-            }
-
-            UserModel? user = _signInService.SignIn(model);
+            UserModel? user = await _signInService.SignIn(model);
             if (user == null)
             {
                 return Unauthorized(new { errortext = "Invalid email or password!" });
             }
+
             string? token = _jwtService.GetJwToken(user);
             return Ok(token);
         }

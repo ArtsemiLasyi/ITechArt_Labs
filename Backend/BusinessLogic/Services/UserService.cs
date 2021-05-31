@@ -47,14 +47,13 @@ namespace BusinessLogic.Services
 
         public async Task<bool> DeleteByAsync(int id)
         {
-            return await _userRepository.DeleteByAsync(id);
+           return await _userRepository.DeleteByAsync(id);
         }
 
-        public async Task<bool> EditAsync(UserModel model)
+        public void Edit(UserModel model)
         {
             UserEntity userEntity = model.Adapt<UserEntity>();
-            await _userRepository.UpdateAsync(userEntity);
-            return true;
+            _userRepository.Update(userEntity);
         }
     }
 }

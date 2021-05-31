@@ -1,9 +1,6 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -17,36 +14,32 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(UserPasswordEntity entity)
+        public void Create(UserPasswordEntity entity)
         {
-            _context
-                .UserPasswords
-                .Add(entity);
-            await _context.SaveChangesAsync();
+            _context.UserPasswords.Add(entity);
+            _context.SaveChangesAsync();
         }
 
         public async Task DeleteByAsync(int userId)
         {
-            UserPasswordEntity? entity = _context.UserPasswords.Find(userId);
+            UserPasswordEntity? entity = await _context.UserPasswords.FindAsync(userId);
             if (entity != null)
             {
                 _context.UserPasswords.Remove(entity);
-                await _context.SaveChangesAsync();
+                _context.SaveChangesAsync();
             }
         }
 
-        public UserPasswordEntity? GetBy(int userId)
+        public async Task<UserPasswordEntity?> GetByAsync(int userId)
         {
-            UserPasswordEntity? userPasswordEntity = _context.UserPasswords.FirstOrDefault(
-                entity => entity.UserId == userId
-            );
+            UserPasswordEntity? userPasswordEntity = await _context.UserPasswords.FindAsync(userId);
             return userPasswordEntity;
         }
 
-        public async Task UpdateAsync(UserPasswordEntity entity)
+        public void Update(UserPasswordEntity entity)
         {
             _context.Update(entity);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
         }
     }
 }

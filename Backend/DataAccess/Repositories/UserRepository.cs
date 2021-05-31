@@ -15,18 +15,16 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<UserEntity> CreateAsync(UserEntity user)
+        public async Task<UserEntity?> CreateAsync(UserEntity user)
         {
-            _context
-                .Users
-                .Add(user);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return GetBy(user.Email);
         }
 
         public async Task<bool> DeleteByAsync(int id)
         {
-            UserEntity? user = _context.Users.Find(id);
+            UserEntity? user = await _context.Users.FindAsync(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
@@ -55,10 +53,10 @@ namespace DataAccess.Repositories
             return userEntity;
         }
 
-        public async Task UpdateAsync(UserEntity user)
+        public void Update(UserEntity user)
         {
             _context.Update(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
         }
     }
 }

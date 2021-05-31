@@ -12,7 +12,7 @@ namespace BusinessLogic.Validators
     {
         public UserValidator()
         {
-            RuleFor(model => model.Email).SetValidator(new EmailValidator());
+            RuleFor(model => model.Email);
         }
     }
 }

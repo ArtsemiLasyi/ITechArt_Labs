@@ -15,6 +15,8 @@ using BusinessLogic.Services;
 using DataAccess.Repositories;
 using WebAPI.Services;
 using WebAPI.Options;
+using FluentValidation.AspNetCore;
+using BusinessLogic.Validators;
 
 namespace WebAPI
 {
@@ -38,6 +40,11 @@ namespace WebAPI
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
 
+            services.AddTransient<SignInValidator>();
+            services.AddTransient<SignUpValidator>();
+            services.AddTransient<UserValidator>();
+            services.AddTransient<PasswordValidator>();
+
             services.AddSingleton<JwtService>();
 
             services.AddLogging(
@@ -47,31 +54,30 @@ namespace WebAPI
                 }
             );
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(
-                        options =>
+                .AddJwtBearer(
+                    options =>
+                    {
+                        JwtOptions jwtOptions = Configuration.GetSection(JwtOptions.JwToken).Get<JwtOptions>();
+
+                        options.RequireHttpsMetadata = false;
+                        string key = jwtOptions.Key;
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            JwtOptions jwtOptions = new JwtOptions();
-                            Configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
+                            ValidateIssuer = true,
+                            ValidIssuer = jwtOptions.Issuer,
 
-                            options.RequireHttpsMetadata = false;
-                            string key = jwtOptions.Key;
-                            options.TokenValidationParameters = new TokenValidationParameters
-                            {
-                                ValidateIssuer = true,
-                                ValidIssuer = jwtOptions.Issuer,
+                            ValidateAudience = true,
+                            ValidAudience = jwtOptions.Audience,
 
-                                ValidateAudience = true,
-                                ValidAudience = jwtOptions.Audience,
+                            ValidateLifetime = true,
 
-                                ValidateLifetime = true,
-
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                                ValidateIssuerSigningKey = true,
-                            };
-                        }
-                    );
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                            ValidateIssuerSigningKey = true,
+                        };
+                    }
+                );
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
