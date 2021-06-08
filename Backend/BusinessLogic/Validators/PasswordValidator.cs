@@ -10,9 +10,9 @@ namespace BusinessLogic.Validators
                 .Custom(
                     (password, context) =>
                     {
-                        if(password != null)
+                        if (password != null)
                         {
-                            if(password.Length < 6)
+                            if (password.Length < 6)
                             {
                                 context.AddFailure("Password must not be less than 6 symbols");
                             }
