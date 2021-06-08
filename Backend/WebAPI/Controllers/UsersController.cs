@@ -41,7 +41,10 @@ namespace WebAPI.Controllers
             UserModel model = request.Adapt<UserModel>();
 
             await _userService.EditAsync(model);
-            await _passwordService.UpdateAsync(model.Id, request.Password);
+            if (request.Password != null)
+            {
+                await _passwordService.UpdateAsync(model.Id, request.Password);
+            }
 
             return Ok();
         }
