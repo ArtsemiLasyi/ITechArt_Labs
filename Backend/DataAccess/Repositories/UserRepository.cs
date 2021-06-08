@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -19,7 +20,7 @@ namespace DataAccess.Repositories
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return GetBy(user.Email);
+            return await GetByAsync(user.Email);
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -37,23 +38,21 @@ namespace DataAccess.Repositories
             }
         }
 
-        public UserEntity? GetBy(string email)
+        public async Task<UserEntity?> GetByAsync(string email)
         {
-            UserEntity? userEntity = _context.Users.FirstOrDefault(
+            UserEntity? userEntity = await _context.Users.FirstOrDefaultAsync(
                 user => user.Email == email
             );
             return userEntity;
         }
 
-        public UserEntity? GetBy(int id)
+        public async Task<UserEntity?> GetByAsync(int id)
         {
-            UserEntity? userEntity = _context.Users.FirstOrDefault(
-                user => user.Id == id
-            );
+            UserEntity? userEntity = await _context.Users.FindAsync(id);
             return userEntity;
         }
 
-        public void Update(UserEntity user)
+        public async Task UpdateAsync(UserEntity user)
         {
             _context.Update(user);
             _context.SaveChangesAsync();

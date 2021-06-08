@@ -24,9 +24,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            UserModel? user = _userService.GetBy(id);
+            UserModel? user = await _userService.GetByAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -40,8 +40,8 @@ namespace WebAPI.Controllers
         {
             UserModel model = request.Adapt<UserModel>();
 
-            _userService.Edit(model);
-            _passwordService.Update(model.Id, request.Password);
+            await _userService.EditAsync(model);
+            await _passwordService.UpdateAsync(model.Id, request.Password);
 
             return Ok();
         }

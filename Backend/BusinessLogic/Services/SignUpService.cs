@@ -20,7 +20,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> SignUpAsync(SignUpModel model)
         {
-            UserModel? user = _userService.GetBy(model.Email);
+            UserModel? user = await _userService.GetByAsync(model.Email);
             if (user != null)
             {
                 return false;
@@ -31,7 +31,7 @@ namespace BusinessLogic.Services
                 Email = model.Email
             };
             user = await _userService.CreateAsync(user);
-            _passwordService.Create(user.Id, model.Password);
+            await _passwordService.CreateAsync(user.Id, model.Password);
             
             return true;
         }

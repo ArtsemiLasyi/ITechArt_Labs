@@ -6,7 +6,16 @@ namespace BusinessLogic.Validators
     {
         public PasswordValidator()
         {
-            RuleFor(password => password).MinimumLength(6);
+            RuleFor(password => password)
+                .Custom(
+                    (password, context) =>
+                    {
+                        if(password != null && password.Length < 6)
+                        {
+                            context.AddFailure("Password must not be less than 6 symbols");
+                        }
+                    }
+                );
         }
     }
 }

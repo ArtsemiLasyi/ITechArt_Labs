@@ -34,8 +34,8 @@ namespace WebAPI.Controllers
         {
             SignUpModel model = request.Adapt<SignUpModel>();
 
-            bool isSuccessful = await _signUpService.SignUpAsync(model);
-            if (!isSuccessful)
+            bool successful = await _signUpService.SignUpAsync(model);
+            if (!successful)
             {
                 return BadRequest(new { errortext = "User is already exists!" });
             }
@@ -47,13 +47,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
             SignInModel model = request.Adapt<SignInModel>();
-            UserModel? user = await _signInService.SignIn(model);
+            UserModel? user = await _signInService.SignInAsync(model);
             if (user == null)
             {
                 return Unauthorized(new { errortext = "Invalid email or password!" });
             }
 
-            string? token = _jwtService.GetJwToken(user);
+            string token = _jwtService.GetJwToken(user);
             return Ok(token);
         }
     }

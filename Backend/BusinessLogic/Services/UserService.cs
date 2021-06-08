@@ -25,9 +25,9 @@ namespace BusinessLogic.Services
             return userEntity.Adapt<UserModel>();
         }
 
-        public UserModel? GetBy(string email)
+        public async Task<UserModel?> GetByAsync(string email)
         {
-            UserEntity? user = _userRepository.GetBy(email);
+            UserEntity? user = await _userRepository.GetByAsync(email);
             if (user == null)
             {
                 return null;
@@ -35,9 +35,9 @@ namespace BusinessLogic.Services
             return user.Adapt<UserModel>();
         }
 
-        public UserModel? GetBy(int id)
+        public async Task<UserModel?> GetByAsync(int id)
         {
-            UserEntity? user = _userRepository.GetBy(id);
+            UserEntity? user = await _userRepository.GetByAsync(id);
             if (user == null)
             {
                 return null;
@@ -50,10 +50,10 @@ namespace BusinessLogic.Services
            return await _userRepository.DeleteByAsync(id);
         }
 
-        public void Edit(UserModel model)
+        public async Task EditAsync(UserModel model)
         {
             UserEntity userEntity = model.Adapt<UserEntity>();
-            _userRepository.Update(userEntity);
+            _userRepository.UpdateAsync(userEntity);
         }
     }
 }

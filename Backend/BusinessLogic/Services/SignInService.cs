@@ -19,15 +19,15 @@ namespace BusinessLogic.Services
             _passwordService = passwordService;
         }
 
-        public async Task<UserModel?> SignIn(SignInModel model)
+        public async Task<UserModel?> SignInAsync(SignInModel model)
         {
-            UserModel? user = _userService.GetBy(model.Email);
+            UserModel? user = await _userService.GetByAsync(model.Email);
             if (user == null)
             {
                 return null;
             }
 
-            bool equal = await _passwordService.MatchForUser(user.Id, model.Password);
+            bool equal = await _passwordService.MatchForUserAsync(user.Id, model.Password);
             if (equal)
             {
                 return user;
