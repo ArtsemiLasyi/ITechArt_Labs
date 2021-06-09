@@ -21,7 +21,7 @@ namespace BusinessLogic.Services
         {
             UserEntity? userEntity = new();
             userEntity.RoleId = (int)UserRole.User;
-            userEntity = await _userRepository.CreateAsync(userEntity);
+            await _userRepository.CreateAsync(userEntity);
             return userEntity.Adapt<UserModel>();
         }
 
