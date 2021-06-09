@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task<int> CreateAsync(UserEntity user)
+        public Task CreateAsync(UserEntity user)
         {
             _context.Users.Add(user);
             return _context.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace DataAccess.Repositories
             return _context.Users.FindAsync(id);
         }
 
-        public Task<int> UpdateAsync(UserEntity user)
+        public Task UpdateAsync(UserEntity user)
         {
             _context.Update(user);
             return _context.SaveChangesAsync();
