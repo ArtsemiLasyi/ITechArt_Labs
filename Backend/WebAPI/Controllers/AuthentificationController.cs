@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
             bool successful = await _signUpService.SignUpAsync(model);
             if (!successful)
             {
-                return BadRequest(new { errortext = "User is already exists!" });
+                return BadRequest(new { errortext = "User already exists!" });
             }
 
             return Ok();
