@@ -19,7 +19,7 @@ namespace BusinessLogic.Services
             _passwordRepository = repository;
         }
 
-        public async Task CreateAsync(int userId, string password)
+        public Task CreateAsync(int userId, string password)
         {
             UserPasswordModel passwordModel = GetPasswordModel(password);
             UserPasswordEntity passwordEntity = new UserPasswordEntity
@@ -29,7 +29,7 @@ namespace BusinessLogic.Services
                 Salt = passwordModel.Salt
             };
 
-            _passwordRepository.CreateAsync(passwordEntity);
+            return _passwordRepository.CreateAsync(passwordEntity);
         }
 
         public async Task<bool> MatchForUserAsync(int userId, string password)
@@ -45,7 +45,7 @@ namespace BusinessLogic.Services
             return equal;
         }
 
-        public async Task UpdateAsync(int userId, string password)
+        public Task UpdateAsync(int userId, string password)
         {
             UserPasswordModel model = GetPasswordModel(password);
             UserPasswordEntity entity = new UserPasswordEntity
@@ -54,12 +54,12 @@ namespace BusinessLogic.Services
                 PasswordHash = model.PasswordHash,
                 Salt = model.Salt
             };
-            _passwordRepository.UpdateAsync(entity);
+            return _passwordRepository.UpdateAsync(entity);
         }
 
-        public async Task DeleteByAsync(int userId)
+        public Task DeleteByAsync(int userId)
         {
-            _passwordRepository.DeleteByAsync(userId);
+            return _passwordRepository.DeleteByAsync(userId);
         }
 
         private UserPasswordModel GetPasswordModel(string password)

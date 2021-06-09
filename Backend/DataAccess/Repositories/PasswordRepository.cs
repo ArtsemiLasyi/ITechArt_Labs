@@ -14,10 +14,10 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(UserPasswordEntity entity)
+        public Task<int> CreateAsync(UserPasswordEntity entity)
         {
             _context.UserPasswords.Add(entity);
-            _context.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
 
         public async Task DeleteByAsync(int userId)
@@ -36,10 +36,10 @@ namespace DataAccess.Repositories
             return userPasswordEntity;
         }
 
-        public async Task UpdateAsync(UserPasswordEntity entity)
+        public Task<int> UpdateAsync(UserPasswordEntity entity)
         {
             _context.Update(entity);
-            _context.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
     }
 }

@@ -45,15 +45,15 @@ namespace BusinessLogic.Services
             return user.Adapt<UserModel>(); 
         }
 
-        public async Task<bool> DeleteByAsync(int id)
+        public Task<bool> DeleteByAsync(int id)
         {
-           return await _userRepository.DeleteByAsync(id);
+           return _userRepository.DeleteByAsync(id);
         }
 
-        public async Task EditAsync(UserModel model)
+        public Task EditAsync(UserModel model)
         {
             UserEntity userEntity = model.Adapt<UserEntity>();
-            _userRepository.UpdateAsync(userEntity);
+            return _userRepository.UpdateAsync(userEntity);
         }
     }
 }

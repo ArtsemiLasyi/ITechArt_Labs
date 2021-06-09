@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -52,10 +50,10 @@ namespace DataAccess.Repositories
             return userEntity;
         }
 
-        public async Task UpdateAsync(UserEntity user)
+        public Task<int> UpdateAsync(UserEntity user)
         {
             _context.Update(user);
-            _context.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
     }
 }
