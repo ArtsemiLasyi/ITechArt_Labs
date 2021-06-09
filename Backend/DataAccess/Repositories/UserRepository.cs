@@ -14,11 +14,10 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<UserEntity?> CreateAsync(UserEntity user)
+        public Task<int> CreateAsync(UserEntity user)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return await GetByAsync(user.Email);
+            return _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -36,18 +35,16 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task<UserEntity?> GetByAsync(string email)
+        public Task<UserEntity?> GetByAsync(string email)
         {
-            UserEntity? userEntity = await _context.Users.FirstOrDefaultAsync(
+            return _context.Users.FirstOrDefaultAsync(
                 user => user.Email == email
             );
-            return userEntity;
         }
 
-        public async Task<UserEntity?> GetByAsync(int id)
+        public Task<UserEntity?> GetByAsync(int id)
         {
-            UserEntity? userEntity = await _context.Users.FindAsync(id);
-            return userEntity;
+            return _context.Users.FindAsync(id);
         }
 
         public Task<int> UpdateAsync(UserEntity user)
