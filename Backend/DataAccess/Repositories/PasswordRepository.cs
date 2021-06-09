@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task<int> CreateAsync(UserPasswordEntity entity)
+        public Task CreateAsync(UserPasswordEntity entity)
         {
             _context.UserPasswords.Add(entity);
             return _context.SaveChangesAsync();
@@ -35,7 +35,7 @@ namespace DataAccess.Repositories
             return _context.UserPasswords.FindAsync(userId);
         }
 
-        public Task<int> UpdateAsync(UserPasswordEntity entity)
+        public Task UpdateAsync(UserPasswordEntity entity)
         {
             _context.Update(entity);
             return _context.SaveChangesAsync();
