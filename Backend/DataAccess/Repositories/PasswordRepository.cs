@@ -30,10 +30,9 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task<UserPasswordEntity?> GetByAsync(int userId)
+        public Task<UserPasswordEntity?> GetByAsync(int userId)
         {
-            UserPasswordEntity? userPasswordEntity = await _context.UserPasswords.FindAsync(userId);
-            return userPasswordEntity;
+            return _context.UserPasswords.FindAsync(userId);
         }
 
         public Task<int> UpdateAsync(UserPasswordEntity entity)
