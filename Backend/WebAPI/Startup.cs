@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,9 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
+using System.Text;
+using DataAccess.Contexts;
+using BusinessLogic.Services;
+using DataAccess.Repositories;
+using WebAPI.Services;
+using WebAPI.Options;
+using FluentValidation.AspNetCore;
+using BusinessLogic.Validators;
 
 namespace WebAPI
 {
@@ -23,14 +32,58 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddScoped<SignInService>();
+            services.AddScoped<SignUpService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<PasswordService>();
+
+            services.AddScoped<UserRepository>();
+            services.AddScoped<PasswordRepository>();
+
+            services.AddTransient<SignInValidator>();
+            services.AddTransient<SignUpValidator>();
+            services.AddTransient<UserValidator>();
+            services.AddTransient<PasswordValidator>();
+
+            services.AddSingleton<JwtService>();
+
             services.AddLogging(
                 builder =>
                 {
                     builder.AddFile(Configuration.GetSection("Logging"));
                 }
             );
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(
+                    options =>
+                    {
+                        JwtOptions jwtOptions = Configuration.GetSection(JwtOptions.JwToken).Get<JwtOptions>();
+
+                        options.RequireHttpsMetadata = false;
+                        string key = jwtOptions.Key;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = jwtOptions.Issuer,
+
+                            ValidateAudience = true,
+                            ValidAudience = jwtOptions.Audience,
+
+                            ValidateLifetime = true,
+
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                            ValidateIssuerSigningKey = true,
+                        };
+                    }
+                );
             services.AddCors();
+            services.AddControllers().AddFluentValidation();
+            services.AddDbContext<CinemabooContext>(
+                options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +117,7 @@ namespace WebAPI
                 }
             );
 
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();          
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
             app.UseCors(
                 builder =>
@@ -75,6 +128,8 @@ namespace WebAPI
 
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app
