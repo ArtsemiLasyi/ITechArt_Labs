@@ -30,7 +30,7 @@ namespace BusinessLogic.Services
             {
                 Email = model.Email
             };
-            user = await _userService.CreateAsync(user);
+            await _userService.CreateAsync(user);
             await _passwordService.CreateAsync(user.Id, model.Password);
             
             return true;
