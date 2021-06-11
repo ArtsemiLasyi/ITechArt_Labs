@@ -17,6 +17,7 @@ using WebAPI.Services;
 using WebAPI.Options;
 using FluentValidation.AspNetCore;
 using BusinessLogic.Validators;
+using DataAccess.Storages;
 
 namespace WebAPI
 {
@@ -36,14 +37,19 @@ namespace WebAPI
             services.AddScoped<SignUpService>();
             services.AddScoped<UserService>();
             services.AddScoped<PasswordService>();
+            services.AddScoped<FilmService>();
+            services.AddScoped<FileService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
+            services.AddScoped<FilmRepository>();
+            services.AddScoped<FileStorage>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
             services.AddTransient<UserValidator>();
             services.AddTransient<PasswordValidator>();
+            services.AddTransient<FilmValidator>();
 
             services.AddSingleton<JwtService>();
 
