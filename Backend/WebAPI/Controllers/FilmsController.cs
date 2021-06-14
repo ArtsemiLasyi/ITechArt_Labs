@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using WebAPI.Responses;
 using WebAPI.Requests;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAPI.Controllers
 {
@@ -33,19 +33,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FilmRequest request)
+        public async Task<IActionResult> Create([FromForm] FilmRequest request)
         {
-            // [FromForm] IFormFile file
-            IFormFile file;
-
-            Stream stream = file.OpenReadStream();
-            string extension = Path.GetExtension(file.FileName);
-
-            Options.FileOptions options = new Options.FileOptions();
-            _configuration.GetSection(Options.FileOptions.Files).Bind(options);
-
-            string path = Path.Combine(options.Path, options.Films);
-            string filename = await _fileService.CreateAsync(stream, path, extension);
+            if (request.Poster == null)
+            {
+                return BadRequest(new { errortext = "Poster must be not null!" });
+            }
+            string filename = await UploadPoster(request.Poster);
             
             FilmModel model = request.Adapt<FilmModel>();
             model.PosterFileName = filename;
@@ -73,12 +67,10 @@ namespace WebAPI.Controllers
             _configuration.GetSection(Options.FileOptions.Files).Bind(options);
             string path = Path.Combine(options.Path, options.Films);
 
-            List<FilmResponse> films = _filmService
+            FilmResponse[] films = _filmService
                                            .Get(request.PageNumber, request.PageSize)
-                                           .ToList()
-                                           .Adapt<List<FilmResponse>>();
-       
-            films.ForEach(film => film.Poster = _fileService.Get(path, film.PosterFileName));
+                                           .ToArray()
+                                           .Adapt<FilmResponse[]>();
             return Ok(films);
         }
 
@@ -87,6 +79,11 @@ namespace WebAPI.Controllers
         {
             FilmModel model = request.Adapt<FilmModel>();
 
+            if (request.Poster != null)
+            {
+                string filename = await UploadPoster(request.Poster);
+                model.PosterFileName = filename;
+            }
             await _filmService.EditAsync(model);
 
             return Ok();
@@ -101,6 +98,20 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
             return Ok();
+        }
+
+        private Task<string> UploadPoster(IFormFile poster)
+        {
+            Stream stream = poster.OpenReadStream();
+            string extension = Path.GetExtension(poster.FileName);
+
+            Options.FileOptions options = new Options.FileOptions();
+            _configuration
+                .GetSection(Options.FileOptions.Files)
+                .Bind(options);
+
+            string path = Path.Combine(options.Path, options.Films);
+            return _fileService.CreateAsync(stream, path, extension);
         }
     }
 }

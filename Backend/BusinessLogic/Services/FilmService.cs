@@ -19,6 +19,7 @@ namespace BusinessLogic.Services
         public async Task<FilmModel> CreateAsync(FilmModel film)
         {
             FilmEntity? filmEntity = film.Adapt<FilmEntity>();
+            filmEntity.DurationInTicks = film.Duration.Ticks;
             await _filmRepository.CreateAsync(filmEntity);
             return filmEntity.Adapt<FilmModel>();
         }
@@ -43,9 +44,10 @@ namespace BusinessLogic.Services
             return _filmRepository.DeleteByAsync(id);
         }
 
-        public Task EditAsync(FilmModel model)
+        public Task EditAsync(FilmModel film)
         {
-            FilmEntity filmEntity = model.Adapt<FilmEntity>();
+            FilmEntity filmEntity = film.Adapt<FilmEntity>();
+            filmEntity.DurationInTicks = film.Duration.Ticks;
             return _filmRepository.UpdateAsync(filmEntity);
         }
     }

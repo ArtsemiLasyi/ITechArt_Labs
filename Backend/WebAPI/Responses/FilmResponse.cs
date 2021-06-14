@@ -10,7 +10,6 @@ namespace WebAPI.Responses
         public string Description { get; set; }
         public int ReleaseYear { get; set; }
         public int DurationInMinutes { get; set; }
-        public Stream Poster { get; set; }
         public string PosterFileName { get; set; }
     }
 }

@@ -18,6 +18,11 @@ using WebAPI.Options;
 using FluentValidation.AspNetCore;
 using BusinessLogic.Validators;
 using DataAccess.Storages;
+using Mapster;
+using WebAPI.Requests;
+using BusinessLogic.Models;
+using System;
+using WebAPI.Validators;
 
 namespace WebAPI
 {
@@ -83,13 +88,26 @@ namespace WebAPI
                     }
                 );
             services.AddCors();
-            services.AddControllers().AddFluentValidation();
+            services.AddControllers()
+                .AddFluentValidation(
+                fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
+                });
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
                 }
             );
+
+            TypeAdapterConfig<FilmRequest, FilmModel>
+                .NewConfig()
+                .Map(dest => dest.Duration,
+                    src => TimeSpan.FromMinutes(src.DurationInMinutes));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
