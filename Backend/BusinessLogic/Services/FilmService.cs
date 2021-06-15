@@ -16,27 +16,24 @@ namespace BusinessLogic.Services
             _filmRepository = filmRepository;
         }
 
-        public async Task<FilmModel> CreateAsync(FilmModel film)
+        public async Task<int> CreateAsync(FilmModel film)
         {
             FilmEntity? filmEntity = film.Adapt<FilmEntity>();
             filmEntity.DurationInTicks = film.Duration.Ticks;
             await _filmRepository.CreateAsync(filmEntity);
-            return filmEntity.Adapt<FilmModel>();
+            return filmEntity.Id;
         }
         
-        public ICollection<FilmModel> Get(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<FilmModel>> GetAsync(int pageNumber, int pageSize)
         {
-            return _filmRepository.Get(pageNumber, pageSize).Adapt<ICollection<FilmModel>>();
+            IReadOnlyCollection<FilmEntity> models = await _filmRepository.GetAsync(pageNumber, pageSize);
+            return models.Adapt<IReadOnlyCollection<FilmModel>>();
         }
 
         public async Task<FilmModel?> GetByAsync(int id)
         {
             FilmEntity? user = await _filmRepository.GetByAsync(id);
-            if (user == null)
-            {
-                return null;
-            }
-            return user.Adapt<FilmModel>();
+            return user?.Adapt<FilmModel>();
         }
 
         public Task<bool> DeleteByAsync(int id)

@@ -3,6 +3,7 @@ using DataAccess.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -24,6 +25,11 @@ namespace DataAccess.Repositories
         public async Task<bool> DeleteByAsync(int id)
         {
             FilmEntity? film = await _context.Films.FindAsync(id);
+            if (film == null)
+            {
+                return false;
+            }
+
             if (!film.IsDeleted)
             {
                 film.IsDeleted = true;
@@ -37,14 +43,16 @@ namespace DataAccess.Repositories
             }
         }
 
-        public ICollection<FilmEntity> Get(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize)
         {
-            return _context.Films
+            FilmEntity[] films = await _context.Films
                 .Where(film => !film.IsDeleted)
                 .OrderBy(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .AsQueryable<FilmEntity>()
+                .ToArrayAsync();
+            return films;
         }
 
         public ValueTask<FilmEntity?> GetByAsync(int id)

@@ -23,6 +23,7 @@ using WebAPI.Requests;
 using BusinessLogic.Models;
 using System;
 using WebAPI.Validators;
+using DataAccess.Entities;
 
 namespace WebAPI
 {
@@ -43,12 +44,12 @@ namespace WebAPI
             services.AddScoped<UserService>();
             services.AddScoped<PasswordService>();
             services.AddScoped<FilmService>();
-            services.AddScoped<FileService>();
+            services.AddScoped<PosterFileService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
             services.AddScoped<FilmRepository>();
-            services.AddScoped<FileStorage>();
+            services.AddScoped<PosterFileStorage>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -57,6 +58,8 @@ namespace WebAPI
             services.AddTransient<FilmValidator>();
 
             services.AddSingleton<JwtService>();
+
+            services.Configure<DataAccess.Options.FileOptions>(Configuration.GetSection("Files"));
 
             services.AddLogging(
                 builder =>
@@ -88,15 +91,18 @@ namespace WebAPI
                     }
                 );
             services.AddCors();
-            services.AddControllers()
+            services
+                .AddControllers()
                 .AddFluentValidation(
-                fv =>
-                {
-                    fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
-                    fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
-                    fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
-                    fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
-                });
+                    fv =>
+                    {
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmCreateRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmEditRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
+                    }
+                );
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
@@ -104,10 +110,26 @@ namespace WebAPI
                 }
             );
 
-            TypeAdapterConfig<FilmRequest, FilmModel>
+            TypeAdapterConfig<FilmCreateRequest, FilmModel>
                 .NewConfig()
-                .Map(dest => dest.Duration,
-                    src => TimeSpan.FromMinutes(src.DurationInMinutes));
+                .Map(
+                    dest => dest.Duration,
+                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
+                );
+
+            TypeAdapterConfig<FilmEditRequest, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInTicks,
+                    src => src.Duration.Ticks
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

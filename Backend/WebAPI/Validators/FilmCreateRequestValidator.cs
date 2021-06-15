@@ -6,11 +6,12 @@ using WebAPI.Requests;
 
 namespace WebAPI.Validators
 {
-    public class FilmRequestValidator : AbstractValidator<FilmRequest>
+    public class FilmCreateRequestValidator : AbstractValidator<FilmCreateRequest>
     {
-        public FilmRequestValidator(FilmValidator validator)
+        public FilmCreateRequestValidator(FilmValidator validator)
         {
             RuleFor(request => request.Adapt<FilmModel>()).SetValidator(validator);
+            RuleFor(request => request.Poster).NotNull();
         }
     }
 }

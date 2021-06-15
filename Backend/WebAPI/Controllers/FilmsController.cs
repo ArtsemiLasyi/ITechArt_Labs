@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebAPI.Responses;
 using WebAPI.Requests;
-using System.Linq;
 using System.IO;
-using Microsoft.Extensions.Configuration;
-using System;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace WebAPI.Controllers
 {
@@ -18,28 +16,24 @@ namespace WebAPI.Controllers
     public class FilmsController : ControllerBase
     {
         private readonly FilmService _filmService;
-        private readonly FileService _fileService;
-        private readonly IConfiguration _configuration;
+        private readonly PosterFileService _posterFileService;
 
         public FilmsController(
             FilmService filmService,
-            FileService fileService,
-            IConfiguration configuration
-            )
+            PosterFileService fileService)
         {
             _filmService = filmService;
-            _fileService = fileService;
-            _configuration = configuration;
+            _posterFileService = fileService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] FilmRequest request)
+        public async Task<IActionResult> Create([FromBody] FilmCreateRequest request)
         {
             if (request.Poster == null)
             {
-                return BadRequest(new { errortext = "Poster must be not null!" });
+                return BadRequest(new { errorText = "Poster must be not null!" });
             }
-            string filename = await UploadPoster(request.Poster);
+            string filename = await UploadPosterAsync(request.Poster);
             
             FilmModel model = request.Adapt<FilmModel>();
             model.PosterFileName = filename;
@@ -60,28 +54,46 @@ namespace WebAPI.Controllers
             return Ok(film.Adapt<FilmResponse>());
         }
 
+        [HttpGet("{id}/poster")]
+        public async Task<IActionResult> GetPoster(int id)
+        {
+            FilmModel? entity = await _filmService.GetByAsync(id);
+            if (entity != null)
+            {
+                Stream? stream = _posterFileService.Get(entity.PosterFileName);
+                if (stream != null)
+                {
+                    string contentType = "image/" + Path.GetExtension(entity.PosterFileName).Trim('.');
+                    return File(stream, contentType);
+                }
+            }
+            return NotFound();
+        }
+
         [HttpGet]
         public IActionResult Get([FromBody] PageRequest request)
         {
-            Options.FileOptions options = new Options.FileOptions();
-            _configuration.GetSection(Options.FileOptions.Files).Bind(options);
-            string path = Path.Combine(options.Path, options.Films);
-
-            FilmResponse[] films = _filmService
-                                           .Get(request.PageNumber, request.PageSize)
-                                           .ToArray()
-                                           .Adapt<FilmResponse[]>();
+            IReadOnlyCollection<FilmResponse> films = _filmService
+                .GetAsync(request.PageNumber, request.PageSize)
+                .Adapt<IReadOnlyCollection<FilmResponse>>();
             return Ok(films);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] FilmRequest request)
+        public async Task<IActionResult> Edit(int id, [FromBody] FilmEditRequest request)
         {
             FilmModel model = request.Adapt<FilmModel>();
+            model.Id = id;
 
             if (request.Poster != null)
             {
-                string filename = await UploadPoster(request.Poster);
+                string filename = await UploadPosterAsync(request.Poster);
+
+                FilmModel? oldModel = await _filmService.GetByAsync(id);
+                if (oldModel != null)
+                {
+                    _posterFileService.Delete(oldModel.PosterFileName);
+                }
                 model.PosterFileName = filename;
             }
             await _filmService.EditAsync(model);
@@ -100,18 +112,12 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        private Task<string> UploadPoster(IFormFile poster)
+        private Task<string> UploadPosterAsync(IFormFile poster)
         {
-            Stream stream = poster.OpenReadStream();
+            using Stream stream = poster.OpenReadStream();
             string extension = Path.GetExtension(poster.FileName);
 
-            Options.FileOptions options = new Options.FileOptions();
-            _configuration
-                .GetSection(Options.FileOptions.Files)
-                .Bind(options);
-
-            string path = Path.Combine(options.Path, options.Films);
-            return _fileService.CreateAsync(stream, path, extension);
+            return _posterFileService.CreateAsync(stream, extension);
         }
     }
 }

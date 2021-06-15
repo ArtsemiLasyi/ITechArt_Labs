@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using BusinessLogic.Models;
 using WebAPI.Requests;
 using Mapster;
 using BusinessLogic.Services;
 using WebAPI.Services;
 using System.Threading.Tasks;
-using BusinessLogic.Validators;
-using FluentValidation.Results;
 
 namespace WebAPI.Controllers
 {
@@ -37,7 +34,7 @@ namespace WebAPI.Controllers
             bool successful = await _signUpService.SignUpAsync(model);
             if (!successful)
             {
-                return BadRequest(new { errortext = "User already exists!" });
+                return BadRequest(new { errorText = "User already exists!" });
             }
 
             return Ok();
@@ -50,7 +47,7 @@ namespace WebAPI.Controllers
             UserModel? user = await _signInService.SignInAsync(model);
             if (user == null)
             {
-                return Unauthorized(new { errortext = "Invalid email or password!" });
+                return Unauthorized(new { errorText = "Invalid email or password!" });
             }
 
             string token = _jwtService.GetJwToken(user);
