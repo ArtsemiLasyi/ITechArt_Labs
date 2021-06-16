@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using DataAccess.Options;
+using Microsoft.Extensions.Options;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -6,14 +7,14 @@ namespace DataAccess.Storages
 {
     public class PosterFileStorage
     {
-        private readonly Options.FileOptions _fileSnapshotOptions;
+        private readonly StorageOptions _storageSnapshotOptions;
 
-        public PosterFileStorage(IOptionsSnapshot<Options.FileOptions> fileSnapshotOptionsAccessor)
+        public PosterFileStorage(IOptionsSnapshot<StorageOptions> storageSnapshotOptionsAccessor)
         {
-            _fileSnapshotOptions = fileSnapshotOptionsAccessor.Value;
+            _storageSnapshotOptions = storageSnapshotOptionsAccessor.Value;
         }
 
-        public Task CreateAsync(Stream stream, string filename)
+        public Task CreateAsync(Stream stream, string fileName)
         {
             string path = GetPath();
 
@@ -21,47 +22,41 @@ namespace DataAccess.Storages
             {
                 Directory.CreateDirectory(path);
             }
-            string fullPath = Path.Combine(path, filename);
+            string fullPath = Path.Combine(path, fileName);
             using FileStream fileStream = new FileStream(fullPath, FileMode.Create);
             return stream.CopyToAsync(fileStream);
         }
 
-        public bool Delete(string filename)
+        public bool Delete(string fileName)
         {
             string path = GetPath();
-            string fullPath = Path.Combine(path, filename);
+            string fullPath = Path.Combine(path, fileName);
 
             bool fileExists = File.Exists(fullPath);
-            if (!fileExists)
-            {
-                return false;
-            }
-            else
+            if (fileExists)
             {
                 File.Delete(fullPath);
                 return true;
             }
+            return false;
         }
 
-        public Stream? Get(string filename)
+        public Stream? Get(string fileName)
         {
             string path = GetPath();
-            string fullPath = Path.Combine(path, filename);
+            string fullPath = Path.Combine(path, fileName);
 
             bool fileExists = File.Exists(fullPath);
             if (!fileExists)
             {
-                return null;
-            }
-            else
-            {
                 return new FileStream(fullPath, FileMode.Open);
-            } 
+            }
+            return null;
         }
 
         private string GetPath()
         {
-            return Path.Combine(_fileSnapshotOptions.Path, _fileSnapshotOptions.Films);
+            return Path.Combine(_storageSnapshotOptions.Path, _storageSnapshotOptions.Films);
         }
     }
 }

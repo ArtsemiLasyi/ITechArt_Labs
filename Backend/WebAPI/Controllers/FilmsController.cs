@@ -8,6 +8,8 @@ using WebAPI.Requests;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.StaticFiles;
+using MimeTypes;
 
 namespace WebAPI.Controllers
 {
@@ -27,16 +29,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FilmCreateRequest request)
+        public async Task<IActionResult> Create([FromBody] FilmRequest request)
         {
-            if (request.Poster == null)
-            {
-                return BadRequest(new { errorText = "Poster must be not null!" });
-            }
-            string filename = await UploadPosterAsync(request.Poster);
-            
             FilmModel model = request.Adapt<FilmModel>();
-            model.PosterFileName = filename;
             await _filmService.CreateAsync(model);
 
             return Ok();
@@ -63,15 +58,30 @@ namespace WebAPI.Controllers
                 Stream? stream = _posterFileService.Get(entity.PosterFileName);
                 if (stream != null)
                 {
-                    string contentType = "image/" + Path.GetExtension(entity.PosterFileName).Trim('.');
+                    string contentType;
+                    FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+                    if (!provider.TryGetContentType(entity.PosterFileName, out contentType))
+                    {
+                        contentType = "application/octet-stream";
+                    }
                     return File(stream, contentType);
                 }
             }
             return NotFound();
         }
 
+        [HttpPost("poster")]
+        public async Task<IActionResult> UploadPoster(IFormFile formFile)
+        {
+            using Stream stream = formFile.OpenReadStream();
+            string extension = MimeTypeMap.GetExtension(formFile.ContentType);
+
+            string fileName = await _posterFileService.CreateAsync(stream, extension);
+            return Ok(fileName);
+        }
+
         [HttpGet]
-        public IActionResult Get([FromBody] PageRequest request)
+        public IActionResult Get([FromQuery] PageRequest request)
         {
             IReadOnlyCollection<FilmResponse> films = _filmService
                 .GetAsync(request.PageNumber, request.PageSize)
@@ -80,21 +90,18 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] FilmEditRequest request)
+        public async Task<IActionResult> Edit(int id, [FromBody] FilmRequest request)
         {
             FilmModel model = request.Adapt<FilmModel>();
             model.Id = id;
 
-            if (request.Poster != null)
+            FilmModel? oldModel = await _filmService.GetByAsync(id);
+            if (oldModel?.PosterFileName != model.PosterFileName)
             {
-                string filename = await UploadPosterAsync(request.Poster);
-
-                FilmModel? oldModel = await _filmService.GetByAsync(id);
                 if (oldModel != null)
                 {
                     _posterFileService.Delete(oldModel.PosterFileName);
                 }
-                model.PosterFileName = filename;
             }
             await _filmService.EditAsync(model);
 
@@ -110,14 +117,6 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
             return Ok();
-        }
-
-        private Task<string> UploadPosterAsync(IFormFile poster)
-        {
-            using Stream stream = poster.OpenReadStream();
-            string extension = Path.GetExtension(poster.FileName);
-
-            return _posterFileService.CreateAsync(stream, extension);
         }
     }
 }

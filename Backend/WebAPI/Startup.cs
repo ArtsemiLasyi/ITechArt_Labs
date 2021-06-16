@@ -24,6 +24,7 @@ using BusinessLogic.Models;
 using System;
 using WebAPI.Validators;
 using DataAccess.Entities;
+using DataAccess.Options;
 
 namespace WebAPI
 {
@@ -59,7 +60,7 @@ namespace WebAPI
 
             services.AddSingleton<JwtService>();
 
-            services.Configure<DataAccess.Options.FileOptions>(Configuration.GetSection("Files"));
+            services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
 
             services.AddLogging(
                 builder =>
@@ -96,8 +97,7 @@ namespace WebAPI
                 .AddFluentValidation(
                     fv =>
                     {
-                        fv.RegisterValidatorsFromAssemblyContaining<FilmCreateRequestValidator>();
-                        fv.RegisterValidatorsFromAssemblyContaining<FilmEditRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
@@ -110,14 +110,7 @@ namespace WebAPI
                 }
             );
 
-            TypeAdapterConfig<FilmCreateRequest, FilmModel>
-                .NewConfig()
-                .Map(
-                    dest => dest.Duration,
-                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
-                );
-
-            TypeAdapterConfig<FilmEditRequest, FilmModel>
+            TypeAdapterConfig<FilmRequest, FilmModel>
                 .NewConfig()
                 .Map(
                     dest => dest.Duration,

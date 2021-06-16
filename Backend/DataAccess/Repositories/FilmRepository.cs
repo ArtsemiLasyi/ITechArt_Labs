@@ -25,12 +25,8 @@ namespace DataAccess.Repositories
         public async Task<bool> DeleteByAsync(int id)
         {
             FilmEntity? film = await _context.Films.FindAsync(id);
-            if (film == null)
-            {
-                return false;
-            }
 
-            if (!film.IsDeleted)
+            if (!film?.IsDeleted == false)
             {
                 film.IsDeleted = true;
                 _context.Update(film);

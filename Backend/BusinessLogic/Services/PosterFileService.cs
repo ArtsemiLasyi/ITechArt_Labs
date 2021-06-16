@@ -22,14 +22,14 @@ namespace BusinessLogic.Services
             return filename;
         }
 
-        public bool Delete(string filename)
+        public bool Delete(string fileName)
         {
-            return _posterFileStorage.Delete(filename);
+            return _posterFileStorage.Delete(fileName);
         }
 
-        public Stream? Get(string filename)
+        public Stream? Get(string fileName)
         {
-            return _posterFileStorage.Get(filename);
+            return _posterFileStorage.Get(fileName);
         }
     }
 }
