@@ -9,6 +9,6 @@ namespace BusinessLogic.Models
         public string Description { get; set; } = string.Empty;
         public int ReleaseYear { get; set; }
         public TimeSpan Duration { get; set; }
-        public string PosterFileName { get; set; } = string.Empty;
+        public string? PosterFileName { get; set; }
     }
 }

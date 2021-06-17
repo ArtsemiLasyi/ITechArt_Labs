@@ -27,7 +27,8 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<FilmModel>> GetAsync(int pageNumber, int pageSize)
         {
             IReadOnlyCollection<FilmEntity> models = await _filmRepository.GetAsync(pageNumber, pageSize);
-            return models.Adapt<IReadOnlyCollection<FilmModel>>();
+            List<FilmModel> result = new List<FilmEntity>(models).Adapt<List<FilmModel>>();
+            return result;
         }
 
         public async Task<FilmModel?> GetByAsync(int id)

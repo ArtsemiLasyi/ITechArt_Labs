@@ -47,7 +47,7 @@ namespace DataAccess.Storages
             string fullPath = Path.Combine(path, fileName);
 
             bool fileExists = File.Exists(fullPath);
-            if (!fileExists)
+            if (fileExists)
             {
                 return new FileStream(fullPath, FileMode.Open);
             }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace DataAccess.Repositories
 {
@@ -26,28 +28,24 @@ namespace DataAccess.Repositories
         {
             FilmEntity? film = await _context.Films.FindAsync(id);
 
-            if (!film?.IsDeleted == false)
+            if (film?.IsDeleted == false)
             {
                 film.IsDeleted = true;
                 _context.Update(film);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize)
         {
-            FilmEntity[] films = await _context.Films
+            List<FilmEntity> films = await _context.Films
                 .Where(film => !film.IsDeleted)
                 .OrderBy(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .AsQueryable<FilmEntity>()
-                .ToArrayAsync();
+                .ToListAsync();
             return films;
         }
 

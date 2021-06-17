@@ -7,7 +7,7 @@
         public string Description { get; set; } = null!;
         public int ReleaseYear { get; set; }
         public long DurationInTicks { get; set; }
-        public string PosterFileName { get; set; } = null!;
+        public string? PosterFileName { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

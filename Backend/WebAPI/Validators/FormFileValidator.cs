@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
 
 namespace WebAPI.Validators
 {
     public class FormFileValidator : AbstractValidator<IFormFile>
     {
-        private const string IMAGE_JPEG_MIME_TYPE = "image/jpeg";
         private const string IMAGE_PNG_MIME_TYPE = "image/png";
 
         public FormFileValidator()
@@ -13,7 +13,7 @@ namespace WebAPI.Validators
             RuleFor(file => file).Must(
                 file =>
                 {
-                    return file.ContentType == IMAGE_JPEG_MIME_TYPE || file.ContentType == IMAGE_PNG_MIME_TYPE;
+                    return file.ContentType == MediaTypeNames.Image.Jpeg || file.ContentType == IMAGE_PNG_MIME_TYPE;
                 }
             );
         }

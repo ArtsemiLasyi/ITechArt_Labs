@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.StaticFiles;
 using MimeTypes;
+using System.Net.Mime;
+using System.Collections.ObjectModel;
 
 namespace WebAPI.Controllers
 {
@@ -53,40 +55,39 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetPoster(int id)
         {
             FilmModel? entity = await _filmService.GetByAsync(id);
-            if (entity != null)
+            if (entity?.PosterFileName != null)
             {
-                Stream? stream = _posterFileService.Get(entity.PosterFileName);
+                Stream? stream = _posterFileService.Get(entity.PosterFileName!);
                 if (stream != null)
                 {
                     string contentType;
                     FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
                     if (!provider.TryGetContentType(entity.PosterFileName, out contentType))
                     {
-                        contentType = "application/octet-stream";
+                        contentType = MediaTypeNames.Application.Octet;
                     }
                     return File(stream, contentType);
                 }
-            }
+            }      
             return NotFound();
         }
 
-        [HttpPost("poster")]
+        [HttpPost("{id}/poster")]
         public async Task<IActionResult> UploadPoster(IFormFile formFile)
         {
             using Stream stream = formFile.OpenReadStream();
             string extension = MimeTypeMap.GetExtension(formFile.ContentType);
 
             string fileName = await _posterFileService.CreateAsync(stream, extension);
-            return Ok(fileName);
+            return Ok();
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] PageRequest request)
+        public async Task<IActionResult> Get([FromQuery] PageRequest request)
         {
-            IReadOnlyCollection<FilmResponse> films = _filmService
-                .GetAsync(request.PageNumber, request.PageSize)
-                .Adapt<IReadOnlyCollection<FilmResponse>>();
-            return Ok(films);
+            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
+            IReadOnlyCollection<FilmResponse> result = new List<FilmModel>(films).Adapt<List<FilmResponse>>();
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -100,7 +101,7 @@ namespace WebAPI.Controllers
             {
                 if (oldModel != null)
                 {
-                    _posterFileService.Delete(oldModel.PosterFileName);
+                    _posterFileService.Delete(oldModel.PosterFileName!);
                 }
             }
             await _filmService.EditAsync(model);

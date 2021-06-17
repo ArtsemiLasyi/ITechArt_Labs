@@ -25,6 +25,7 @@ using System;
 using WebAPI.Validators;
 using DataAccess.Entities;
 using DataAccess.Options;
+using WebAPI.Responses;
 
 namespace WebAPI
 {
@@ -98,6 +99,7 @@ namespace WebAPI
                     fv =>
                     {
                         fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
@@ -122,6 +124,20 @@ namespace WebAPI
                 .Map(
                     dest => dest.DurationInTicks,
                     src => src.Duration.Ticks
+                );
+
+            TypeAdapterConfig<FilmEntity, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => new TimeSpan(src.DurationInTicks)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmResponse>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInMinutes,
+                    src => src.Duration.TotalMinutes
                 );
         }
 
