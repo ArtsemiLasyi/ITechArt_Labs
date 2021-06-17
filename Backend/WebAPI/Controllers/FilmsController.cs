@@ -83,6 +83,11 @@ namespace WebAPI.Controllers
 
                 string fileName = await _posterFileService.CreateAsync(stream, extension);
 
+                if (model.PosterFileName != null)
+                {
+                    _posterFileService.Delete(model.PosterFileName);
+                }
+
                 model.PosterFileName = fileName;
                 await _filmService.EditAsync(model);
                 return Ok();
