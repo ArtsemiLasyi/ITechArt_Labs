@@ -6,14 +6,12 @@ namespace WebAPI.Validators
 {
     public class FormFileValidator : AbstractValidator<IFormFile>
     {
-        private const string IMAGE_PNG_MIME_TYPE = "image/png";
-
         public FormFileValidator()
         {
             RuleFor(file => file).Must(
                 file =>
                 {
-                    return file.ContentType == MediaTypeNames.Image.Jpeg || file.ContentType == IMAGE_PNG_MIME_TYPE;
+                    return file.ContentType == MediaTypeNames.Image.Jpeg || file.ContentType == "image/png";
                 }
             );
         }
