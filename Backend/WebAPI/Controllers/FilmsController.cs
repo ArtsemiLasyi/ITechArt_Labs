@@ -102,6 +102,7 @@ namespace WebAPI.Controllers
                 if (oldModel != null)
                 {
                     _posterFileService.Delete(oldModel.PosterFileName!);
+                    model.PosterFileName = oldModel.PosterFileName;
                 }
             }
             await _filmService.EditAsync(model);
