@@ -46,12 +46,13 @@ namespace WebAPI
             services.AddScoped<UserService>();
             services.AddScoped<PasswordService>();
             services.AddScoped<FilmService>();
-            services.AddScoped<PosterFileService>();
+            services.AddScoped<PosterService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
             services.AddScoped<FilmRepository>();
             services.AddScoped<PosterFileStorage>();
+            services.AddScoped<PosterRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();

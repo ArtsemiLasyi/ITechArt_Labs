@@ -8,8 +8,8 @@ namespace DataAccess.Contexts
         public virtual DbSet<UserEntity> Users { get; set; } = null!;
         public virtual DbSet<UserPasswordEntity> UserPasswords { get; set; } = null!;
         public virtual DbSet<UserRoleEntity> UserRoles { get; set; } = null!;
-
         public virtual DbSet<FilmEntity> Films { get; set; } = null!;
+        public virtual DbSet<PosterEntity> Posters { get; set; } = null!;
 
         public CinemabooContext(DbContextOptions<CinemabooContext> options)
             : base(options)

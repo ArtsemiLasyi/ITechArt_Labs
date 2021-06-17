@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
-using System.Threading;
 
 namespace DataAccess.Repositories
 {

@@ -20,11 +20,11 @@ namespace WebAPI.Controllers
     public class FilmsController : ControllerBase
     {
         private readonly FilmService _filmService;
-        private readonly PosterFileService _posterFileService;
+        private readonly PosterService _posterFileService;
 
         public FilmsController(
             FilmService filmService,
-            PosterFileService fileService)
+            PosterService fileService)
         {
             _filmService = filmService;
             _posterFileService = fileService;
@@ -54,46 +54,33 @@ namespace WebAPI.Controllers
         [HttpGet("{id}/poster")]
         public async Task<IActionResult> GetPoster(int id)
         {
-            FilmModel? entity = await _filmService.GetByAsync(id);
-            if (entity?.PosterFileName != null)
+            PosterModel? model = await _posterFileService.GetAsync(id);
+            if (model == null)
             {
-                Stream? stream = _posterFileService.Get(entity.PosterFileName!);
-                if (stream != null)
-                {
-                    string contentType;
-                    FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
-                    if (!provider.TryGetContentType(entity.PosterFileName, out contentType))
-                    {
-                        contentType = MediaTypeNames.Application.Octet;
-                    }
-                    return File(stream, contentType);
-                }
-            }      
-            return NotFound();
+                return NotFound();
+            }
+            string contentType;
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(model.FileName, out contentType))
+            {
+                contentType = MediaTypeNames.Application.Octet;
+            }
+            return File(model.FileStream, contentType);
         }
 
         [HttpPost("{id}/poster")]
         public async Task<IActionResult> UploadPoster(int id, IFormFile formFile)
         {
             FilmModel? model = await _filmService.GetByAsync(id);
-            if (model != null)
+            if (model == null)
             {
-                using Stream stream = formFile.OpenReadStream();
-                string extension = MimeTypeMap.GetExtension(formFile.ContentType);
-
-                string fileName = await _posterFileService.CreateAsync(stream, extension);
-
-                if (model.PosterFileName != null)
-                {
-                    _posterFileService.Delete(model.PosterFileName);
-                }
-
-                model.PosterFileName = fileName;
-                await _filmService.EditAsync(model);
-                return Ok();
+                return NotFound();
             }
+            using Stream stream = formFile.OpenReadStream();
+            string extension = MimeTypeMap.GetExtension(formFile.ContentType);
 
-            return NotFound();
+            await _posterFileService.UploadAsync(id, stream, extension);
+            return Ok();
         }
 
         [HttpGet]
