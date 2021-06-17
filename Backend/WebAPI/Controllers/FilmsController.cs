@@ -73,13 +73,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("{id}/poster")]
-        public async Task<IActionResult> UploadPoster(IFormFile formFile)
+        public async Task<IActionResult> UploadPoster(int id, IFormFile formFile)
         {
-            using Stream stream = formFile.OpenReadStream();
-            string extension = MimeTypeMap.GetExtension(formFile.ContentType);
+            FilmModel? model = await _filmService.GetByAsync(id);
+            if (model != null)
+            {
+                using Stream stream = formFile.OpenReadStream();
+                string extension = MimeTypeMap.GetExtension(formFile.ContentType);
 
-            string fileName = await _posterFileService.CreateAsync(stream, extension);
-            return Ok();
+                string fileName = await _posterFileService.CreateAsync(stream, extension);
+
+                model.PosterFileName = fileName;
+                await _filmService.EditAsync(model);
+                return Ok();
+            }
+
+            return NotFound();
         }
 
         [HttpGet]
@@ -95,16 +104,6 @@ namespace WebAPI.Controllers
         {
             FilmModel model = request.Adapt<FilmModel>();
             model.Id = id;
-
-            FilmModel? oldModel = await _filmService.GetByAsync(id);
-            if (oldModel?.PosterFileName != model.PosterFileName)
-            {
-                if (oldModel != null)
-                {
-                    _posterFileService.Delete(oldModel.PosterFileName!);
-                    model.PosterFileName = oldModel.PosterFileName;
-                }
-            }
             await _filmService.EditAsync(model);
 
             return Ok();
