@@ -39,6 +39,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Edit(int id, [FromBody] UserEditRequest request)
         {
             UserModel model = request.Adapt<UserModel>();
+            model.Id = id;
 
             await _userService.EditAsync(model);
             if (request.Password != null)

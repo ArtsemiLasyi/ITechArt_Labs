@@ -17,6 +17,15 @@ using WebAPI.Services;
 using WebAPI.Options;
 using FluentValidation.AspNetCore;
 using BusinessLogic.Validators;
+using DataAccess.Storages;
+using Mapster;
+using WebAPI.Requests;
+using BusinessLogic.Models;
+using System;
+using WebAPI.Validators;
+using DataAccess.Entities;
+using DataAccess.Options;
+using WebAPI.Responses;
 
 namespace WebAPI
 {
@@ -36,16 +45,24 @@ namespace WebAPI
             services.AddScoped<SignUpService>();
             services.AddScoped<UserService>();
             services.AddScoped<PasswordService>();
+            services.AddScoped<FilmService>();
+            services.AddScoped<PosterService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
+            services.AddScoped<FilmRepository>();
+            services.AddScoped<PosterFileStorage>();
+            services.AddScoped<PosterRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
             services.AddTransient<UserValidator>();
             services.AddTransient<PasswordValidator>();
+            services.AddTransient<FilmValidator>();
 
             services.AddSingleton<JwtService>();
+
+            services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
 
             services.AddLogging(
                 builder =>
@@ -77,13 +94,52 @@ namespace WebAPI
                     }
                 );
             services.AddCors();
-            services.AddControllers().AddFluentValidation();
+            services
+                .AddControllers()
+                .AddFluentValidation(
+                    fv =>
+                    {
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
+                    }
+                );
             services.AddDbContext<CinemabooContext>(
                 options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("CinemabooContext"));
                 }
             );
+
+            TypeAdapterConfig<FilmRequest, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInTicks,
+                    src => src.Duration.Ticks
+                );
+
+            TypeAdapterConfig<FilmEntity, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => new TimeSpan(src.DurationInTicks)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmResponse>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInMinutes,
+                    src => src.Duration.TotalMinutes
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

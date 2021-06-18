@@ -37,14 +37,20 @@ namespace DataAccess.Repositories
 
         public Task<UserEntity?> GetByAsync(string email)
         {
+            // This measure is temporary. The directive will be removed with the release of EF 6.0
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.Users.FirstOrDefaultAsync(
                 user => user.Email == email
             );
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
-        public Task<UserEntity?> GetByAsync(int id)
+        public ValueTask<UserEntity?> GetByAsync(int id)
         {
+            // This measure is temporary. The directive will be removed with the release of EF 6.0
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.Users.FindAsync(id);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
         public Task UpdateAsync(UserEntity user)

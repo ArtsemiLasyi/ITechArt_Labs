@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BusinessLogic.Models;
 using DataAccess.Entities;
 using Mapster;
@@ -19,7 +17,7 @@ namespace BusinessLogic.Services
 
         public async Task<UserModel> CreateAsync(UserModel user)
         {
-            UserEntity? userEntity = new();
+            UserEntity userEntity = user.Adapt<UserEntity>();
             userEntity.RoleId = (int)UserRole.User;
             await _userRepository.CreateAsync(userEntity);
             return userEntity.Adapt<UserModel>();
