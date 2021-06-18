@@ -362,3 +362,6 @@ FodyWeavers.xsd
 
 # File storage
 Data/
+
+# Refactorlog files
+.refactorlog

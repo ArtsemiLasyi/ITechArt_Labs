@@ -34,6 +34,7 @@ namespace BusinessLogic.Services
                     FileName = fileName
                 };
                 await _posterRepository.CreateAsync(entity);
+                return;
             }
             _posterFileStorage.Delete(entity.FileName);
             entity.FileName = fileName;

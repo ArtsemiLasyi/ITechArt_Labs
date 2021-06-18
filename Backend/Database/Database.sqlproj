@@ -66,7 +66,4 @@
     <Build Include="dbo\Tables\Films.sql" />
     <Build Include="dbo\Tables\Posters.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Database.refactorlog" />
-  </ItemGroup>
 </Project>
