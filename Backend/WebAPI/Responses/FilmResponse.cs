@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.IO;
-
-namespace WebAPI.Responses
+﻿namespace WebAPI.Responses
 {
     public class FilmResponse
     {

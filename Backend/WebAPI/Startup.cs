@@ -93,7 +93,23 @@ namespace WebAPI
                         };
                     }
                 );
-            services.AddCors();
+
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+            services.AddCors(
+                options =>
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder
+                                .WithOrigins(originsArray)
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        }
+                    );
+                }
+            );
             services
                 .AddControllers()
                 .AddFluentValidation(
@@ -147,14 +163,10 @@ namespace WebAPI
             IApplicationBuilder app,
             IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
             string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
@@ -173,17 +185,9 @@ namespace WebAPI
                 }
             );
 
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-
-            app.UseCors(
-                builder =>
-                {
-                    builder.WithOrigins(originsArray);
-                }
-            );
-
             app.UseRouting();
 
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

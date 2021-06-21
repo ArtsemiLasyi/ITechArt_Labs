@@ -1,4 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.content {
+	min-height: calc(100vh - 150px);
+}
 
 .btn:hover {
   background-color:  #D3875F;
@@ -19,4 +27,9 @@
 
 .page-link {
   color: #7D401F;
+}
+
+.form-signin {
+  width: 30%;
+  margin: 0 auto;
 }
