@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
 
         public Task UpdateAsync(UserEntity user)
         {
-            _context.Update(user);
+            _context.Users.Update(user);
             return _context.SaveChangesAsync();
         }
     }

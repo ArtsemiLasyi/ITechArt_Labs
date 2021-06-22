@@ -37,7 +37,7 @@ namespace DataAccess.Repositories
 
         public Task UpdateAsync(UserPasswordEntity entity)
         {
-            _context.Update(entity);
+            _context.UserPasswords.Update(entity);
             return _context.SaveChangesAsync();
         }
     }

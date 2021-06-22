@@ -1,63 +1,59 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class FilmRepository
+    public class HallRepository
     {
         private readonly CinemabooContext _context;
 
-        public FilmRepository(CinemabooContext context)
+        public HallRepository(CinemabooContext context)
         {
             _context = context;
         }
 
-        public Task CreateAsync(FilmEntity film)
+        public Task CreateAsync(HallEntity hall)
         {
-            _context.Films.Add(film);
+            _context.Halls.Add(hall);
             return _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteByAsync(int id)
         {
-            FilmEntity? film = await _context.Films.FindAsync(id);
-
-            if (film?.IsDeleted == false)
+            HallEntity? hall = await _context.Halls.FindAsync(id);
+            if (hall?.IsDeleted == false)
             {
-                film.IsDeleted = true;
-                _context.Update(film);
+                hall.IsDeleted = true;
+                _context.Update(hall);
                 await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<HallEntity>> GetAllByAsync(int cinemaId)
         {
-            List<FilmEntity> films = await _context.Films
-                .Where(film => !film.IsDeleted)
-                .OrderBy(on => on.ReleaseYear)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+            List<HallEntity> halls = await _context.Halls
+                .Where(hall => !hall.IsDeleted && hall.CinemaId == cinemaId)
                 .ToListAsync();
-            return films;
+            return halls;
         }
 
-        public ValueTask<FilmEntity?> GetByAsync(int id)
+        public ValueTask<HallEntity?> GetByAsync(int id)
         {
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-            return _context.Films.FindAsync(id);
+            return _context.Halls.FindAsync(id);
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
-        public Task UpdateAsync(FilmEntity film)
+        public Task UpdateAsync(HallEntity hall)
         {
-            _context.Films.Update(film);
+            _context.Halls.Update(hall);
             return _context.SaveChangesAsync();
         }
     }

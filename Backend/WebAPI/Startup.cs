@@ -47,18 +47,32 @@ namespace WebAPI
             services.AddScoped<PasswordService>();
             services.AddScoped<FilmService>();
             services.AddScoped<PosterService>();
+            services.AddScoped<CinemaService>();
+            services.AddScoped<CinemaPhotoService>();
+            services.AddScoped<HallService>();
+            services.AddScoped<HallPhotoService>();
+            services.AddScoped<CityService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
             services.AddScoped<FilmRepository>();
             services.AddScoped<PosterFileStorage>();
             services.AddScoped<PosterRepository>();
+            services.AddScoped<CinemaRepository>();
+            services.AddScoped<HallRepository>();
+            services.AddScoped<CinemaPhotoRepository>();
+            services.AddScoped<HallPhotoRepository>();
+            services.AddScoped<CinemaPhotoFileStorage>();
+            services.AddScoped<HallPhotoFileStorage>();
+            services.AddScoped<CityRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
             services.AddTransient<UserValidator>();
             services.AddTransient<PasswordValidator>();
             services.AddTransient<FilmValidator>();
+            services.AddTransient<CinemaValidator>();
+            services.AddTransient<HallValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -113,6 +127,62 @@ namespace WebAPI
                 }
             );
 
+            ConfigureAdapters();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
+        {
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
+            IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
+
+            DefaultFilesOptions options = new()
+            {
+                FileProvider = fileProvider
+            };
+            options.DefaultFileNames.Clear();
+            options.DefaultFileNames.Add("index.html");
+
+            app.UseDefaultFiles(options);
+            app.UseStaticFiles(
+                new StaticFileOptions
+                {
+                    FileProvider = fileProvider
+                }
+            );
+
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+            app.UseRouting();
+            app.UseCors(
+                builder =>
+                {
+                    builder.WithOrigins(originsArray);
+                }
+            );
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app
+                .UseEndpoints(
+                    endpoints =>
+                    {
+                        endpoints.MapControllers();
+                    }
+                );
+        }
+
+        private void ConfigureAdapters()
+        {
             TypeAdapterConfig<FilmRequest, FilmModel>
                 .NewConfig()
                 .Map(
@@ -140,60 +210,12 @@ namespace WebAPI
                     dest => dest.DurationInMinutes,
                     src => src.Duration.TotalMinutes
                 );
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            IWebHostEnvironment env)
-        {
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
-            IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
-
-            DefaultFilesOptions options = new()
-            {
-                FileProvider = fileProvider
-            };
-            options.DefaultFileNames.Clear();
-            options.DefaultFileNames.Add("index.html");
-
-            app.UseDefaultFiles(options);
-            app.UseStaticFiles(
-                new StaticFileOptions
-                {
-                    FileProvider = fileProvider
-                }
-            );
-
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-
-            app.UseCors(
-                builder =>
-                {
-                    builder.WithOrigins(originsArray);
-                }
-            );
-
-            app.UseRouting();
-
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app
-                .UseEndpoints(
-                    endpoints =>
-                    {
-                        endpoints.MapControllers();
-                    }
+            TypeAdapterConfig<CinemaEntity, CinemaModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.CityName,
+                    src => src.City.Name
                 );
         }
     }

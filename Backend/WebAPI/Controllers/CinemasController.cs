@@ -11,30 +11,29 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.StaticFiles;
 using MimeTypes;
 using System.Net.Mime;
-using System.Collections.ObjectModel;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("/films")]
-    public class FilmsController : ControllerBase
+    [Route("/cinemas")]
+    public class CinemasController : ControllerBase
     {
-        private readonly FilmService _filmService;
-        private readonly PosterService _posterFileService;
+        private readonly CinemaService _cinemaService;
+        private readonly CinemaPhotoService _cinemaPhotoService;
 
-        public FilmsController(
-            FilmService filmService,
-            PosterService fileService)
+        public CinemasController(
+            CinemaService cinemaService,
+            CinemaPhotoService cinemaPhotoService)
         {
-            _filmService = filmService;
-            _posterFileService = fileService;
+            _cinemaService = cinemaService;
+            _cinemaPhotoService = cinemaPhotoService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FilmRequest request)
+        public async Task<IActionResult> Create([FromBody] CinemaRequest request)
         {
-            FilmModel model = request.Adapt<FilmModel>();
-            await _filmService.CreateAsync(model);
+            CinemaModel model = request.Adapt<CinemaModel>();
+            await _cinemaService.CreateAsync(model);
 
             return Ok();
         }
@@ -42,19 +41,19 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            FilmModel? film = await _filmService.GetByAsync(id);
-            if (film == null)
+            CinemaModel? cinema = await _cinemaService.GetByAsync(id);
+            if (cinema == null)
             {
                 return NotFound();
             }
 
-            return Ok(film.Adapt<FilmResponse>());
+            return Ok(cinema.Adapt<CinemaResponse>());
         }
 
-        [HttpGet("{id}/poster")]
-        public async Task<IActionResult> GetPoster(int id)
+        [HttpGet("{id}/photo")]
+        public async Task<IActionResult> GetPhoto(int id)
         {
-            PosterModel? model = await _posterFileService.GetAsync(id);
+            PosterModel? model = await _cinemaPhotoService.GetAsync(id);
             if (model == null)
             {
                 return NotFound();
@@ -68,10 +67,10 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
-        [HttpPost("{id}/poster")]
-        public async Task<IActionResult> UploadPoster(int id, IFormFile formFile)
+        [HttpPost("{id}/photo")]
+        public async Task<IActionResult> UploadPhoto(int id, IFormFile formFile)
         {
-            FilmModel? model = await _filmService.GetByAsync(id);
+            CinemaModel? model = await _cinemaService.GetByAsync(id);
             if (model == null)
             {
                 return NotFound();
@@ -79,24 +78,24 @@ namespace WebAPI.Controllers
             using Stream stream = formFile.OpenReadStream();
             string extension = MimeTypeMap.GetExtension(formFile.ContentType);
 
-            await _posterFileService.UploadAsync(id, stream, extension);
+            await _cinemaPhotoService.UploadAsync(id, stream, extension);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PageRequest request)
+        public async Task<IActionResult> GetAllBy([FromQuery]int cityId)
         {
-            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
-            IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
+            IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId);
+            IReadOnlyCollection<CinemaResponse> response = cinemas.Adapt<IReadOnlyCollection<CinemaResponse>>();
             return Ok(response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] FilmRequest request)
+        public async Task<IActionResult> Edit(int id, [FromBody] CinemaRequest request)
         {
-            FilmModel model = request.Adapt<FilmModel>();
+            CinemaModel model = request.Adapt<CinemaModel>();
             model.Id = id;
-            await _filmService.EditAsync(model);
+            await _cinemaService.EditAsync(model);
 
             return Ok();
         }
@@ -104,7 +103,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            bool successful = await _filmService.DeleteByAsync(id);
+            bool successful = await _cinemaService.DeleteByAsync(id);
             if (!successful)
             {
                 return NotFound();
