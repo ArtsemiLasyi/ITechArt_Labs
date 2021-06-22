@@ -26,13 +26,13 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<HallModel>> GetAllByAsync(int cinemaId)
         {
             IReadOnlyCollection<HallEntity> models = await _hallRepository.GetAllByAsync(cinemaId);
-            return models.Adapt<List<HallModel>>();
+            return models.Adapt<IReadOnlyCollection<HallModel>>();
         }
 
         public async Task<HallModel?> GetByAsync(int id)
         {
-            HallEntity? user = await _hallRepository.GetByAsync(id);
-            return user?.Adapt<HallModel>();
+            HallEntity? hallEntity = await _hallRepository.GetByAsync(id);
+            return hallEntity?.Adapt<HallModel>();
         }
 
         public Task<bool> DeleteByAsync(int id)

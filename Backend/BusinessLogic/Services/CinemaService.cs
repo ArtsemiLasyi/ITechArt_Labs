@@ -47,7 +47,7 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<CinemaModel>> GetAllByAsync(int cityId)
         {
             IReadOnlyCollection<CinemaEntity> models = await _cinemaRepository.GetAllByAsync(cityId);
-            return models.Adapt<List<CinemaModel>>();
+            return models.Adapt<IReadOnlyCollection<CinemaModel>>();
         }
 
         public async Task<CinemaModel?> GetByAsync(int id)

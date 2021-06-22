@@ -26,8 +26,7 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<CityModel>> GetAsync()
         {
             IReadOnlyCollection<CityEntity> models = await _cityRepository.GetAllAsync();
-            List<CityModel> result = new List<CityEntity>(models).Adapt<List<CityModel>>();
-            return result;
+            return models.Adapt<IReadOnlyCollection<CityModel>>();
         }
 
         public async Task<CityModel?> GetByAsync(int id)

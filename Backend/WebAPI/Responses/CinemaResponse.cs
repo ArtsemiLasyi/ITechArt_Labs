@@ -9,8 +9,7 @@ namespace WebAPI.Responses
         public string CityName { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public IReadOnlyCollection<HallResponse> Halls { get; set; } = new ReadOnlyCollection<HallResponse>(
-            new List<HallResponse>()
+        public IReadOnlyCollection<HallResponse> Halls { get; set; } = new List<HallResponse>();
         );
     }
 }
