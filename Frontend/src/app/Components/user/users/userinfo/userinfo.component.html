@@ -1,22 +1,19 @@
-<section class="content form text-center">
+<section class="content form-signin text-center">
     <div>
       <form>
         <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">User info</h1>
   
         <div class="form-floating">
-          <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required>
-          <label for="emailInput">Enter email...</label>
-        </div>
-        <div [hidden]="!(email.invalid && (email.dirty || email.touched))" class="alert alert-danger">
-            Invalid email
+          <input readonly type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required>
+          <label for="emailInput">You email:</label>
         </div>
         <div class="form-floating">
           <input type="password" name="password" [(ngModel)]="newPassword" #password="ngModel" minlength="6" class="form-control" id="passwordInput" placeholder="passwordInput" required>
           <label for="passwordInput">Enter new password...</label>
         </div>
         <div [hidden]="!(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
-            Password must be equal or more than 6 symbols
+            New password must be equal or more than 6 symbols
         </div>
   
         <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editUser()">Edit</button>

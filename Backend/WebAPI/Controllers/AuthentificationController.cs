@@ -5,6 +5,7 @@ using Mapster;
 using BusinessLogic.Services;
 using WebAPI.Services;
 using System.Threading.Tasks;
+using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
@@ -51,7 +52,12 @@ namespace WebAPI.Controllers
             }
 
             string token = _jwtService.GetJwToken(user);
-            return Ok(token);
+            return Ok(
+                new TokenResponse()
+                {
+                    Token = token
+                }
+            );
         }
     }
 }

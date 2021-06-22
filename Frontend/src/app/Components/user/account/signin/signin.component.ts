@@ -21,10 +21,15 @@ export class SignInComponent {
   model : SignInModel = new SignInModel();
   error : ErrorModel = new ErrorModel();
 
+
+
   signIn() {
     let request = new SignInRequest(this.model.email!, this.model.password!);
     this.service.signIn(request).subscribe(
-      () => {
+      (data : any) => {
+
+        let token = data.token;
+        localStorage.setItem('token', token);
         this.router.navigate(['']);
       },
       error => {

@@ -7,6 +7,10 @@ using WebAPI.Requests;
 using WebAPI.Responses;
 using BusinessLogic.Validators;
 using FluentValidation.Results;
+using System.Security.Claims;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace WebAPI.Controllers
 {
@@ -21,6 +25,37 @@ namespace WebAPI.Controllers
         {
             _userService = userService;
             _passwordService = passwordService;
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> Get()
+        {
+            int id;
+            ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null)
+            {
+                return Unauthorized();
+            }
+            bool converted = int.TryParse(
+                identity
+                    .Claims
+                    .Where(c => c.Type == JwtRegisteredClaimNames.Sub)
+                    .Select(c => c.Value)
+                    .SingleOrDefault(),
+                out id
+            );
+            if (!converted)
+            {
+                return Unauthorized();
+            }
+
+            UserModel? user = await _userService.GetByAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user.Adapt<UserResponse>());
         }
 
         [HttpGet("{id}")]

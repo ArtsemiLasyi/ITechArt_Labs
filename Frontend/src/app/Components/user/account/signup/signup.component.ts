@@ -21,13 +21,10 @@ export class SignUpComponent {
   error : ErrorModel = new ErrorModel();
 
   signUp() {
-    if (this.error.exists) {
-        return;
-    }
     let request = new SignUpRequest(this.model.email!, this.model.password!);
     this.service.signUp(request).subscribe(
       () => {
-        this.router.navigate(['']);
+        this.router.navigate(['/account/signin']);
       },
       error => {
         this.error.exists = true;

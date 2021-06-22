@@ -4,7 +4,7 @@
       <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
       <h1 class="h3 mb-3 fw-normal">Sign in</h1>
       <div class="form-floating">
-        <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required>
+        <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required pattern="[a-zA-Z_0-9]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}">
         <label for="emailInput">Enter email...</label>
       </div>
       <div [hidden]="!(email.invalid && (email.dirty || email.touched))" class="alert alert-danger">
@@ -17,8 +17,13 @@
         <div [hidden]="!(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
             Password must be equal or more than 6 symbols
         </div>
-  
         <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="signIn()">Sign in</button>
+        <div [hidden]="!error.exists" class="alert alert-danger">
+          {{error.text}}
+        </div>
+        <div>
+          <p>No account? <a class="nav-link px-2 text-black" routerLink="../signup">Sign up</a></p>
+        </div>
       </form>
     </div>
 </section>

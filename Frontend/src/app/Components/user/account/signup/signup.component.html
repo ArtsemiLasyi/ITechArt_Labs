@@ -5,7 +5,7 @@
         <h1 class="h3 mb-3 fw-normal">Sign up</h1>
   
         <div class="form-floating">
-          <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required>
+          <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required pattern="[a-zA-Z_0-9]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}">
           <label for="emailInput">Enter email...</label>
         </div>
         <div [hidden]="!(email.invalid && (email.dirty || email.touched))" class="alert alert-danger">

@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +15,7 @@ import { FilmsListComponent } from 'src/app/Components/user/films/filmslist/film
 import { FilmsNodeComponent } from 'src/app/Components/user/films/filmsnode/filmsnode.component';
 import { UserInfoComponent } from 'src/app/Components/user/users/userinfo/userinfo.component';
 import { SignInRequest } from 'src/app/Requests/SignInRequest';
+import { AuthInterceptor } from 'src/app/Services/authinterceptor';
 
 const accountRoutes: Routes = [
   { path: 'signin', component: SignInComponent },
@@ -29,7 +30,7 @@ const filmsRoutes: Routes = [
 const appRoutes: Routes = [
   { path: '', component : FilmsListComponent },
   { path: 'account', component : AccountNodeComponent, children: accountRoutes },
-  { path: 'users:id', component: UserInfoComponent },
+  { path: 'users/current', component: UserInfoComponent },
   { path: 'films', component : FilmsNodeComponent, children: filmsRoutes },
   { path: '**', component: NotFoundComponent }
 ];
@@ -53,7 +54,13 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

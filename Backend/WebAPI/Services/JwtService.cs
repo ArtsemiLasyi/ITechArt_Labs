@@ -46,6 +46,10 @@ namespace WebAPI.Services
                 new Claim(
                     "email",
                     userInfo.Email
+                ),
+                new Claim(
+                    "role",
+                    userInfo.Role.ToString()
                 )
             };
 

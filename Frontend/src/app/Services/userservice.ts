@@ -14,6 +14,11 @@ export class UserService{
         return this.http.put(Config.ApiUrl + this._users + '/id', user); 
     }
 
+
+    getCurrentUser() {
+        return this.http.get(Config.ApiUrl + this._users + '/current');       
+    }
+
     getUser(id : number) {
         return this.http.get(Config.ApiUrl + this._users + '/id');
     }
