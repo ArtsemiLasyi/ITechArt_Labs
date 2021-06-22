@@ -29,7 +29,7 @@ namespace BusinessLogic.Services
                 cityId = await _cityService.CreateAsync(
                     new CityModel()
                     {
-                        Name = cinema.Name
+                        Name = cinema.CityName
                     }
                 );
             }
@@ -47,14 +47,13 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<CinemaModel>> GetAllByAsync(int cityId)
         {
             IReadOnlyCollection<CinemaEntity> models = await _cinemaRepository.GetAllByAsync(cityId);
-            List<CinemaModel> result = new List<CinemaEntity>(models).Adapt<List<CinemaModel>>();
-            return result;
+            return models.Adapt<List<CinemaModel>>();
         }
 
         public async Task<CinemaModel?> GetByAsync(int id)
         {
-            CinemaEntity? user = await _cinemaRepository.GetByAsync(id);
-            return user?.Adapt<CinemaModel>();
+            CinemaEntity? cinemaEntity = await _cinemaRepository.GetByAsync(id);
+            return cinemaEntity?.Adapt<CinemaModel>();
         }
 
         public Task<bool> DeleteByAsync(int id)

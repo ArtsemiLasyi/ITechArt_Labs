@@ -83,11 +83,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBy(int cityId)
+        public async Task<IActionResult> GetAllBy([FromQuery]int cityId)
         {
             IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId);
-            IReadOnlyCollection<FilmResponse> result = new List<CinemaModel>(cinemas).Adapt<List<FilmResponse>>();
-            return Ok(result);
+            IReadOnlyCollection<CinemaResponse> response = cinemas.Adapt<List<CinemaResponse>>();
+            return Ok(response);
         }
 
         [HttpPut("{id}")]

@@ -86,8 +86,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetAll(int cinemaId)
         {
             IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
-            IReadOnlyCollection<FilmResponse> result = new List<HallModel>(halls).Adapt<List<FilmResponse>>();
-            return Ok(result);
+            IReadOnlyCollection<FilmResponse> response = halls.Adapt<List<FilmResponse>>();
+            return Ok(response);
         }
 
         [HttpPut("{id}")]

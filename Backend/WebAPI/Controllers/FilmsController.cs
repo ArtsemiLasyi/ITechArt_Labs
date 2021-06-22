@@ -87,8 +87,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Get([FromQuery] PageRequest request)
         {
             IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
-            //IReadOnlyCollection<FilmResponse> result = new List<FilmModel>(films).Adapt<List<FilmResponse>>();
-            return Ok(films.Adapt<IReadOnlyCollection<FilmResponse>>());
+            IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
+            return Ok(response);
         }
 
         [HttpPut("{id}")]

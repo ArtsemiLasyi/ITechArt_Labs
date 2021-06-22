@@ -43,12 +43,16 @@ namespace DataAccess.Repositories
             return cinemas;
         }
 
-        public ValueTask<CinemaEntity?> GetByAsync(int id)
+        public async Task<CinemaEntity?> GetByAsync(int id)
         {
-            // This measure is temporary. The directive will be removed with the release of EF 6.0
-#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-            return _context.Cinemas.FindAsync(id);
-#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+            CinemaEntity? entity = await _context.Cinemas.FindAsync(id);
+            if (entity == null)
+            {
+                return entity;
+            }
+            await _context.Entry(entity).Reference(cinema => cinema.City).LoadAsync();
+            await _context.Entry(entity).Collection(cinema => cinema.Halls).LoadAsync();
+            return entity;
         }
 
         public Task UpdateAsync(CinemaEntity cinema)

@@ -26,8 +26,7 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<HallModel>> GetAllByAsync(int cinemaId)
         {
             IReadOnlyCollection<HallEntity> models = await _hallRepository.GetAllByAsync(cinemaId);
-            List<HallModel> result = new List<HallEntity>(models).Adapt<List<HallModel>>();
-            return result;
+            return models.Adapt<List<HallModel>>();
         }
 
         public async Task<HallModel?> GetByAsync(int id)

@@ -127,33 +127,7 @@ namespace WebAPI
                 }
             );
 
-            TypeAdapterConfig<FilmRequest, FilmModel>
-                .NewConfig()
-                .Map(
-                    dest => dest.Duration,
-                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
-                );
-
-            TypeAdapterConfig<FilmModel, FilmEntity>
-                .NewConfig()
-                .Map(
-                    dest => dest.DurationInTicks,
-                    src => src.Duration.Ticks
-                );
-
-            TypeAdapterConfig<FilmEntity, FilmModel>
-                .NewConfig()
-                .Map(
-                    dest => dest.Duration,
-                    src => new TimeSpan(src.DurationInTicks)
-                );
-
-            TypeAdapterConfig<FilmModel, FilmResponse>
-                .NewConfig()
-                .Map(
-                    dest => dest.DurationInMinutes,
-                    src => src.Duration.TotalMinutes
-                );
+            ConfigureAdapters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -204,6 +178,44 @@ namespace WebAPI
                     {
                         endpoints.MapControllers();
                     }
+                );
+        }
+
+        private void ConfigureAdapters()
+        {
+            TypeAdapterConfig<FilmRequest, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => TimeSpan.FromMinutes(src.DurationInMinutes)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInTicks,
+                    src => src.Duration.Ticks
+                );
+
+            TypeAdapterConfig<FilmEntity, FilmModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Duration,
+                    src => new TimeSpan(src.DurationInTicks)
+                );
+
+            TypeAdapterConfig<FilmModel, FilmResponse>
+                .NewConfig()
+                .Map(
+                    dest => dest.DurationInMinutes,
+                    src => src.Duration.TotalMinutes
+                );
+
+            TypeAdapterConfig<CinemaEntity, CinemaModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.CityName,
+                    src => src.City.Name
                 );
         }
     }
