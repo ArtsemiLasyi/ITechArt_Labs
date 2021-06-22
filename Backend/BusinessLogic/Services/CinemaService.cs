@@ -26,10 +26,12 @@ namespace BusinessLogic.Services
             int cityId;
             if (cityModel == null)
             {
-                cityId = await _cityService.CreateAsync(new CityModel()
-                {
-                    Name = cinema.Name
-                });
+                cityId = await _cityService.CreateAsync(
+                    new CityModel()
+                    {
+                        Name = cinema.Name
+                    }
+                );
             }
             else
             {

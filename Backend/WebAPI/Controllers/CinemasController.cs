@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             return Ok(cinema.Adapt<CinemaResponse>());
         }
 
-        [HttpGet("{id}/poster")]
+        [HttpGet("{id}/photo")]
         public async Task<IActionResult> GetPhoto(int id)
         {
             PosterModel? model = await _cinemaPhotoService.GetAsync(id);
