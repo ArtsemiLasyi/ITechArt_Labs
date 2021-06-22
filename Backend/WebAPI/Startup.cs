@@ -47,18 +47,32 @@ namespace WebAPI
             services.AddScoped<PasswordService>();
             services.AddScoped<FilmService>();
             services.AddScoped<PosterService>();
+            services.AddScoped<CinemaService>();
+            services.AddScoped<CinemaPhotoService>();
+            services.AddScoped<HallService>();
+            services.AddScoped<HallPhotoService>();
+            services.AddScoped<CityService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
             services.AddScoped<FilmRepository>();
             services.AddScoped<PosterFileStorage>();
             services.AddScoped<PosterRepository>();
+            services.AddScoped<CinemaRepository>();
+            services.AddScoped<HallRepository>();
+            services.AddScoped<CinemaPhotoRepository>();
+            services.AddScoped<HallPhotoRepository>();
+            services.AddScoped<CinemaPhotoFileStorage>();
+            services.AddScoped<HallPhotoFileStorage>();
+            services.AddScoped<CityRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
             services.AddTransient<UserValidator>();
             services.AddTransient<PasswordValidator>();
             services.AddTransient<FilmValidator>();
+            services.AddTransient<CinemaValidator>();
+            services.AddTransient<HallValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -153,8 +167,6 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
@@ -175,15 +187,13 @@ namespace WebAPI
 
             string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
+            app.UseRouting();
             app.UseCors(
                 builder =>
                 {
                     builder.WithOrigins(originsArray);
                 }
             );
-
-            app.UseRouting();
-
 
             app.UseAuthentication();
             app.UseAuthorization();

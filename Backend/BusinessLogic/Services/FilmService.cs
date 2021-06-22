@@ -19,7 +19,6 @@ namespace BusinessLogic.Services
         public async Task<int> CreateAsync(FilmModel film)
         {
             FilmEntity? filmEntity = film.Adapt<FilmEntity>();
-            filmEntity.DurationInTicks = film.Duration.Ticks;
             await _filmRepository.CreateAsync(filmEntity);
             return filmEntity.Id;
         }
@@ -33,8 +32,8 @@ namespace BusinessLogic.Services
 
         public async Task<FilmModel?> GetByAsync(int id)
         {
-            FilmEntity? user = await _filmRepository.GetByAsync(id);
-            return user?.Adapt<FilmModel>();
+            FilmEntity? film = await _filmRepository.GetByAsync(id);
+            return film?.Adapt<FilmModel>();
         }
 
         public Task<bool> DeleteByAsync(int id)
