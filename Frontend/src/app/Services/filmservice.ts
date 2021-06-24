@@ -18,7 +18,7 @@ export class FilmService{
         return this.http.put(Config.ApiUrl + this._films + '/' + id, film); 
     }
 
-    addPoster(id : number, poster : File) {
+    addPoster(id : number, poster : any) {
         return this.http.post(
             Config.ApiUrl + 
             this._films + 

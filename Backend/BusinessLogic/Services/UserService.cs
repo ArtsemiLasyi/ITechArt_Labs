@@ -18,7 +18,6 @@ namespace BusinessLogic.Services
         public async Task<UserModel> CreateAsync(UserModel user)
         {
             UserEntity userEntity = user.Adapt<UserEntity>();
-            userEntity.RoleId = (int)UserRole.User;
             await _userRepository.CreateAsync(userEntity);
             return userEntity.Adapt<UserModel>();
         }

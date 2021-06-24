@@ -1,8 +1,8 @@
 export class FilmModel {
 
-    id : number | undefined;
-    name : string | undefined;
-    description : string | undefined;
-    releaseYear : number | undefined;
-    durationInMinutes : number | undefined;
+    id : number = 0;
+    name : string = "";
+    description : string = "";
+    releaseYear : number = 0;
+    durationInMinutes : number = 0;
 }

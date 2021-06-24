@@ -26,6 +26,8 @@ using WebAPI.Validators;
 using DataAccess.Entities;
 using DataAccess.Options;
 using WebAPI.Responses;
+using System.Security.Claims;
+using WebAPI.Constants;
 
 namespace WebAPI
 {
@@ -61,6 +63,7 @@ namespace WebAPI
             services.AddTransient<FilmValidator>();
 
             services.AddSingleton<JwtService>();
+            services.AddSingleton<IdentityService>();
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
 
@@ -93,6 +96,18 @@ namespace WebAPI
                         };
                     }
                 );
+
+            services.AddAuthorization(
+                opts => 
+                {
+                    opts.AddPolicy(PolicyNames.Authorized, policy => {
+                        policy.RequireClaim(ClaimTypes.NameIdentifier);
+                    });
+                    opts.AddPolicy(PolicyNames.Administrator, policy => {
+                        policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
+                    });
+                }
+            );
 
             string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
@@ -156,6 +171,13 @@ namespace WebAPI
                     dest => dest.DurationInMinutes,
                     src => src.Duration.TotalMinutes
                 );
+
+            TypeAdapterConfig<UserEntity, UserModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Role,
+                    src => src.RoleId
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -167,6 +189,9 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpsRedirection();
+
             string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 

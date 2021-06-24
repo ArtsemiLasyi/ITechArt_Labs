@@ -30,7 +30,7 @@ namespace WebAPI.Services
             _configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
 
             SymmetricSecurityKey securityKey = new (
-                Encoding.Unicode.GetBytes(jwtOptions.Key)
+                Encoding.ASCII.GetBytes(jwtOptions.Key)
             );
             SigningCredentials credentials = new (
                 securityKey,
@@ -40,15 +40,15 @@ namespace WebAPI.Services
             Claim[] claims = new []
             {
                 new Claim(
-                    JwtRegisteredClaimNames.Sub,
+                    ClaimTypes.NameIdentifier,
                     userInfo.Id.ToString()
                 ),
                 new Claim(
-                    "email",
+                    ClaimTypes.Email,
                     userInfo.Email
                 ),
                 new Claim(
-                    "role",
+                    ClaimTypes.Role,
                     userInfo.Role.ToString()
                 )
             };
