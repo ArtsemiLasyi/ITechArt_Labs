@@ -1,0 +1,23 @@
+<section class="content">
+    <div class="left column">
+        <div class="row">
+            <div class="dropdown">
+                <button class="dropbtn">Users</button>
+                <div class="dropdown-content">
+                    <a routerLink="./users">Add user</a>
+                    <a routerLink="./users/current">Settings</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Films</button>
+                <div class="dropdown-content">
+                  <a routerLink="./films">Add film</a>
+                  <a routerLink="./films/search">Search film</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right column">
+        <router-outlet></router-outlet>
+    </div>
+</section>

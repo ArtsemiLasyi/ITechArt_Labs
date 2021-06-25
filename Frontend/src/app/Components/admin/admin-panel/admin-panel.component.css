@@ -1,0 +1,19 @@
+.left {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 40%;
+    
+}
+
+.right {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 60%;
+}
+
+.column {
+    float: left;
+    padding: 16px;
+}
