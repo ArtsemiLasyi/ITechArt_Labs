@@ -26,6 +26,7 @@ using WebAPI.Validators;
 using DataAccess.Entities;
 using DataAccess.Options;
 using WebAPI.Responses;
+using System.Collections.Generic;
 
 namespace WebAPI
 {
@@ -52,6 +53,8 @@ namespace WebAPI
             services.AddScoped<HallService>();
             services.AddScoped<HallPhotoService>();
             services.AddScoped<CityService>();
+            services.AddScoped<SeatTypeService>();
+            services.AddScoped<SeatService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -65,6 +68,8 @@ namespace WebAPI
             services.AddScoped<CinemaPhotoFileStorage>();
             services.AddScoped<HallPhotoFileStorage>();
             services.AddScoped<CityRepository>();
+            services.AddScoped<SeatTypeRepository>();
+            services.AddScoped<SeatRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -73,6 +78,9 @@ namespace WebAPI
             services.AddTransient<FilmValidator>();
             services.AddTransient<CinemaValidator>();
             services.AddTransient<HallValidator>();
+            services.AddTransient<SeatValidator>();
+            services.AddTransient<SeatTypeValidator>();
+            services.AddTransient<CityValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -118,6 +126,9 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SeatTypeRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

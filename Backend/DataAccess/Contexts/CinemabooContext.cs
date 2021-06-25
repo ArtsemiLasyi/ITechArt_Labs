@@ -15,6 +15,8 @@ namespace DataAccess.Contexts
         public virtual DbSet<CinemaEntity> Cinemas { get; set; } = null!;
         public virtual DbSet<HallPhotoEntity> HallPhotos { get; set; } = null!;
         public virtual DbSet<CinemaPhotoEntity> CinemaPhotos { get; set; } = null!;
+        public virtual DbSet<SeatEntity> Seats { get; set; } = null!;
+        public virtual DbSet<SeatTypeEntity> SeatTypes { get; set; } = null!;
 
         public CinemabooContext(DbContextOptions<CinemabooContext> options)
             : base(options)

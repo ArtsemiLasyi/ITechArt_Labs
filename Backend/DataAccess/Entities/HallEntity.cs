@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Entities
+﻿using System.Collections.Generic;
+
+namespace DataAccess.Entities
 {
     public class HallEntity
     {
@@ -7,5 +9,6 @@
         public int CinemaId { get; set; }
         public bool IsDeleted { get; set; }
         public CinemaEntity Cinema { get; set; } = null!;
+        public ICollection<SeatEntity> Seats { get; set; } = null!;
     }
 }

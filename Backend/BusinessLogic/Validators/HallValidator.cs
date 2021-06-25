@@ -8,7 +8,6 @@ namespace BusinessLogic.Validators
         public HallValidator()
         {
             RuleFor(model => model.Name).NotNull().MaximumLength(50);
-            RuleFor(model => model.Description).NotNull();
         }
     }
 }

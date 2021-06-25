@@ -70,5 +70,7 @@
     <Build Include="dbo\Tables\Halls.sql" />
     <Build Include="dbo\Tables\CinemaPhotos.sql" />
     <Build Include="dbo\Tables\HallPhotos.sql" />
+    <Build Include="dbo\Tables\Seats.sql" />
+    <Build Include="dbo\Tables\SeatTypes.sql" />
   </ItemGroup>
 </Project>

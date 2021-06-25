@@ -16,10 +16,11 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task CreateAsync(HallEntity hall)
+        public async Task<int> CreateAsync(HallEntity hall)
         {
             _context.Halls.Add(hall);
-            return _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return hall.Id;
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -43,12 +44,15 @@ namespace DataAccess.Repositories
             return halls;
         }
 
-        public ValueTask<HallEntity?> GetByAsync(int id)
+        public async Task<HallEntity?> GetByAsync(int id)
         {
-            // This measure is temporary. The directive will be removed with the release of EF 6.0
-#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-            return _context.Halls.FindAsync(id);
-#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+            HallEntity? entity = await _context.Halls.FindAsync(id);
+            if (entity == null)
+            {
+                return entity;
+            }
+            await _context.Entry(entity).Collection(cinema => cinema.Seats).LoadAsync();
+            return entity;
         }
 
         public Task UpdateAsync(HallEntity hall)
