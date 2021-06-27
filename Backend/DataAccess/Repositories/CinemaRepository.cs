@@ -52,6 +52,7 @@ namespace DataAccess.Repositories
             }
             await _context.Entry(entity).Reference(cinema => cinema.City).LoadAsync();
             await _context.Entry(entity).Collection(cinema => cinema.Halls).LoadAsync();
+            await _context.Entry(entity).Collection(cinema => cinema.ServiceCinemas).LoadAsync();
             return entity;
         }
 

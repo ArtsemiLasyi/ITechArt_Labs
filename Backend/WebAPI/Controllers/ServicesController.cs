@@ -1,0 +1,78 @@
+﻿using BusinessLogic.Models;
+using BusinessLogic.Services;
+using BusinessLogic.Statuses;
+using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using WebAPI.Requests;
+using WebAPI.Responses;
+
+namespace WebAPI.Controllers
+{
+    [ApiController]
+    [Route("/services")]
+    public class ServicesController : ControllerBase
+    {
+        private readonly ServiceService _serviceService;
+
+        public ServicesController(ServiceService serviceService)
+        {
+            _serviceService = serviceService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ServiceRequest request)
+        {
+            ServiceModel model = request.Adapt<ServiceModel>();
+            await _serviceService.CreateAsync(model);
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            ServiceModel? service = await _serviceService.GetByAsync(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(service.Adapt<ServiceResponse>());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            IReadOnlyCollection<ServiceModel> services = await _serviceService.GetAllAsync();
+            IReadOnlyCollection<ServiceResponse> response = services.Adapt<IReadOnlyCollection<ServiceResponse>>();
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] ServiceRequest request)
+        {
+            ServiceModel model = request.Adapt<ServiceModel>();
+            model.Id = id;
+            await _serviceService.EditAsync(model);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            ServiceDeletionStatus status = await _serviceService.DeleteByAsync(id);
+            if (status == ServiceDeletionStatus.NotFound)
+            {
+                return NotFound();
+            }
+            if (status == ServiceDeletionStatus.DeletionRestricted)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+    }
+}

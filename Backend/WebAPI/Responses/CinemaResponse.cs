@@ -10,6 +10,6 @@ namespace WebAPI.Responses
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public IReadOnlyCollection<HallResponse> Halls { get; set; } = new List<HallResponse>();
-        );
+        public IReadOnlyCollection<ServiceCinemaResponse> ServiceCinemas { get; set; } = new List<ServiceCinemaResponse>();
     }
 }

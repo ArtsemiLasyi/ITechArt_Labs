@@ -29,10 +29,7 @@ namespace DataAccess.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public Task<UserEntity?> GetByAsync(string email)
