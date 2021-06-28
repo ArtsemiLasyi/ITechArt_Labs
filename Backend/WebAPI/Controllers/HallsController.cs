@@ -16,6 +16,7 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("/halls")]
+    [Route("/cities/{cityId}/cinemas/{cinemaId}/halls")]
     public class HallsController : ControllerBase
     {
         private readonly HallService _hallService;

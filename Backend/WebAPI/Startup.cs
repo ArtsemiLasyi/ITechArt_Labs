@@ -53,6 +53,7 @@ namespace WebAPI
             services.AddScoped<HallPhotoService>();
             services.AddScoped<CityService>();
             services.AddScoped<ServiceService>();
+            services.AddScoped<CinemaServiceService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -67,6 +68,7 @@ namespace WebAPI
             services.AddScoped<HallPhotoFileStorage>();
             services.AddScoped<CityRepository>();
             services.AddScoped<ServiceRepository>();
+            services.AddScoped<CinemaServiceService>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -76,7 +78,9 @@ namespace WebAPI
             services.AddTransient<CinemaValidator>();
             services.AddTransient<HallValidator>();
             services.AddTransient<ServiceValidator>();
-            services.AddTransient<ServiceCinemaValidator>();
+            services.AddTransient<CinemaServiceValidator>();
+            services.AddTransient<PriceValidator>();
+
 
             services.AddSingleton<JwtService>();
 
@@ -123,6 +127,11 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<ServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

@@ -1,10 +1,9 @@
 ﻿namespace BusinessLogic.Models
 {
-    public class ServiceCinemaModel
+    public class CinemaServiceModel
     {
         public int ServiceId { get; set; }
         public int CinemaId { get; set; }
-        public decimal PriceInDollars { get; set; }
-
+        public PriceModel Price { get; set; } = null!;
     }
 }

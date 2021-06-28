@@ -47,13 +47,13 @@ namespace BusinessLogic.Services
             {
                 return ServiceDeletionStatus.NotFound;
             }
-            if (await _serviceRepository.IsUsedAsync(id))
+            if (await _serviceRepository.CheckUsedAsync(id))
             {
-                return ServiceDeletionStatus.DeletionRestricted;
+                return ServiceDeletionStatus.ForbiddenAsUsed;
             }
             if (await _serviceRepository.DeleteByAsync(id))
             {
-                return ServiceDeletionStatus.DeletionSuccessful;
+                return ServiceDeletionStatus.Successful;
             }
             return ServiceDeletionStatus.NotFound;
         }

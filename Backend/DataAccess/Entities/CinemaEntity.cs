@@ -9,8 +9,6 @@ namespace DataAccess.Entities
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public bool IsDeleted { get; set; }
-        public ICollection<HallEntity> Halls { get; set; } = null!;
-        public ICollection<ServiceCinemaEntity> ServiceCinemas { get; set; } = null!;
         public CityEntity City { get; set; } = null!;
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace WebAPI.Requests
 {
-    public class ServiceCinemaRequest
+    public class CinemaServiceRequest
     {
         public int CinemaId { get; set; }
         public int ServiceId { get; set; }
-        public decimal PriceInDollars { get; set; }
+        public PriceRequest Price { get; set; } = null!;
     }
 }

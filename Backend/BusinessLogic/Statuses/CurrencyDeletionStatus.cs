@@ -1,6 +1,6 @@
 ﻿namespace BusinessLogic.Statuses
 {
-    public enum ServiceDeletionStatus
+    public enum CurrencyDeletionStatus
     {
         NotFound = 0,
         ForbiddenAsUsed = 1,

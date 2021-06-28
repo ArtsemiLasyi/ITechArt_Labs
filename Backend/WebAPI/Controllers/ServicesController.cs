@@ -38,7 +38,6 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(service.Adapt<ServiceResponse>());
         }
 
@@ -68,9 +67,9 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            if (status == ServiceDeletionStatus.DeletionRestricted)
+            if (status == ServiceDeletionStatus.ForbiddenAsUsed)
             {
-                return BadRequest();
+                return BadRequest(new { errorText = "Service is already in use!" });
             }
             return Ok();
         }

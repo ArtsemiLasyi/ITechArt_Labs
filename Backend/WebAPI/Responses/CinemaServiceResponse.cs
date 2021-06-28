@@ -1,9 +1,9 @@
 ﻿namespace WebAPI.Responses
 {
-    public class ServiceCinemaResponse
+    public class CinemaServiceResponse
     {
         public int CinemaId { get; set; }
         public int ServiceId { get; set; }
-        public decimal PriceInDollars { get; set; }
+        public PriceResponse Price { get; set; } = null!;
     }
 }
