@@ -55,6 +55,8 @@ namespace WebAPI
             services.AddScoped<CityService>();
             services.AddScoped<SeatTypeService>();
             services.AddScoped<SeatService>();
+            services.AddScoped<ServiceService>();
+            services.AddScoped<CinemaServiceService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -70,6 +72,8 @@ namespace WebAPI
             services.AddScoped<CityRepository>();
             services.AddScoped<SeatTypeRepository>();
             services.AddScoped<SeatRepository>();
+            services.AddScoped<ServiceRepository>();
+            services.AddScoped<CinemaServiceService>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -81,6 +85,9 @@ namespace WebAPI
             services.AddTransient<SeatValidator>();
             services.AddTransient<SeatTypeValidator>();
             services.AddTransient<CityValidator>();
+            services.AddTransient<ServiceValidator>();
+            services.AddTransient<CinemaServiceValidator>();
+            services.AddTransient<PriceValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -129,6 +136,12 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypeRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<ServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

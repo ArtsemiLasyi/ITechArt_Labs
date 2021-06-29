@@ -29,7 +29,7 @@ namespace DataAccess.Repositories
             if (film?.IsDeleted == false)
             {
                 film.IsDeleted = true;
-                _context.Update(film);
+                _context.Films.Update(film);
                 await _context.SaveChangesAsync();
                 return true;
             }

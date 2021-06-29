@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int cinemaId)
+        public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
         {
             IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
             IReadOnlyCollection<HallResponse> response = halls.Adapt<IReadOnlyCollection<HallResponse>>();

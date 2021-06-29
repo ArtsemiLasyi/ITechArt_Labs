@@ -2,6 +2,7 @@
 using BusinessLogic.Validators;
 using FluentValidation;
 using Mapster;
+using System.Collections.Generic;
 using WebAPI.Requests;
 
 namespace WebAPI.Validators
