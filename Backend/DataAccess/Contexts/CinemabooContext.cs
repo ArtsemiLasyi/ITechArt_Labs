@@ -15,6 +15,8 @@ namespace DataAccess.Contexts
         public virtual DbSet<CinemaEntity> Cinemas { get; set; } = null!;
         public virtual DbSet<HallPhotoEntity> HallPhotos { get; set; } = null!;
         public virtual DbSet<CinemaPhotoEntity> CinemaPhotos { get; set; } = null!;
+        public virtual DbSet<SeatEntity> Seats { get; set; } = null!;
+        public virtual DbSet<SeatTypeEntity> SeatTypes { get; set; } = null!;
         public virtual DbSet<ServiceEntity> Services { get; set; } = null!;
         public virtual DbSet<CinemaServiceEntity> CinemaServices { get; set; } = null!;
         public virtual DbSet<CurrencyEntity> Currencies { get; set; } = null!;

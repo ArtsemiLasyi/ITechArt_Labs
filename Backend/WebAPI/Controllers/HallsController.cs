@@ -34,7 +34,6 @@ namespace WebAPI.Controllers
         {
             HallModel model = request.Adapt<HallModel>();
             await _hallService.CreateAsync(model);
-
             return Ok();
         }
 
@@ -86,7 +85,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
         {
             IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
-            IReadOnlyCollection<FilmResponse> response = halls.Adapt<IReadOnlyCollection<FilmResponse>>();
+            IReadOnlyCollection<HallResponse> response = halls.Adapt<IReadOnlyCollection<HallResponse>>();
             return Ok(response);
         }
 
@@ -96,7 +95,6 @@ namespace WebAPI.Controllers
             HallModel model = request.Adapt<HallModel>();
             model.Id = id;
             await _hallService.EditAsync(model);
-
             return Ok();
         }
 

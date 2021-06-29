@@ -9,9 +9,17 @@ namespace WebAPI.Validators
 {
     public class CinemaRequestValidator : AbstractValidator<CinemaRequest>
     {
-        public CinemaRequestValidator(CinemaValidator cinemaValidator)
+        public CinemaRequestValidator(CityValidator cityValidator, CinemaValidator cinemaValidator)
         {
             RuleFor(request => request.Adapt<CinemaModel>()).SetValidator(cinemaValidator);
+            RuleFor(
+                request => 
+                    new CityModel() 
+                    {
+                        Name = request.CityName 
+                    }
+                )
+                .SetValidator(cityValidator);
         }
     }
 }
