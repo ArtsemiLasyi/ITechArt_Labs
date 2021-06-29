@@ -9,12 +9,9 @@ namespace WebAPI.Validators
 {
     public class HallRequestValidator : AbstractValidator<HallRequest>
     {
-        public HallRequestValidator(SeatValidator seatValidator, HallValidator hallValidator)
+        public HallRequestValidator(HallValidator hallValidator)
         {
             RuleFor(request => request.Adapt<HallModel>()).SetValidator(hallValidator);
-            RuleForEach(request => request.Seats.Adapt<IReadOnlyCollection<SeatModel>>())
-                .SetValidator(seatValidator)
-                .OverridePropertyName("Seats");
         }
     }
 }
