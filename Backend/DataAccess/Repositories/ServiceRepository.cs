@@ -34,7 +34,7 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<ServiceEntity>> GetAllAsync()
+        public async Task<IReadOnlyCollection<ServiceEntity>> GetAsync()
         {
             List<ServiceEntity> services = await _context.Services.ToListAsync();
             return services;

@@ -34,9 +34,9 @@ namespace BusinessLogic.Services
             return currency.Adapt<CurrencyModel>();
         }
 
-        public async Task<IReadOnlyCollection<CurrencyModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<CurrencyModel>> GetAsync()
         {
-            IReadOnlyCollection<CurrencyEntity> models = await _currencyRepository.GetAllAsync();
+            IReadOnlyCollection<CurrencyEntity> models = await _currencyRepository.GetAsync();
             return models.Adapt<IReadOnlyCollection<CurrencyModel>>();
         }
 

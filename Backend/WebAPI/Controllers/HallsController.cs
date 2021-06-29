@@ -16,7 +16,6 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("/halls")]
-    [Route("/cities/{cityId}/cinemas/{cinemaId}/halls")]
     public class HallsController : ControllerBase
     {
         private readonly HallService _hallService;
@@ -84,7 +83,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int cinemaId)
+        public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
         {
             IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
             IReadOnlyCollection<FilmResponse> response = halls.Adapt<IReadOnlyCollection<FilmResponse>>();

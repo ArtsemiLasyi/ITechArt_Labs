@@ -34,9 +34,9 @@ namespace BusinessLogic.Services
             return service.Adapt<ServiceModel>();
         }
 
-        public async Task<IReadOnlyCollection<ServiceModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<ServiceModel>> GetAsync()
         {
-            IReadOnlyCollection<ServiceEntity> models = await _serviceRepository.GetAllAsync();
+            IReadOnlyCollection<ServiceEntity> models = await _serviceRepository.GetAsync();
             return models.Adapt<IReadOnlyCollection<ServiceModel>>();
         }
 

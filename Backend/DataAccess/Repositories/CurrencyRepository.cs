@@ -34,7 +34,7 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<CurrencyEntity>> GetAllAsync()
+        public async Task<IReadOnlyCollection<CurrencyEntity>> GetAsync()
         {
             List<CurrencyEntity> currencys = await _context.Currencies.ToListAsync();
             return currencys;

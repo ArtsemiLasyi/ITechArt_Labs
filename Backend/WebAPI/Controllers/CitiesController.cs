@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            IReadOnlyCollection<CityModel> cities = await _cityService.GetAllAsync();
+            IReadOnlyCollection<CityModel> cities = await _cityService.GetAsync();
             IReadOnlyCollection<CityResponse> response = cities.Adapt<IReadOnlyCollection<CityResponse>>();
             return Ok(response);
         }

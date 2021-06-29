@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            IReadOnlyCollection<CurrencyModel> cities = await _currencyService.GetAllAsync();
+            IReadOnlyCollection<CurrencyModel> cities = await _currencyService.GetAsync();
             IReadOnlyCollection<CurrencyResponse> response = cities.Adapt<IReadOnlyCollection<CurrencyResponse>>();
             return Ok(response);
         }

@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            IReadOnlyCollection<ServiceModel> services = await _serviceService.GetAllAsync();
+            IReadOnlyCollection<ServiceModel> services = await _serviceService.GetAsync();
             IReadOnlyCollection<ServiceResponse> response = services.Adapt<IReadOnlyCollection<ServiceResponse>>();
             return Ok(response);
         }
