@@ -9,6 +9,5 @@ namespace BusinessLogic.Models
         public string CityName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public IReadOnlyCollection<HallModel> Halls { get; set; } = new List<HallModel>();
     }
 }

@@ -1,0 +1,66 @@
+﻿using BusinessLogic.Models;
+using BusinessLogic.Services;
+using BusinessLogic.Statuses;
+using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using WebAPI.Requests;
+using WebAPI.Responses;
+
+namespace WebAPI.Controllers
+{
+    [ApiController]
+    [Route("/currencies")]
+    public class CurrenciesController : ControllerBase
+    {
+        private readonly CurrencyService _currencyService;
+
+        public CurrenciesController(CurrencyService cityService)
+        {
+            _currencyService = cityService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CurrencyRequest request)
+        {
+            CurrencyModel model = request.Adapt<CurrencyModel>();
+            await _currencyService.CreateAsync(model);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            IReadOnlyCollection<CurrencyModel> cities = await _currencyService.GetAsync();
+            IReadOnlyCollection<CurrencyResponse> response = cities.Adapt<IReadOnlyCollection<CurrencyResponse>>();
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] CurrencyRequest request)
+        {
+            CurrencyModel model = request.Adapt<CurrencyModel>();
+            model.Id = id;
+            await _currencyService.EditAsync(model);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            CurrencyDeletionStatus status = await _currencyService.DeleteByAsync(id);
+            if (status == CurrencyDeletionStatus.NotFound)
+            {
+                return NotFound();
+            }
+            if (status == CurrencyDeletionStatus.ForbiddenAsUsed)
+            {
+                return BadRequest(new { errorText = "Currency is already in use!" });
+            }
+            return Ok();
+        }
+    }
+}

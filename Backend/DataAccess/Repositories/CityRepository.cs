@@ -39,7 +39,7 @@ namespace DataAccess.Repositories
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
-        public async Task<IReadOnlyCollection<CityEntity>> GetAllAsync()
+        public async Task<IReadOnlyCollection<CityEntity>> GetAsync()
         {
             List<CityEntity> cities = await _context.Cities.ToListAsync();
             return cities;
