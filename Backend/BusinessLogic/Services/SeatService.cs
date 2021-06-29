@@ -23,6 +23,19 @@ namespace BusinessLogic.Services
             return seatEntity.Id;
         }
 
+        public Task CreateAsync(SeatsModel model)
+        {
+            IReadOnlyCollection<SeatEntity> entity = model.Seats.Adapt<IReadOnlyCollection<SeatEntity>>();
+            return _seatRepository.CreateAsync(entity);
+        }
+
+        public async Task<SeatsModel> GetAllByAsync(int hallId)
+        {
+            IReadOnlyCollection<SeatEntity> entities = await _seatRepository.GetAllBy(hallId);
+            IReadOnlyCollection<SeatModel> seats = entities.Adapt<IReadOnlyCollection<SeatModel>>();
+            return new SeatsModel(seats);
+        }
+
         public async Task<SeatModel?> GetByAsync(int id)
         {
             SeatEntity? seatEntity = await _seatRepository.GetByAsync(id);
@@ -38,6 +51,12 @@ namespace BusinessLogic.Services
         {
             SeatEntity seatEntity = seat.Adapt<SeatEntity>();
             return _seatRepository.UpdateAsync(seatEntity);
+        }
+
+        public async Task EditAsync(int hallId, SeatsModel model)
+        {
+            await DeleteAllByAsync(hallId);
+            await CreateAsync(model);
         }
 
         public Task DeleteAllByAsync(int hallId)

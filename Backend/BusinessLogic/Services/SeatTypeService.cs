@@ -45,11 +45,11 @@ namespace BusinessLogic.Services
             }
             if (await _seatTypeRepository.IsUsedAsync(id))
             {
-                return SeatTypeDeletionStatus.DeletionRestricted;
+                return SeatTypeDeletionStatus.ForbiddenAsUsed;
             }
             if (await _seatTypeRepository.DeleteByAsync(id))
             {
-                return SeatTypeDeletionStatus.DeletionSuccessful;
+                return SeatTypeDeletionStatus.Successful;
             }
             return SeatTypeDeletionStatus.NotFound;
         }

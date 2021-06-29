@@ -1,5 +1,7 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,6 +20,20 @@ namespace DataAccess.Repositories
         {
             _context.Seats.Add(seat);
             return _context.SaveChangesAsync();
+        }
+
+        public Task CreateAsync(IReadOnlyCollection<SeatEntity> entities)
+        {
+            _context.Seats.AddRange(entities);
+            return _context.SaveChangesAsync();
+        }
+
+        public async Task<IReadOnlyCollection<SeatEntity>> GetAllBy(int hallId)
+        {
+            List<SeatEntity> seats = await _context.Seats
+                .Where(seat => seat.HallId == hallId)
+                .ToListAsync();
+            return seats;
         }
 
         public async Task<bool> DeleteByAsync(int id)

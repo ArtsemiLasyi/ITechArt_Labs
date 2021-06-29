@@ -7,6 +7,5 @@ namespace WebAPI.Requests
         public int CinemaId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public IReadOnlyCollection<SeatRequest> Seats { get; set; } = null!;
     }
 }

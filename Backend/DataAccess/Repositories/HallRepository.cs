@@ -51,7 +51,6 @@ namespace DataAccess.Repositories
             {
                 return entity;
             }
-            await _context.Entry(entity).Collection(cinema => cinema.Seats).LoadAsync();
             return entity;
         }
 

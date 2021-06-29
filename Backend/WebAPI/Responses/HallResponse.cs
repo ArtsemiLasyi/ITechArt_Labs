@@ -7,6 +7,5 @@ namespace WebAPI.Responses
         public int Id { get; set; }
         public int CinemaId { get; set; }
         public string Name { get; set; } = null!;
-        public IReadOnlyCollection<SeatResponse> Seats { get; set; } = new List<SeatResponse>();
     }
 }

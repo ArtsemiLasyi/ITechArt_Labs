@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            if (status == SeatTypeDeletionStatus.DeletionRestricted)
+            if (status == SeatTypeDeletionStatus.ForbiddenAsUsed)
             {
                 return BadRequest();
             }

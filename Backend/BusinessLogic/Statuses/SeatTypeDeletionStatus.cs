@@ -3,7 +3,7 @@
     public enum SeatTypeDeletionStatus
     {
         NotFound = 0,
-        DeletionRestricted = 1,
-        DeletionSuccessful = 2
+        ForbiddenAsUsed = 1,
+        Successful = 2
     }
 }
