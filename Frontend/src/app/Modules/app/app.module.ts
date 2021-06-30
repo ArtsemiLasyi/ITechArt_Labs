@@ -12,36 +12,14 @@ import { NotFoundComponent } from 'src/app/Components/main/notfound/notfound.com
 import { AccountNodeComponent } from 'src/app/Components/user/account/accountnode/accountnode.component';
 import { SignInComponent } from 'src/app/Components/user/account/signin/signin.component';
 import { SignUpComponent } from 'src/app/Components/user/account/signup/signup.component';
-import { FilmInfoComponent } from 'src/app/Components/user/films/filminfo/film-info.component';
 import { FilmsListComponent } from 'src/app/Components/user/films/films-list/films-list.component';
 import { FilmsNodeComponent } from 'src/app/Components/user/films/filmsnode/films-node.component';
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
-import { SignInRequest } from 'src/app/Requests/SignInRequest';
+import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
+import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
 import { AuthInterceptor } from 'src/app/Services/AuthInterceptor';
-
-const accountRoutes : Routes = [
-    { path: 'signin', component: SignInComponent },
-    { path: 'signup', component: SignUpComponent }
-];
-
-const filmsRoutes : Routes = [
-    { path: '', component: FilmsListComponent },
-    { path: ':id', component: FilmInfoComponent }
-];
-
-const adminRoutes : Routes = [
-    { path: 'users', component: AdminUserAddComponent },
-    { path: 'users/current', component: UserInfoComponent }
-];
-
-const appRoutes: Routes = [
-    { path: '', component : FilmsListComponent },
-    { path: 'admin', component : AdminPanelComponent, children: adminRoutes },
-    { path: 'account', component : AccountNodeComponent, children: accountRoutes },
-    { path: 'users/current', component: UserInfoComponent },
-    { path: 'films', component : FilmsNodeComponent, children: filmsRoutes },
-    { path: '**', component: NotFoundComponent }
-];
+import { UserService } from 'src/app/Services/UserService';
+import { AppRoutingModule } from '../app-routing/app-routing.module';
 
 @NgModule({
     declarations: [
@@ -55,21 +33,23 @@ const appRoutes: Routes = [
         SignInComponent,
         SignUpComponent,
         UserInfoComponent,
-        FilmInfoComponent,
         AdminPanelComponent
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(appRoutes),
         FormsModule,
-        HttpClientModule
+        HttpClientModule,
+        AppRoutingModule
     ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
             multi: true
-        }
+        },
+        UserInfoGuard,
+        AdminPanelGuard,
+        UserService
     ],
     bootstrap: [AppComponent]
 })

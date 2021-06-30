@@ -9,34 +9,33 @@ import { AuthentificationService } from 'src/app/Services/AuthentificationServic
 @Component({
     selector: 'account-signin',
     templateUrl: './signin.component.html',
-    styleUrls: ['./signin.component.css'],
+    styleUrls: ['./signin.component.scss'],
     providers: [ AuthentificationService]
 })
 export class SignInComponent {
 
-
     constructor(
         private service : AuthentificationService,
-        private router : Router) { }
+        private router : Router
+    ) { }
 
-    model : SignInModel = new SignInModel();
-    error : ErrorModel = new ErrorModel();
-
-
+    model = new SignInModel();
+    error = new ErrorModel();
 
     signIn() {
-        let request = new SignInRequest(this.model.email!, this.model.password!);
-        this.service.signIn(request).subscribe(
-            (data : any) => {
-                let token = data.token;
-                localStorage.setItem(LocalStorageKeyNames.TOKEN, token);
-                this.router.navigate(['']);
-            },
-            error => {
-                this.error.exists = true;
-                this.error.text = this.getError(error);
-            }
-        );  
+        let request = new SignInRequest(this.model.email, this.model.password);
+        this.service.signIn(request)
+            .subscribe(
+                (data : any) => {
+                    let token = data.token;
+                    localStorage.setItem(LocalStorageKeyNames.TOKEN, token);
+                    this.router.navigate(['']);
+                },
+                error => {
+                    this.error.exists = true;
+                    this.error.text = this.getError(error);
+                }
+            );  
     }
 
     getError(error : any) : string {

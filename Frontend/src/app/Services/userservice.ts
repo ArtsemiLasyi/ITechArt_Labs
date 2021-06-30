@@ -1,29 +1,26 @@
 import { Injectable } from "@angular/core";
 import {HttpClient} from '@angular/common/http';
-import * as Config from '../../../config.json';
 import { UserRequest } from "../Requests/UserRequest";
+import { ConfigurationService } from "./ConfigurationService";
 
 @Injectable()
 export class UserService{
-   
-    private _users : string = '/users';
     
     constructor(private http: HttpClient){ }
  
     editUser(id : number, user: UserRequest) {         
-        return this.http.put(Config.ApiUrl + this._users + '/id', user); 
+        return this.http.put(ConfigurationService.URL_USERS + '/' + id, user); 
     }
 
-
     getCurrentUser() {
-        return this.http.get(Config.ApiUrl + this._users + '/current');       
+        return this.http.get(ConfigurationService.URL_USERS + '/current');       
     }
 
     getUser(id : number) {
-        return this.http.get(Config.ApiUrl + this._users + '/id');
+        return this.http.get(ConfigurationService.URL_USERS + '/' + id);
     }
 
     deleteUser(id : number) {
-        return this.http.delete(Config.ApiUrl + this._users + '/id');
+        return this.http.delete(ConfigurationService.URL_USERS + '/' + id);
     }
 }

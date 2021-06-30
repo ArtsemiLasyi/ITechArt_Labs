@@ -17,18 +17,11 @@
         <div [hidden]="!(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
             Password must be equal or more than 6 symbols
         </div><br>
-        <div class="form-floating">
-            <h5 class="h5 mb-3 fw-normal">Choose role:</h5>
-            <select class="form-select">
-                <option>Administrator</option>
-                <option>User</option>
-            </select>
-        </div><br>
         <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addUser()">Add</button>
-        <div [hidden]="!error.exists" class="alert alert-danger">
+        <div *ngIf="error.exists" class="alert alert-danger">
           {{error.text}}
         </div>
-        <div [hidden]="!success.flag" class="alert alert-success">
+        <div *ngIf="success.flag" class="alert alert-success">
             {{success.text}}
         </div>
       </form>

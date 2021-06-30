@@ -1,3 +1,3 @@
 export class LocalStorageKeyNames {
-    static readonly TOKEN = "token";
+    static readonly TOKEN = 'token';
 }

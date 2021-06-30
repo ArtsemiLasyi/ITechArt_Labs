@@ -14,7 +14,7 @@
                 <label for="passwordInput">Enter new password...</label>
             </div>
 
-            <div [hidden]="!(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
+            <div *ngIf="(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
                 New password must be equal or more than 6 symbols
             </div>
   

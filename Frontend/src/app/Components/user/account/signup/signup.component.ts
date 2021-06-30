@@ -8,35 +8,36 @@ import { AuthentificationService } from 'src/app/Services/AuthentificationServic
 @Component({
     selector: 'account-signup',
     templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.css'],
-    providers: [ AuthentificationService]
+    providers: [AuthentificationService]
 })
 export class SignUpComponent {
 
     constructor(
         private service : AuthentificationService,
-        private router : Router) { }
+        private router : Router
+    ) { }
 
-    model : SignUpModel = new SignUpModel();
-    error : ErrorModel = new ErrorModel();
+    model = new SignUpModel();
+    error = new ErrorModel();
 
     signUp() {
         let request = new SignUpRequest(this.model.email, this.model.password);
-        this.service.signUp(request).subscribe(
-            () => {
-                this.router.navigate(['/account/signin']);
-            },
-            error => {
-                this.error.exists = true;
-                this.error.text = this.getError(error);
-            }
-        );
-      }
+        this.service.signUp(request)
+            .subscribe(
+                () => {
+                    this.router.navigate(['/account/signin']);
+                },
+                error => {
+                    this.error.exists = true;
+                    this.error.text = this.getError(error);
+                }
+            );
+    }
 
-  getError(error : any) : string {
-      return error.error.errorText 
-          || error.error.errors.Email 
-          || error.error.errors.Password 
-          || error.error.title;     
-  }
+    getError(error : any) : string {
+        return error.error.errorText 
+            || error.error.errors.Email 
+            || error.error.errors.Password 
+            || error.error.title;     
+    }
 }
