@@ -2,14 +2,17 @@
 using BusinessLogic.Services;
 using BusinessLogic.Statuses;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("/currencies")]
     public class CurrenciesController : ControllerBase
@@ -21,6 +24,7 @@ namespace WebAPI.Controllers
             _currencyService = cityService;
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CurrencyRequest request)
         {
@@ -30,6 +34,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

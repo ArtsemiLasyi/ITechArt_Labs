@@ -1,14 +1,17 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("halls/{hallId}/seats")]
     public class SeatsController : ControllerBase

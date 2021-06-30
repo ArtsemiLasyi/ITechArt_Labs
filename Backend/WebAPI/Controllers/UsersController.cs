@@ -7,6 +7,10 @@ using WebAPI.Requests;
 using WebAPI.Responses;
 using BusinessLogic.Validators;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
+using WebAPI.Constants;
+using System.Security.Claims;
+using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
@@ -16,13 +20,19 @@ namespace WebAPI.Controllers
     {
         private readonly UserService _userService;
         private readonly PasswordService _passwordService;
-        
-        public UsersController(UserService userService, PasswordService passwordService)
+        private readonly IdentityService _identityService;
+
+        public UsersController(
+            UserService userService,
+            PasswordService passwordService,
+            IdentityService identityService)
         {
             _userService = userService;
             _passwordService = passwordService;
+            _identityService = identityService;
         }
 
+        [Authorize(Policy = PolicyNames.Authorized)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -35,6 +45,26 @@ namespace WebAPI.Controllers
             return Ok(user.Adapt<UserResponse>());
         }
 
+        [Authorize(Policy = PolicyNames.Authorized)]
+        [HttpGet("current")]
+        public async Task<IActionResult> Get()
+        {
+            int? id = _identityService.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            if (id == null)
+            {
+                return Unauthorized();
+            }
+
+            UserModel? user = await _userService.GetByAsync(id.Value);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user.Adapt<UserResponse>());
+        }
+
+        [Authorize(Policy = PolicyNames.Authorized)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] UserEditRequest request)
         {
@@ -50,6 +80,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = PolicyNames.Authorized)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
@@ -29,6 +31,7 @@ namespace WebAPI.Controllers
             _hallPhotoService = hallPhotoService;
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] HallRequest request)
         {
@@ -66,6 +69,7 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPost("{id}/photo")]
         public async Task<IActionResult> UploadPhoto(int id, IFormFile formFile)
         {
@@ -89,6 +93,7 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] HallRequest request)
         {
@@ -98,6 +103,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,14 +1,17 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("cinemas/{cinemaId}/services")]
     public class CinemaServicesController : ControllerBase
@@ -28,6 +31,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id, int cinemaId)
         {
@@ -39,6 +43,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int cinemaId)
         {

@@ -29,27 +29,31 @@ namespace WebAPI.Services
             JwtOptions jwtOptions = new JwtOptions();
             _configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
 
-            SymmetricSecurityKey securityKey = new (
-                Encoding.Unicode.GetBytes(jwtOptions.Key)
+            SymmetricSecurityKey securityKey = new(
+                Encoding.ASCII.GetBytes(jwtOptions.Key)
             );
-            SigningCredentials credentials = new (
+            SigningCredentials credentials = new(
                 securityKey,
                 SecurityAlgorithms.HmacSha256
             );
 
-            Claim[] claims = new []
+            Claim[] claims = new[]
             {
                 new Claim(
-                    JwtRegisteredClaimNames.Sub,
+                    ClaimTypes.NameIdentifier,
                     userInfo.Id.ToString()
                 ),
                 new Claim(
-                    "email",
+                    ClaimTypes.Email,
                     userInfo.Email
+                ),
+                new Claim(
+                    ClaimTypes.Role,
+                    userInfo.Role.ToString()
                 )
             };
 
-            JwtSecurityToken token = new (
+            JwtSecurityToken token = new(
                 jwtOptions.Issuer,
                 jwtOptions.Audience,
                 claims,

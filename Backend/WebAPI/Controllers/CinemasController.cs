@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.StaticFiles;
 using MimeTypes;
 using System.Net.Mime;
+using WebAPI.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
@@ -29,6 +31,7 @@ namespace WebAPI.Controllers
             _cinemaPhotoService = cinemaPhotoService;
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CinemaRequest request)
         {
@@ -67,6 +70,7 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPost("{id}/photo")]
         public async Task<IActionResult> UploadPhoto(int id, IFormFile formFile)
         {
@@ -90,6 +94,7 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] CinemaRequest request)
         {
@@ -100,6 +105,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
