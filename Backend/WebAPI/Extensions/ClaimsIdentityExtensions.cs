@@ -5,13 +5,9 @@ namespace WebAPI.Extensions
 {
     public static class ClaimsIdentityExtensions
     {
-        public static int? GetUserId(this ClaimsIdentity? identity)
+        public static int? GetUserId(this ClaimsIdentity identity)
         {
             int id;
-            if (identity == null)
-            {
-                return null;
-            }
             bool converted = int.TryParse(
                 identity
                     .Claims

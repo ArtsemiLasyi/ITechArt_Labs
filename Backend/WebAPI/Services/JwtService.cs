@@ -53,7 +53,7 @@ namespace WebAPI.Services
                 )
             };
 
-            JwtSecurityToken token = new(
+            JwtSecurityToken token = new (
                 jwtOptions.Issuer,
                 jwtOptions.Audience,
                 claims,

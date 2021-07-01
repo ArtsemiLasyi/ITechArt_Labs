@@ -43,7 +43,13 @@ namespace WebAPI.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> Get()
         {
-            int? id = (HttpContext.User.Identity as ClaimsIdentity).GetUserId();
+            ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null)
+            {
+                return Unauthorized();
+            }
+
+            int? id = identity.GetUserId();
             if (id == null)
             {
                 return Unauthorized();
