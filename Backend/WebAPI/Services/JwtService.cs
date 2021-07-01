@@ -29,10 +29,10 @@ namespace WebAPI.Services
             JwtOptions jwtOptions = new JwtOptions();
             _configuration.GetSection(JwtOptions.JwToken).Bind(jwtOptions);
 
-            SymmetricSecurityKey securityKey = new(
+            SymmetricSecurityKey securityKey = new (
                 Encoding.ASCII.GetBytes(jwtOptions.Key)
             );
-            SigningCredentials credentials = new(
+            SigningCredentials credentials = new (
                 securityKey,
                 SecurityAlgorithms.HmacSha256
             );

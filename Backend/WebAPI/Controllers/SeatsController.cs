@@ -23,14 +23,6 @@ namespace WebAPI.Controllers
             _seatService = seatService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SeatsRequest request)
-        {
-            SeatModel model = request.Adapt<SeatModel>();
-            await _seatService.CreateAsync(model);
-            return Ok();
-        }
-
         [HttpGet]
         public async Task<IActionResult> Get(int hallId)
         {
@@ -39,7 +31,14 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
- 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] SeatsRequest request)
+        {
+            SeatModel model = request.Adapt<SeatModel>();
+            await _seatService.CreateAsync(model);
+            return Ok();
+        }
+
         public async Task<IActionResult> Edit(int hallId, [FromBody] SeatsRequest request)
         {
             SeatsModel model = request.Adapt<SeatsModel>();

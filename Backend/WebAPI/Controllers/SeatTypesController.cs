@@ -24,20 +24,21 @@ namespace WebAPI.Controllers
             _seatTypeService = seatTypeService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SeatTypeRequest request)
-        {
-            SeatTypeModel model = request.Adapt<SeatTypeModel>();
-            await _seatTypeService.CreateAsync(model);
-            return Ok();
-        }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             IReadOnlyCollection<SeatTypeModel> seatTypes = await _seatTypeService.GetAllAsync();
             IReadOnlyCollection<SeatTypeResponse> response = seatTypes.Adapt<IReadOnlyCollection<SeatTypeResponse>>();
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] SeatTypeRequest request)
+        {
+            SeatTypeModel model = request.Adapt<SeatTypeModel>();
+            await _seatTypeService.CreateAsync(model);
+            return Ok();
         }
 
         [HttpPut("{id}")]

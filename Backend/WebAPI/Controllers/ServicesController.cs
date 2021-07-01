@@ -24,15 +24,6 @@ namespace WebAPI.Controllers
             _serviceService = serviceService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ServiceRequest request)
-        {
-            ServiceModel model = request.Adapt<ServiceModel>();
-            await _serviceService.CreateAsync(model);
-
-            return Ok();
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -50,6 +41,15 @@ namespace WebAPI.Controllers
             IReadOnlyCollection<ServiceModel> services = await _serviceService.GetAsync();
             IReadOnlyCollection<ServiceResponse> response = services.Adapt<IReadOnlyCollection<ServiceResponse>>();
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ServiceRequest request)
+        {
+            ServiceModel model = request.Adapt<ServiceModel>();
+            await _serviceService.CreateAsync(model);
+
+            return Ok();
         }
 
         [HttpPut("{id}")]

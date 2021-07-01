@@ -24,16 +24,6 @@ namespace WebAPI.Controllers
             _currencyService = cityService;
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CurrencyRequest request)
-        {
-            CurrencyModel model = request.Adapt<CurrencyModel>();
-            await _currencyService.CreateAsync(model);
-
-            return Ok();
-        }
-
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -49,6 +39,15 @@ namespace WebAPI.Controllers
             CurrencyModel model = request.Adapt<CurrencyModel>();
             model.Id = id;
             await _currencyService.EditAsync(model);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CurrencyRequest request)
+        {
+            CurrencyModel model = request.Adapt<CurrencyModel>();
+            await _currencyService.CreateAsync(model);
 
             return Ok();
         }

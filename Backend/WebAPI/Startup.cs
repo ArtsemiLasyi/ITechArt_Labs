@@ -92,7 +92,6 @@ namespace WebAPI
             services.AddTransient<PriceValidator>();
 
             services.AddSingleton<JwtService>();
-            services.AddSingleton<IdentityService>();
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
 
@@ -129,12 +128,20 @@ namespace WebAPI
             services.AddAuthorization(
                 opts =>
                 {
-                    opts.AddPolicy(PolicyNames.Authorized, policy => {
-                        policy.RequireClaim(ClaimTypes.NameIdentifier);
-                    });
-                    opts.AddPolicy(PolicyNames.Administrator, policy => {
-                        policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
-                    });
+                    opts.AddPolicy(
+                        PolicyNames.Authorized, 
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.NameIdentifier);
+                        }
+                    );
+                    opts.AddPolicy(
+                        PolicyNames.Administrator,
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
+                        }
+                    );
                 }
             );
 

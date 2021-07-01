@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 
-namespace WebAPI.Services
+namespace WebAPI.Extensions
 {
-    public class IdentityService
+    public static class ClaimsIdentityExtensions
     {
-        public int? GetUserId(ClaimsIdentity? identity)
+        public static int? GetUserId(this ClaimsIdentity? identity)
         {
             int id;
             if (identity == null)

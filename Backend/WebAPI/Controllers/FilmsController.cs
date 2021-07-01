@@ -11,12 +11,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.StaticFiles;
 using MimeTypes;
 using System.Net.Mime;
-using System.Collections.ObjectModel;
 using WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("/films")]
     public class FilmsController : ControllerBase
@@ -32,16 +32,16 @@ namespace WebAPI.Controllers
             _posterFileService = fileService;
         }
 
-        [Authorize(Policy = PolicyNames.Administrator)]
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FilmRequest request)
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] PageRequest request)
         {
-            FilmModel model = request.Adapt<FilmModel>();
-            await _filmService.CreateAsync(model);
-
-            return Ok();
+            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
+            IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
+            return Ok(response);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -54,6 +54,7 @@ namespace WebAPI.Controllers
             return Ok(film.Adapt<FilmResponse>());
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}/poster")]
         public async Task<IActionResult> GetPoster(int id)
         {
@@ -71,7 +72,16 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
-        [Authorize(Policy = PolicyNames.Administrator)]
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] FilmRequest request)
+        {
+            FilmModel model = request.Adapt<FilmModel>();
+            await _filmService.CreateAsync(model);
+
+            return Ok();
+        }
+
         [HttpPost("{id}/poster")]
         public async Task<IActionResult> UploadPoster(int id, IFormFile formFile)
         {
@@ -87,15 +97,6 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PageRequest request)
-        {
-            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
-            IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
-            return Ok(response);
-        }
-
-        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] FilmRequest request)
         {
@@ -106,7 +107,6 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
