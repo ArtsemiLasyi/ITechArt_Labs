@@ -8,8 +8,6 @@ namespace WebAPI.Extensions
     {
         public static int? GetUserId(this IIdentity? identity)
         {
-            int id;
-
             if (identity == null)
             {
                 return null;
@@ -27,7 +25,7 @@ namespace WebAPI.Extensions
                     .Where(c => c.Type == ClaimTypes.NameIdentifier)
                     .Select(c => c.Value)
                     .SingleOrDefault(),
-                out id
+                out int id
             );
             if (!converted)
             {
