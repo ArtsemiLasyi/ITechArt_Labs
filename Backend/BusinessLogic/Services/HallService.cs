@@ -10,14 +10,10 @@ namespace BusinessLogic.Services
     public class HallService
     {
         private readonly HallRepository _hallRepository;
-        private readonly SeatService _seatService;
 
-        public HallService(
-            HallRepository hallRepository,
-            SeatService seatService)
+        public HallService(HallRepository hallRepository)
         {
             _hallRepository = hallRepository;
-            _seatService = seatService;
         }
 
         public async Task<int> CreateAsync(HallModel hall)
@@ -47,7 +43,6 @@ namespace BusinessLogic.Services
         public async Task EditAsync(HallModel hall)
         {
             HallEntity hallEntity = hall.Adapt<HallEntity>();
-            await _seatService.DeleteAllByAsync(hallEntity.Id);
             await _hallRepository.UpdateAsync(hallEntity);
         }
     }

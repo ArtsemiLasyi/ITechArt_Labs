@@ -16,9 +16,9 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task CreateAsync(CinemaEntity film)
+        public Task CreateAsync(CinemaEntity cinema)
         {
-            _context.Cinemas.Add(film);
+            _context.Cinemas.Add(cinema);
             return _context.SaveChangesAsync();
         }
 
