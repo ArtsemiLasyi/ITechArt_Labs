@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BusinessLogic.Models;
 
 namespace WebAPI.Responses
 {
@@ -9,6 +6,6 @@ namespace WebAPI.Responses
     {
         public int Id { get; set; }
         public string Email { get; set; } = null!;
-        public int Role { get; set; }
+        public UserRole Role { get; set; }
     }
 }

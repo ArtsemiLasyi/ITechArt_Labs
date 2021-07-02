@@ -7,9 +7,9 @@ import { SignUpRequest } from 'src/app/Requests/SignUpRequest';
 import { AuthentificationService } from 'src/app/Services/AuthentificationService';
 
 @Component({
-    selector: 'admin-user-add',
-    templateUrl: './admin-user-add.component.html',
-    providers: [AuthentificationService]
+    selector : 'admin-user-add',
+    templateUrl : './admin-user-add.component.html',
+    providers : [AuthentificationService]
 })
 export class AdminUserAddComponent {
 

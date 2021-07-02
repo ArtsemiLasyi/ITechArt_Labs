@@ -2,13 +2,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from 'src/app/Components/admin/admin-panel/admin-panel.component';
 import { AdminUserAddComponent } from 'src/app/Components/admin/admin-user-add/admin-user-add.component';
 import { AppComponent } from 'src/app/Components/main/app/app.component';
 import { FooterComponent } from 'src/app/Components/main/footer/footer.component';
 import { HeaderComponent } from 'src/app/Components/main/header/header.component';
-import { NotFoundComponent } from 'src/app/Components/main/notfound/notfound.component';
 import { AccountNodeComponent } from 'src/app/Components/user/account/accountnode/accountnode.component';
 import { SignInComponent } from 'src/app/Components/user/account/signin/signin.component';
 import { SignUpComponent } from 'src/app/Components/user/account/signup/signup.component';
@@ -22,7 +20,7 @@ import { UserService } from 'src/app/Services/UserService';
 import { AppRoutingModule } from '../app-routing/app-routing.module';
 
 @NgModule({
-    declarations: [
+    declarations : [
         AppComponent,
         FooterComponent,
         AdminUserAddComponent,
@@ -35,13 +33,13 @@ import { AppRoutingModule } from '../app-routing/app-routing.module';
         UserInfoComponent,
         AdminPanelComponent
     ],
-    imports: [
+    imports : [
         BrowserModule,
         FormsModule,
         HttpClientModule,
         AppRoutingModule
     ],
-    providers: [
+    providers : [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
@@ -51,6 +49,6 @@ import { AppRoutingModule } from '../app-routing/app-routing.module';
         AdminPanelGuard,
         UserService
     ],
-    bootstrap: [AppComponent]
+    bootstrap : [AppComponent]
 })
 export class AppModule { }

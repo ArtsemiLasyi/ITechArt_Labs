@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
 import {Observable} from "rxjs";
-import { UserRoles } from "../Constants/UserRoles";
+import { UserRoles } from "../Models/UserRoles";
 import { UserModel } from "../Models/UserModel";
 import { UserService } from "../Services/UserService";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn : 'root'
 })
 export class AdminPanelGuard implements CanActivate{
  
@@ -17,7 +17,10 @@ export class AdminPanelGuard implements CanActivate{
 
     model = new UserModel();
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | boolean {
+    canActivate(
+        route : ActivatedRouteSnapshot,
+        state : RouterStateSnapshot
+    ) : Observable<boolean> | boolean {
 
         let flag = false;
 
@@ -25,7 +28,7 @@ export class AdminPanelGuard implements CanActivate{
             .subscribe(
                 (data : any) => {
                     this.model.role = data.role;
-                    if (this.model.role === UserRoles.ADMINISTRATOR) {
+                    if (this.model.role === UserRoles.Administrator) {
                         flag = true;
                     }
                 },

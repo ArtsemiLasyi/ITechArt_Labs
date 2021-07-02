@@ -7,10 +7,10 @@ import { SignInRequest } from 'src/app/Requests/SignInRequest';
 import { AuthentificationService } from 'src/app/Services/AuthentificationService';
 
 @Component({
-    selector: 'account-signin',
-    templateUrl: './signin.component.html',
-    styleUrls: ['./signin.component.scss'],
-    providers: [ AuthentificationService]
+    selector : 'account-signin',
+    templateUrl : './signin.component.html',
+    styleUrls : ['./signin.component.scss'],
+    providers : [ AuthentificationService]
 })
 export class SignInComponent {
 

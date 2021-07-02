@@ -6,9 +6,9 @@ import { SignUpRequest } from 'src/app/Requests/SignUpRequest';
 import { AuthentificationService } from 'src/app/Services/AuthentificationService';
 
 @Component({
-    selector: 'account-signup',
-    templateUrl: './signup.component.html',
-    providers: [AuthentificationService]
+    selector : 'account-signup',
+    templateUrl : './signup.component.html',
+    providers : [AuthentificationService]
 })
 export class SignUpComponent {
 

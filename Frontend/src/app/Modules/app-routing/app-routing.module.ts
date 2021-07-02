@@ -13,30 +13,35 @@ import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
 
 const accountRoutes : Routes = [
-    { path: 'signin', component: SignInComponent },
-    { path: 'signup', component: SignUpComponent }
+    { path: 'signin', component : SignInComponent },
+    { path: 'signup', component : SignUpComponent }
 ];
 
 const filmsRoutes : Routes = [
-    { path: '', component: FilmsListComponent }
+    { path: '', component : FilmsListComponent }
 ];
 
 const adminRoutes : Routes = [
-    { path: 'users', component: AdminUserAddComponent },
-    { path: 'users/current', component: UserInfoComponent }
+    { path: 'users', component : AdminUserAddComponent },
+    { path: 'users/current', component : UserInfoComponent }
 ];
 
 const appRoutes: Routes = [
     { path: '', component : FilmsListComponent },
-    { path: 'admin', component : AdminPanelComponent, canActivate: [AdminPanelGuard], children: adminRoutes },
-    { path: 'account', component : AccountNodeComponent, children: accountRoutes },
-    { path: 'films', component : FilmsNodeComponent, children: filmsRoutes },
-    { path: 'users/current', component: UserInfoComponent, canActivate: [UserInfoGuard] },
+    {
+        path: 'admin',
+        component : AdminPanelComponent,
+        canActivate : [AdminPanelGuard],
+        children : adminRoutes 
+    },
+    { path: 'account', component : AccountNodeComponent, children : accountRoutes },
+    { path: 'films', component : FilmsNodeComponent, children : filmsRoutes },
+    { path: 'users/current', component : UserInfoComponent, canActivate : [UserInfoGuard] },
     { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
-  exports: [RouterModule]
+  imports : [RouterModule.forRoot(appRoutes)],
+  exports : [RouterModule]
 })
 export class AppRoutingModule { }

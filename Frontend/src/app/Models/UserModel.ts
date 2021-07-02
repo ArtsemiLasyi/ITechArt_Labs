@@ -1,7 +1,7 @@
-import { UserRoles } from "../Constants/UserRoles";
+import { UserRoles } from "./UserRoles";
 
 export class UserModel {
     id : number = 0;
     email : string = "";
-    role : number = UserRoles.USER;
+    role : number = UserRoles.User;
 }
