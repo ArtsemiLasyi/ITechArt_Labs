@@ -27,6 +27,8 @@ using DataAccess.Entities;
 using DataAccess.Options;
 using WebAPI.Responses;
 using System.Collections.Generic;
+using WebAPI.Constants;
+using System.Security.Claims;
 
 namespace WebAPI
 {
@@ -73,7 +75,7 @@ namespace WebAPI
             services.AddScoped<SeatTypeRepository>();
             services.AddScoped<SeatRepository>();
             services.AddScoped<ServiceRepository>();
-            services.AddScoped<CinemaServiceService>();
+            services.AddScoped<CinemaServiceRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -122,7 +124,45 @@ namespace WebAPI
                         };
                     }
                 );
-            services.AddCors();
+
+            services.AddAuthorization(
+                opts =>
+                {
+                    opts.AddPolicy(
+                        PolicyNames.Authorized, 
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.NameIdentifier);
+                        }
+                    );
+                    opts.AddPolicy(
+                        PolicyNames.Administrator,
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
+                        }
+                    );
+                }
+            );
+
+
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+            services.AddCors(
+                options =>
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder
+                                .WithOrigins(originsArray)
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        }
+                    );
+                }
+            );
+
             services
                 .AddControllers()
                 .AddFluentValidation(
@@ -165,6 +205,8 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
@@ -183,15 +225,9 @@ namespace WebAPI
                 }
             );
 
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-
             app.UseRouting();
-            app.UseCors(
-                builder =>
-                {
-                    builder.WithOrigins(originsArray);
-                }
-            );
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -2,14 +2,17 @@
 using BusinessLogic.Services;
 using BusinessLogic.Statuses;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("/services")]
     public class ServicesController : ControllerBase
@@ -19,15 +22,6 @@ namespace WebAPI.Controllers
         public ServicesController(ServiceService serviceService)
         {
             _serviceService = serviceService;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ServiceRequest request)
-        {
-            ServiceModel model = request.Adapt<ServiceModel>();
-            await _serviceService.CreateAsync(model);
-
-            return Ok();
         }
 
         [HttpGet("{id}")]
@@ -47,6 +41,15 @@ namespace WebAPI.Controllers
             IReadOnlyCollection<ServiceModel> services = await _serviceService.GetAsync();
             IReadOnlyCollection<ServiceResponse> response = services.Adapt<IReadOnlyCollection<ServiceResponse>>();
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ServiceRequest request)
+        {
+            ServiceModel model = request.Adapt<ServiceModel>();
+            await _serviceService.CreateAsync(model);
+
+            return Ok();
         }
 
         [HttpPut("{id}")]

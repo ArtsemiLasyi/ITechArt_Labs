@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -9,11 +10,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using WebAPI.Constants;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("/halls")]
     public class HallsController : ControllerBase
@@ -29,14 +32,7 @@ namespace WebAPI.Controllers
             _hallPhotoService = hallPhotoService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] HallRequest request)
-        {
-            HallModel model = request.Adapt<HallModel>();
-            await _hallService.CreateAsync(model);
-            return Ok();
-        }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -49,6 +45,16 @@ namespace WebAPI.Controllers
             return Ok(hall.Adapt<HallResponse>());
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
+        {
+            IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
+            IReadOnlyCollection<HallResponse> response = halls.Adapt<IReadOnlyCollection<HallResponse>>();
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}/photo")]
         public async Task<IActionResult> GetPhoto(int id)
         {
@@ -66,6 +72,14 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] HallRequest request)
+        {
+            HallModel model = request.Adapt<HallModel>();
+            await _hallService.CreateAsync(model);
+            return Ok();
+        }
+
         [HttpPost("{id}/photo")]
         public async Task<IActionResult> UploadPhoto(int id, IFormFile formFile)
         {
@@ -81,14 +95,6 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
-        {
-            IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
-            IReadOnlyCollection<HallResponse> response = halls.Adapt<IReadOnlyCollection<HallResponse>>();
-            return Ok(response);
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] HallRequest request)
         {
@@ -98,6 +104,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = PolicyNames.Administrator)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
