@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Responses
+﻿using System.Collections.Generic;
+
+namespace WebAPI.Responses
 {
     public class HallResponse
     {

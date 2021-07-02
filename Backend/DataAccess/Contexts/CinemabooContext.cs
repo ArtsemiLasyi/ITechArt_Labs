@@ -15,10 +15,36 @@ namespace DataAccess.Contexts
         public virtual DbSet<CinemaEntity> Cinemas { get; set; } = null!;
         public virtual DbSet<HallPhotoEntity> HallPhotos { get; set; } = null!;
         public virtual DbSet<CinemaPhotoEntity> CinemaPhotos { get; set; } = null!;
+        public virtual DbSet<SeatEntity> Seats { get; set; } = null!;
+        public virtual DbSet<SeatTypeEntity> SeatTypes { get; set; } = null!;
+        public virtual DbSet<ServiceEntity> Services { get; set; } = null!;
+        public virtual DbSet<CinemaServiceEntity> CinemaServices { get; set; } = null!;
+        public virtual DbSet<CurrencyEntity> Currencies { get; set; } = null!;
 
         public CinemabooContext(DbContextOptions<CinemabooContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CinemaServiceEntity>()
+                .HasKey(nameof(CinemaServiceEntity.CinemaId), nameof(CinemaServiceEntity.ServiceId));
+
+            modelBuilder.Entity<UserPasswordEntity>()
+                .HasKey(nameof(UserPasswordEntity.UserId));
+
+            modelBuilder.Entity<UserPasswordEntity>()
+                .HasKey(nameof(UserPasswordEntity.UserId));
+
+            modelBuilder.Entity<PosterEntity>()
+                .HasKey(nameof(PosterEntity.FilmId));
+
+            modelBuilder.Entity<HallPhotoEntity>()
+                .HasKey(nameof(HallPhotoEntity.HallId));
+
+            modelBuilder.Entity<CinemaPhotoEntity>()
+                .HasKey(nameof(CinemaPhotoEntity.CinemaId));
         }
     }
 }

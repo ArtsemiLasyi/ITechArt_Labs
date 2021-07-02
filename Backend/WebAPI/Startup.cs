@@ -26,6 +26,9 @@ using WebAPI.Validators;
 using DataAccess.Entities;
 using DataAccess.Options;
 using WebAPI.Responses;
+using System.Collections.Generic;
+using WebAPI.Constants;
+using System.Security.Claims;
 
 namespace WebAPI
 {
@@ -52,6 +55,10 @@ namespace WebAPI
             services.AddScoped<HallService>();
             services.AddScoped<HallPhotoService>();
             services.AddScoped<CityService>();
+            services.AddScoped<SeatTypeService>();
+            services.AddScoped<SeatService>();
+            services.AddScoped<ServiceService>();
+            services.AddScoped<CinemaServiceService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -65,6 +72,10 @@ namespace WebAPI
             services.AddScoped<CinemaPhotoFileStorage>();
             services.AddScoped<HallPhotoFileStorage>();
             services.AddScoped<CityRepository>();
+            services.AddScoped<SeatTypeRepository>();
+            services.AddScoped<SeatRepository>();
+            services.AddScoped<ServiceRepository>();
+            services.AddScoped<CinemaServiceRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -73,6 +84,12 @@ namespace WebAPI
             services.AddTransient<FilmValidator>();
             services.AddTransient<CinemaValidator>();
             services.AddTransient<HallValidator>();
+            services.AddTransient<SeatValidator>();
+            services.AddTransient<SeatTypeValidator>();
+            services.AddTransient<CityValidator>();
+            services.AddTransient<ServiceValidator>();
+            services.AddTransient<CinemaServiceValidator>();
+            services.AddTransient<PriceValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -107,7 +124,45 @@ namespace WebAPI
                         };
                     }
                 );
-            services.AddCors();
+
+            services.AddAuthorization(
+                opts =>
+                {
+                    opts.AddPolicy(
+                        PolicyNames.Authorized, 
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.NameIdentifier);
+                        }
+                    );
+                    opts.AddPolicy(
+                        PolicyNames.Administrator,
+                        policy => 
+                        {
+                            policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
+                        }
+                    );
+                }
+            );
+
+
+            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+            services.AddCors(
+                options =>
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder
+                                .WithOrigins(originsArray)
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        }
+                    );
+                }
+            );
+
             services
                 .AddControllers()
                 .AddFluentValidation(
@@ -118,6 +173,15 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SeatTypeRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<ServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CinemaServiceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(
@@ -141,6 +205,8 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             string staticContentPath = Path.GetFullPath(Configuration.GetSection("Frontend:RootPath").Value);
             IFileProvider fileProvider = new PhysicalFileProvider(staticContentPath);
 
@@ -159,15 +225,9 @@ namespace WebAPI
                 }
             );
 
-            string[] originsArray = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-
             app.UseRouting();
-            app.UseCors(
-                builder =>
-                {
-                    builder.WithOrigins(originsArray);
-                }
-            );
+
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

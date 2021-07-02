@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Models;
 
 namespace WebAPI.Responses
 {

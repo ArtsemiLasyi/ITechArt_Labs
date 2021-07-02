@@ -11,9 +11,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.StaticFiles;
 using MimeTypes;
 using System.Net.Mime;
+using WebAPI.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Policy = PolicyNames.Administrator)]
     [ApiController]
     [Route("/cinemas")]
     public class CinemasController : ControllerBase
@@ -29,15 +32,7 @@ namespace WebAPI.Controllers
             _cinemaPhotoService = cinemaPhotoService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CinemaRequest request)
-        {
-            CinemaModel model = request.Adapt<CinemaModel>();
-            await _cinemaService.CreateAsync(model);
-
-            return Ok();
-        }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -50,6 +45,16 @@ namespace WebAPI.Controllers
             return Ok(cinema.Adapt<CinemaResponse>());
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetAllBy([FromQuery] int cityId)
+        {
+            IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId);
+            IReadOnlyCollection<CinemaResponse> response = cinemas.Adapt<IReadOnlyCollection<CinemaResponse>>();
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}/photo")]
         public async Task<IActionResult> GetPhoto(int id)
         {
@@ -67,6 +72,15 @@ namespace WebAPI.Controllers
             return File(model.FileStream, contentType);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CinemaRequest request)
+        {
+            CinemaModel model = request.Adapt<CinemaModel>();
+            await _cinemaService.CreateAsync(model);
+
+            return Ok();
+        }
+
         [HttpPost("{id}/photo")]
         public async Task<IActionResult> UploadPhoto(int id, IFormFile formFile)
         {
@@ -82,13 +96,6 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBy([FromQuery]int cityId)
-        {
-            IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId);
-            IReadOnlyCollection<CinemaResponse> response = cinemas.Adapt<IReadOnlyCollection<CinemaResponse>>();
-            return Ok(response);
-        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] CinemaRequest request)
