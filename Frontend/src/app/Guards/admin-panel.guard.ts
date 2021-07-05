@@ -26,7 +26,7 @@ export class AdminPanelGuard implements CanActivate{
 
         this.service.getCurrentUser()
             .subscribe(
-                (data : any) => {
+                (data : UserModel) => {
                     this.model.role = data.role;
                     if (this.model.role === UserRoles.Administrator) {
                         flag = true;

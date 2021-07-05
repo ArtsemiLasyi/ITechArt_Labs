@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import {HttpClient} from '@angular/common/http';
 import { UserRequest } from "../Requests/UserRequest";
 import { ApiUrls } from "../Constants/ApiUrls";
+import { Observable } from "rxjs";
+import { UserModel } from "../Models/UserModel";
 
 @Injectable()
 export class UserService{
@@ -13,7 +15,7 @@ export class UserService{
     }
 
     getCurrentUser() {
-        return this.http.get(ApiUrls.Users + '/current');       
+        return this.http.get<UserModel>(ApiUrls.Users + '/current');       
     }
 
     getUser(id : number) {

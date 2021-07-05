@@ -23,7 +23,7 @@ export class UserInfoComponent {
     ngOnInit() {
         this.service.getCurrentUser()
             .subscribe(
-                (data : any) => {
+                (data : UserModel) => {
                     this.model.email = data.email;
                     this.model.id = data.id;
                 },

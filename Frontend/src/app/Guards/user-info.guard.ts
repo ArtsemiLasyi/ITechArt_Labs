@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
 import {Observable} from "rxjs";
+import { UserModel } from "../Models/UserModel";
 import { UserService } from "../Services/UserService";
 
 @Injectable({
@@ -19,7 +20,7 @@ export class UserInfoGuard implements CanActivate {
 
         this.service.getCurrentUser()
             .subscribe(
-                (data : any) => {
+                (data : UserModel) => {
                     flag = true;
                 },
                 error => {
