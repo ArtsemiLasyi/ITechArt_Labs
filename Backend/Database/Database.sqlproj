@@ -75,5 +75,7 @@
     <Build Include="dbo\Tables\Services.sql" />
     <Build Include="dbo\Tables\CinemaServices.sql" />
     <Build Include="dbo\Tables\Currencies.sql" />
+    <Build Include="dbo\Tables\Sessions.sql" />
+    <Build Include="dbo\Tables\SeatTypePrices.sql" />
   </ItemGroup>
 </Project>

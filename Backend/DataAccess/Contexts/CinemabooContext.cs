@@ -20,6 +20,8 @@ namespace DataAccess.Contexts
         public virtual DbSet<ServiceEntity> Services { get; set; } = null!;
         public virtual DbSet<CinemaServiceEntity> CinemaServices { get; set; } = null!;
         public virtual DbSet<CurrencyEntity> Currencies { get; set; } = null!;
+        public virtual DbSet<SessionEntity> Sessions { get; set; } = null!;
+        public virtual DbSet<SeatTypePriceEntity> SeatTypePrices { get; set; } = null!;
 
         public CinemabooContext(DbContextOptions<CinemabooContext> options)
             : base(options)
@@ -30,6 +32,9 @@ namespace DataAccess.Contexts
         {
             modelBuilder.Entity<CinemaServiceEntity>()
                 .HasKey(nameof(CinemaServiceEntity.CinemaId), nameof(CinemaServiceEntity.ServiceId));
+
+            modelBuilder.Entity<SeatTypePriceEntity>()
+                .HasKey(nameof(SeatTypePriceEntity.SessionId), nameof(SeatTypePriceEntity.SeatTypeId));
 
             modelBuilder.Entity<UserPasswordEntity>()
                 .HasKey(nameof(UserPasswordEntity.UserId));
