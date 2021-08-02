@@ -1,0 +1,14 @@
+<section>
+    <h5>Search film:</h5>
+    <form>
+        <input type="search" class="form-control form-control-dark" oninput="alert(this.value)" placeholder="Input film name...">
+    </form>
+    <div class="card" *ngFor="let film of films">
+        <img class="card-img-top" src="{{getPoster(film.id!)}}">
+        <div class="card-body">
+            <h5 class="card-title">{{film.name}}</h5>
+            <p class="card-text">{{film.releaseYear}}</p>
+            <a href="#" class="btn btn-primary">Details</a>
+        </div>
+    </div>
+</section>

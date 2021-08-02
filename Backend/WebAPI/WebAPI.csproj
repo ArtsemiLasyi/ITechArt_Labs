@@ -4,12 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <AssemblyName>Cinemaboo</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
     <PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
   </ItemGroup>
 

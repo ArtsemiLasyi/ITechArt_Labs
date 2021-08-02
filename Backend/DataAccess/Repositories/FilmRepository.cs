@@ -40,9 +40,9 @@ namespace DataAccess.Repositories
         {
             List<FilmEntity> films = await _context.Films
                 .Where(
-                    film => 
+                    film =>
                         !film.IsDeleted
-                        && _context.Sessions.Where(session => session.FilmId == film.Id).Any()
+                        //&& _context.Sessions.Where(session => session.FilmId == film.Id).Any()
                 )
                 .OrderBy(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)

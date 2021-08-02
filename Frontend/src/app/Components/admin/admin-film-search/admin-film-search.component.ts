@@ -1,25 +1,24 @@
+  
 import { Component, OnInit } from '@angular/core';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmService } from 'src/app/Services/filmservice';
 import { PageService } from 'src/app/Services/pageservice';
 
 @Component({
-    selector: 'films-films-list',
-    templateUrl: './films-list.component.html',
-    styleUrls: ['./films-list.component.scss'],
+    selector: 'admin-film-search',
+    templateUrl: './admin-film-search.component.html',
     providers: [
         FilmService,
         PageService
     ]
 })
-export class FilmsListComponent implements OnInit {
+export class AdminFilmSearchComponent implements OnInit {
 
     films: FilmModel[] = [];
 
     constructor (
         private filmService: FilmService,
-        private pageService : PageService
-    ) { }
+        private pageService : PageService) { }
 
     getFilms() {
         this.filmService
@@ -34,7 +33,7 @@ export class FilmsListComponent implements OnInit {
             )
     }
 
-    getPoster(id : number) {
+    getPoster(id : number) : string {
         return this.filmService.getPoster(id);
     }
 
@@ -45,5 +44,5 @@ export class FilmsListComponent implements OnInit {
     onScroll(event : any) {
         this.pageService.nextPage();
         this.getFilms();
-    }
+    }   
 }

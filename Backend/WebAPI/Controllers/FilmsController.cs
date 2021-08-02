@@ -77,9 +77,9 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] FilmRequest request)
         {
             FilmModel model = request.Adapt<FilmModel>();
-            await _filmService.CreateAsync(model);
+            model.Id = await _filmService.CreateAsync(model);
 
-            return Ok();
+            return Ok(model.Adapt<FilmResponse>());
         }
 
         [HttpPost("{id}/poster")]

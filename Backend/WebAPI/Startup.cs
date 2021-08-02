@@ -282,6 +282,13 @@ namespace WebAPI
                     dest => dest.CityName,
                     src => src.City.Name
                 );
+
+            TypeAdapterConfig<UserEntity, UserModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Role,
+                    src => src.RoleId
+                );
         }
     }
 }

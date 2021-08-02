@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import { UserRoles } from "../Models/UserRoles";
 import { UserModel } from "../Models/UserModel";
 import { UserService } from "../Services/UserService";
+import { catchError, map } from "rxjs/operators";
 
 @Injectable({
     providedIn : 'root'
@@ -24,19 +25,24 @@ export class AdminPanelGuard implements CanActivate{
 
         let flag = false;
 
-        this.service.getCurrentUser()
-            .subscribe(
-                (data : UserModel) => {
-                    this.model.role = data.role;
-                    if (this.model.role === UserRoles.Administrator) {
-                        flag = true;
+        return this.service.getCurrentUser()
+            .pipe(
+                map(
+                    (data : UserModel) => {
+                        this.model.role = data.role;
+                        if (this.model.role === UserRoles.Administrator) {
+                            flag = true;
+                        }
+                        console.log(data);
+                        return flag;
                     }
-                },
-                error => {
-                    flag = false;
-                    this.router.navigate(['/account/signin']);
-                }
+                ),
+                catchError(
+                    (err) => {
+                        this.router.navigate(['/account/signin']);
+                        return of(false);
+                    }
+                )
             );
-        return flag;
     }
 }
