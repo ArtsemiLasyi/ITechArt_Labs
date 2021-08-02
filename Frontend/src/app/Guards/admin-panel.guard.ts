@@ -33,7 +33,6 @@ export class AdminPanelGuard implements CanActivate{
                         if (this.model.role === UserRoles.Administrator) {
                             flag = true;
                         }
-                        console.log(data);
                         return flag;
                     }
                 ),

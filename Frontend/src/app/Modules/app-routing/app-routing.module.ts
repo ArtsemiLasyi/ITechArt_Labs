@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminFilmAddComponent } from 'src/app/Components/admin/admin-film-add/admin-film-add.component';
+import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { AdminFilmSearchComponent } from 'src/app/Components/admin/admin-film-search/admin-film-search.component';
 import { AdminPanelComponent } from 'src/app/Components/admin/admin-panel/admin-panel.component';
 import { AdminUserAddComponent } from 'src/app/Components/admin/admin-user-add/admin-user-add.component';
@@ -30,6 +31,7 @@ const adminRoutes : Routes = [
     { path: 'users/current', component : UserInfoComponent },
     { path: 'films', component : AdminFilmAddComponent },
     { path: 'films/search', component : AdminFilmSearchComponent },
+    { path: 'films/info/:id', component : AdminFilmInfoComponent },
     { path: '', component : UserInfoComponent }
 ];
 

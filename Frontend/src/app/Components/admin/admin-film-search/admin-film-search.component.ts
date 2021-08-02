@@ -7,6 +7,7 @@ import { PageService } from 'src/app/Services/pageservice';
 @Component({
     selector: 'admin-film-search',
     templateUrl: './admin-film-search.component.html',
+    styleUrls: ['./admin-film-search.component.scss'],
     providers: [
         FilmService,
         PageService
@@ -14,7 +15,8 @@ import { PageService } from 'src/app/Services/pageservice';
 })
 export class AdminFilmSearchComponent implements OnInit {
 
-    films: FilmModel[] = [];
+    films : FilmModel[] = [];
+    text : string = "";
 
     constructor (
         private filmService: FilmService,
@@ -44,5 +46,10 @@ export class AdminFilmSearchComponent implements OnInit {
     onScroll(event : any) {
         this.pageService.nextPage();
         this.getFilms();
-    }   
+    }
+    
+    search() {
+        console.log(this.text);
+        // Todo
+    }
 }

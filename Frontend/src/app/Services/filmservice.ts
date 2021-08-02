@@ -47,7 +47,7 @@ export class FilmService {
     }
 
     getFilm(id : number) {
-        return this.http.get(ApiUrls.Films + '/' + id);
+        return this.http.get<FilmModel>(ApiUrls.Films + '/' + id);
     }
 
     deleteFilm(id : number) {

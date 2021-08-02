@@ -43,6 +43,7 @@ export class FilmsListComponent implements OnInit {
     }
   
     onScroll(event : any) {
+        console.log("a");
         this.pageService.nextPage();
         this.getFilms();
     }

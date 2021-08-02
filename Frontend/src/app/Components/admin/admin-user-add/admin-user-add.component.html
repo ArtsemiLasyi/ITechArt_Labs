@@ -7,14 +7,14 @@
           <input type="email" #email="ngModel" name="email" [(ngModel)]="model.email" class="form-control" id="emailInput" placeholder="emailInput" required pattern="[a-zA-Z_0-9]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}">
           <label for="emailInput">Enter email...</label>
         </div>
-        <div *ngIf="!(email.invalid && (email.dirty || email.touched))" class="alert alert-danger">
+        <div *ngIf="(email.invalid && (email.dirty || email.touched))" class="alert alert-danger">
             Invalid email
         </div>
         <div class="form-floating">
           <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" minlength="6" class="form-control" id="passwordInput" placeholder="passwordInput" required>
           <label for="passwordInput">Enter password...</label>
         </div>
-        <div *ngIf="!(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
+        <div *ngIf="(password.invalid && (password.dirty || password.touched))" class="alert alert-danger">
             Password must be equal or more than 6 symbols
         </div><br>
         <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addUser()">Add</button>

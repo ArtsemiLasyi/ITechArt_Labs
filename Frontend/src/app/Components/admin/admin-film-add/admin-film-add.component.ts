@@ -46,7 +46,7 @@ export class AdminFilmAddComponent {
                 formData.append("formFile", this.poster!);  
                 this.filmService.addPoster(id, formData).subscribe(
                     () => {
-
+                        this.success.flag = true;
                     }
                 )
             }

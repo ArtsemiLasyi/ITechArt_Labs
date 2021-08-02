@@ -1,0 +1,37 @@
+<section class="form-signin text-center">
+    <div>
+        <form>
+            <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Film info</h1>
+  
+            <div class="form-floating">
+                <input type="text" #name="ngModel" name="name" [(ngModel)]="model.name" class="form-control" id="nameInput" placeholder="nameInput" required>
+                <label for="nameInput">Enter name...</label>
+            </div>
+            <div class="form-control">
+                <label for="descriptionInput">Enter description...</label>
+                <textarea type="text" rows="3" name="description" [(ngModel)]="model.description" #description="ngModel" class="form-control rounded-0" id="descriptionInput" placeholder="..." required></textarea>
+            </div>
+            <div class="form-floating">
+                <input type="number" name="releaseYear" [(ngModel)]="model.releaseYear" #releaseYear="ngModel" class="form-control" id="releaseYearInput" placeholder="releaseYearInput" required>
+                <label for="releaseYearInput">Enter release year...</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" name="duration" [(ngModel)]="model.durationInMinutes" #duration="ngModel" class="form-control" id="durationInput" placeholder="durationInput" required>
+                <label for="durationInput">Enter duration in minutes...</label>
+            </div>
+            <div class="form-floating">
+                <input type="file" name="file" accept=".jpg, .png, .jpeg|image/*" style="display: none;" (change)="loadPhoto($event)" #fileInput>
+                <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">{{selectedFileName}}</button><br><br>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editFilm()">Edit</button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteFilm()">Delete</button>
+            <div [hidden]="!error.exists" class="alert alert-danger">
+                {{error.text}}
+            </div>
+            <div [hidden]="!success.flag" class="alert alert-success">
+                {{success.text}}
+            </div>
+        </form>
+    </div>
+</section>

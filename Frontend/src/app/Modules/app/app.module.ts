@@ -23,6 +23,8 @@ import { FilmService } from 'src/app/Services/filmservice';
 import { PageService } from 'src/app/Services/pageservice';
 import { UserService } from 'src/app/Services/UserService';
 import { AppRoutingModule } from '../app-routing/app-routing.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 
 @NgModule({
     declarations : [
@@ -39,13 +41,15 @@ import { AppRoutingModule } from '../app-routing/app-routing.module';
         SignInComponent,
         SignUpComponent,
         UserInfoComponent,
-        AdminPanelComponent
+        AdminPanelComponent,
+        AdminFilmInfoComponent
     ],
     imports : [
         BrowserModule,
         FormsModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        ScrollingModule
     ],
     providers : [
         {

@@ -8,6 +8,7 @@ import { FilmService } from 'src/app/Services/filmservice';
 @Component({
     selector: 'films-filminfo',
     templateUrl: './film-info.component.html',
+    styleUrls: ['./film-info.component.scss'],
     providers: [FilmService]
 })
 export class FilmInfoComponent implements OnInit {
