@@ -60,6 +60,8 @@ namespace WebAPI
             services.AddScoped<CinemaServiceService>();
             services.AddScoped<SessionService>();
             services.AddScoped<SeatTypePriceService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<SessionSeatService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -79,6 +81,9 @@ namespace WebAPI
             services.AddScoped<CinemaServiceRepository>();
             services.AddScoped<SessionRepository>();
             services.AddScoped<SeatTypePriceRepository>();
+            services.AddScoped<SeatOrderRepository>();
+            services.AddScoped<OrderRepository>();
+            services.AddScoped<SessionSeatRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -94,6 +99,7 @@ namespace WebAPI
             services.AddTransient<CinemaServiceValidator>();
             services.AddTransient<PriceValidator>();
             services.AddTransient<SeatTypePriceValidator>();
+            services.AddTransient<OrderValidator>();
 
             services.AddSingleton<JwtService>();
 
