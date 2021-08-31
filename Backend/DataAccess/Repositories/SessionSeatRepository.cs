@@ -46,6 +46,12 @@ namespace DataAccess.Repositories
             return entity;
         }
 
+        public int GetNumberOfFreeSeats(int sessionId)
+        {
+            return _context.SessionSeats
+                .Where(seat => seat.SessionId == sessionId).Count();
+        }
+
         public async Task<bool> DeleteByAsync(int id)
         {
             SessionSeatEntity? seat = await _context.SessionSeats.FindAsync(id);

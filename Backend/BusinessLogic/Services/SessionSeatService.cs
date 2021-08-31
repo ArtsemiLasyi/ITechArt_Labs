@@ -46,6 +46,11 @@ namespace BusinessLogic.Services
             return new SessionSeatsModel(sessionSeats);
         }
 
+        public int GetNumberOfFreeSeats(int sessionId)
+        {
+            return _sessionSeatRepository.GetNumberOfFreeSeats(sessionId);
+        }
+
         public async Task OrderAsync(int sessionId, SeatsModel seats)
         {
             SessionSeatsModel sessionSeats = await GetAllByAsync(sessionId);

@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Entities
+﻿using System.Collections.Generic;
+
+namespace DataAccess.Entities
 {
     public class FilmEntity
     {
@@ -8,5 +10,6 @@
         public int ReleaseYear { get; set; }
         public long DurationInTicks { get; set; }
         public bool IsDeleted { get; set; }
+        public ICollection<SessionEntity> Sessions { get; set; } = null!;
     }
 }
