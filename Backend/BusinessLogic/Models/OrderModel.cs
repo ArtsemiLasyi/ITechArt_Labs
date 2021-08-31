@@ -11,6 +11,6 @@ namespace BusinessLogic.Models
         public PriceModel Price { get; set; } = null!;
         public DateTime DateTime { get; set; }
         public SeatsModel Seats { get; set; } = null!;
-        public IReadOnlyCollection<ServiceModel> Services { get; set; } = null!;
+        public IReadOnlyCollection<CinemaServiceModel> CinemaServices { get; set; } = null!;
     }
 }

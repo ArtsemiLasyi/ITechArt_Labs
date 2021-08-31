@@ -57,6 +57,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] OrderRequest request)
         {
             OrderModel model = request.Adapt<OrderModel>();
+            PriceModel price = await _orderService.GetSum(request.Adapt<OrderModel>());
             await _orderService.CreateAsync(model);
             return Ok();
         }

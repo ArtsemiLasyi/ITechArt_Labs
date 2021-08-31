@@ -48,6 +48,19 @@ namespace DataAccess.Repositories
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
+        public Task<CurrencyEntity> GetByAsync(string name)
+        {
+            return _context.Currencies
+                .FirstOrDefaultAsync(
+                    currencyEntity => 
+                        currencyEntity.Name
+                            .Equals(
+                                name.Trim().ToLower(),
+                                System.StringComparison.Ordinal
+                            )
+                 );
+        }
+
         public Task UpdateAsync(CurrencyEntity currency)
         {
             _context.Currencies.Update(currency);

@@ -18,10 +18,11 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task CreateAsync(OrderEntity film)
+        public async Task<int> CreateAsync(OrderEntity order)
         {
-            _context.Orders.Add(film);
-            return _context.SaveChangesAsync();
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            return order.Id;
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -67,6 +68,22 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.Orders.FindAsync(id);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+        }
+
+        public Task<OrderEntity?> GetByAsync(int sessionId, int seatId)
+        {
+            // This measure is temporary. The directive will be removed with the release of EF 6.0
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+            return _context.Orders
+                .Where(
+                    order =>
+                        order.SessionId == sessionId
+                        && _context.SeatOrders
+                            .Where(seatOrder => seatOrder.OrderId == order.Id)
+                            .Any()
+                )
+                .FirstOrDefaultAsync();
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 

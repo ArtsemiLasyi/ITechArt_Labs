@@ -28,12 +28,22 @@ namespace DataAccess.Repositories
             return _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyCollection<SessionSeatEntity>> GetAllBy(int sessionId)
+        public async Task<IReadOnlyCollection<SessionSeatEntity>> GetAllByAsync(int sessionId)
         {
             List<SessionSeatEntity> seats = await _context.SessionSeats
                 .Where(seat => seat.SessionId == sessionId)
                 .ToListAsync();
             return seats;
+        }
+
+        public async Task<SessionSeatEntity?> GetByAsync(int sessionId, int seatId)
+        {
+            SessionSeatEntity? entity = await _context.SessionSeats.FindAsync(sessionId, seatId);
+            if (entity == null)
+            {
+                return entity;
+            }
+            return entity;
         }
 
         public async Task<bool> DeleteByAsync(int id)

@@ -43,7 +43,7 @@ namespace DataAccess.Contexts
                 .HasKey(nameof(SeatOrderEntity.OrderId), nameof(SeatOrderEntity.SeatId));
 
             modelBuilder.Entity<SessionSeatEntity>()
-                .HasKey(nameof(SessionSeatEntity.SeatId), nameof(SessionSeatEntity.SessionId));
+                .HasKey(nameof(SessionSeatEntity.SessionId), nameof(SessionSeatEntity.SeatId));
 
             modelBuilder.Entity<UserPasswordEntity>()
                 .HasKey(nameof(UserPasswordEntity.UserId));

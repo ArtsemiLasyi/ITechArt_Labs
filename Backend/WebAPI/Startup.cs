@@ -60,8 +60,10 @@ namespace WebAPI
             services.AddScoped<CinemaServiceService>();
             services.AddScoped<SessionService>();
             services.AddScoped<SeatTypePriceService>();
-            services.AddScoped<OrderService>();
             services.AddScoped<SessionSeatService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<SeatOrderService>();
+            services.AddScoped<CurrencyService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -84,6 +86,7 @@ namespace WebAPI
             services.AddScoped<SeatOrderRepository>();
             services.AddScoped<OrderRepository>();
             services.AddScoped<SessionSeatRepository>();
+            services.AddScoped<CurrencyRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -193,6 +196,7 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<OrderRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

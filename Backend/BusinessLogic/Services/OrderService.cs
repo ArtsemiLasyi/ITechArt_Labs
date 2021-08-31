@@ -13,18 +13,38 @@ namespace BusinessLogic.Services
     {
         private readonly OrderRepository _orderRepository;
         private readonly SeatTypePriceService _seatTypePriceService;
+        private readonly CurrencyService _currencyService;
+        private readonly SeatOrderService _seatOrderService;
+        private readonly SessionSeatService _sessionSeatService;
 
-        public OrderService(OrderRepository orderRepository, SeatTypePriceService seatTypePriceService)
+        public OrderService(
+            OrderRepository orderRepository,
+            SeatTypePriceService seatTypePriceService,
+            CurrencyService сurrencyService,
+            SeatOrderService seatOrderService,
+            SessionSeatService sessionSeatService)
         {
             _orderRepository = orderRepository;
             _seatTypePriceService = seatTypePriceService;
+            _currencyService = сurrencyService;
+            _seatOrderService = seatOrderService;
+            _sessionSeatService = sessionSeatService;
         }
 
-        public Task CreateAsync(OrderModel order)
+        public async Task CreateAsync(OrderModel order)
         {
             OrderEntity? orderEntity = order.Adapt<OrderEntity>();
-            orderEntity.DateTime = System.DateTime.Now;
-            return _orderRepository.CreateAsync(orderEntity);
+            orderEntity.DateTime = DateTime.UtcNow;
+
+            PriceModel price = await GetSum(order);
+            orderEntity.Price = price.Value;
+
+            CurrencyModel currencyModel = await _currencyService.GetByAsync(price.Currency);
+            orderEntity.CurrencyId = currencyModel.Id;
+
+            int id = await _orderRepository.CreateAsync(orderEntity);
+            await _seatOrderService.CreateAsync(id, order.Seats);
+            await _sessionSeatService.OrderAsync(orderEntity.SessionId, order.Seats);
         }
 
         public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(OrderParameters parameters)
@@ -41,7 +61,7 @@ namespace BusinessLogic.Services
             decimal value = 0;
             string currency = string.Empty;
             PriceModel seatsPrice = await GetSeatsSum(model.SessionId, model.Seats);
-            PriceModel servicesPrice = await GetServicesSum(model.SessionId, model.Services);
+            PriceModel servicesPrice = GetServicesSum(model.SessionId, model.CinemaServices);
             value += seatsPrice.Value;
             currency = seatsPrice.Currency;
             PriceModel price = new PriceModel(value, currency);
@@ -51,6 +71,12 @@ namespace BusinessLogic.Services
         public async Task<OrderModel?> GetByAsync(int id)
         {
             OrderEntity? orderEntity = await _orderRepository.GetByAsync(id);
+            return orderEntity?.Adapt<OrderModel>();
+        }
+
+        public async Task<OrderModel?> GetByAsync(int sessionId, int seatId)
+        {
+            OrderEntity? orderEntity = await _orderRepository.GetByAsync(sessionId, seatId);
             return orderEntity?.Adapt<OrderModel>();
         }
 
@@ -83,27 +109,16 @@ namespace BusinessLogic.Services
             return new PriceModel(value, currency);
         }
 
-        private PriceModel GetServicesSum(int sessionId, IReadOnlyCollection<ServiceModel> services)
+        private PriceModel GetServicesSum(int sessionId, IReadOnlyCollection<CinemaServiceModel> services)
         {
             decimal value = 0;
             string currency = string.Empty;
-            foreach (ServiceModel service in services)
+            foreach (CinemaServiceModel service in services)
             {
-                CinemaServiceModel? cinemaSericeModel = GetCinemaIdBySessionId(sessionId);
-                if (cinemaSericeModel == null)
-                {
-                    continue;
-                }
-                currency = cinemaSericeModel.Price.Currency;
-                value += cinemaSericeModel.Price.Value;
+                currency = service.Price.Currency;
+                value += service.Price.Value;
             }
             return new PriceModel(value, currency);
-        }
-
-        private CinemaServiceModel GetCinemaIdBySessionId(int sessionId)
-        {
-            // Todo
-            throw new NotImplementedException();
         }
     }
 }

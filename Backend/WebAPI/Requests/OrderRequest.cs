@@ -10,6 +10,6 @@ namespace WebAPI.Requests
         public int SessionId { get; set; }
         public DateTime DateTime { get; set; }
         public SeatsRequest Seats { get; set; } = null!;
-        public IReadOnlyCollection<ServiceRequest> Services { get; set; } = null!; 
+        public IReadOnlyCollection<CinemaServiceRequest> CinemaServices { get; set; } = null!; 
     }
 }

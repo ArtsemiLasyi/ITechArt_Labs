@@ -23,6 +23,20 @@ namespace BusinessLogic.Services
             return entity.Adapt<SeatOrderModel>();
         }
 
+        public async Task CreateAsync(int orderId, SeatsModel seats)
+        {
+            foreach(SeatModel seat in seats.Seats)
+            {
+                await CreateAsync(
+                    new SeatOrderModel()
+                    {
+                        OrderId = orderId,
+                        SeatId = seat.Id
+                    }
+                );
+            }
+        }
+
         public async Task<SeatOrderModel?> GetByAsync(int orderId, int seatId)
         {
             SeatOrderEntity? entity = await _cinemaServiceRepository.GetByAsync(orderId, seatId);
