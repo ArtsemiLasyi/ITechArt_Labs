@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
@@ -23,9 +24,10 @@ namespace BusinessLogic.Services
             return filmEntity.Id;
         }
         
-        public async Task<IReadOnlyCollection<FilmModel>> GetAsync(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<FilmModel>> GetAsync(int pageNumber, int pageSize, FilmParameters parameters)
         {
-            IReadOnlyCollection<FilmEntity> models = await _filmRepository.GetAsync(pageNumber, pageSize);
+            DataAccess.Parameters.FilmParameters filmParameters = parameters.Adapt<DataAccess.Parameters.FilmParameters>();
+            IReadOnlyCollection<FilmEntity> models = await _filmRepository.GetAsync(pageNumber, pageSize, filmParameters);
             return models.Adapt<IReadOnlyCollection<FilmModel>>();
         }
 

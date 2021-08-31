@@ -13,6 +13,7 @@ using MimeTypes;
 using System.Net.Mime;
 using WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
+using WebAPI.Parameters;
 
 namespace WebAPI.Controllers
 {
@@ -34,9 +35,10 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PageRequest request)
+        public async Task<IActionResult> Get([FromQuery] PageRequest request, [FromBody] FilmParameters parameters)
         {
-            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize);
+            BusinessLogic.Parameters.FilmParameters filmParameters = parameters.Adapt<BusinessLogic.Parameters.FilmParameters>();
+            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize, filmParameters);
             IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
             return Ok(response);
         }

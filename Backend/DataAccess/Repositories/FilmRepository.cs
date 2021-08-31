@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using DataAccess.Parameters;
+using DataAccess.Services;
 
 namespace DataAccess.Repositories
 {
@@ -36,15 +38,45 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize, FilmParameters parameters)
         {
-            List<FilmEntity> films = await _context.Films
+            IQueryable<FilmEntity> query = _context.Films
                 .Where(
-                    film => 
+                    film =>
                         !film.IsDeleted
                         && _context.Sessions.Where(session => session.FilmId == film.Id).Any()
-                )
-                .OrderBy(on => on.ReleaseYear)
+                );
+
+            if (!string.IsNullOrEmpty(parameters.Name))
+            {
+                query = query.Where(film => SearchService.Contains(film.Name, parameters.Name));
+            }
+
+            if (parameters.StartDateTime != null)
+            {
+                query = query.Where(
+                    film => 
+                        _context.Sessions
+                            .Where(
+                                session => 
+                                    parameters.StartDateTime > session.StartDateTime)
+                            .Any()
+                        );
+            }
+
+            if (parameters.EndDateTime != null)
+            {
+                query = query.Where(
+                    film =>
+                        _context.Sessions
+                            .Where(
+                                session =>
+                                    parameters.EndDateTime < session.StartDateTime)
+                            .Any()
+                        );
+            }
+
+            List<FilmEntity> films = await query.OrderByDescending(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
