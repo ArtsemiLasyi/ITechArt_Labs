@@ -41,11 +41,7 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize, FilmParameters parameters)
         {
             IQueryable<FilmEntity> query = _context.Films
-                .Where(
-                    film =>
-                        !film.IsDeleted
-                        && _context.Sessions.Where(session => session.FilmId == film.Id).Any()
-                );
+                .Where(film => !film.IsDeleted);
 
             if (!string.IsNullOrEmpty(parameters.Name))
             {
