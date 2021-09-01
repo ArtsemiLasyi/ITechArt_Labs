@@ -14,6 +14,7 @@ using System.Net.Mime;
 using WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using WebAPI.Parameters;
+using BusinessLogic.Parameters;
 
 namespace WebAPI.Controllers
 {
@@ -35,10 +36,10 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PageRequest request, [FromBody] FilmParameters parameters)
+        public async Task<IActionResult> Get([FromQuery] FilmRequestSearchParameters parameters)
         {
-            BusinessLogic.Parameters.FilmParameters filmParameters = parameters.Adapt<BusinessLogic.Parameters.FilmParameters>();
-            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(request.PageNumber, request.PageSize, filmParameters);
+            FilmModelSearchParameters filmParameters = parameters.Adapt<FilmModelSearchParameters>();
+            IReadOnlyCollection<FilmModel> films = await _filmService.GetAsync(parameters.PageNumber, parameters.PageSize, filmParameters);
             IReadOnlyCollection<FilmResponse> response = films.Adapt<IReadOnlyCollection<FilmResponse>>();
             return Ok(response);
         }

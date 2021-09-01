@@ -173,7 +173,7 @@ namespace WebAPI
                     fv =>
                     {
                         fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
-                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmRequestSearchParametersValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
@@ -184,7 +184,7 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<CinemaRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<HallRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<CinemaServiceRequestValidator>();
-                        fv.RegisterValidatorsFromAssemblyContaining<PageRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<FilmRequestSearchParametersValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
                     }
