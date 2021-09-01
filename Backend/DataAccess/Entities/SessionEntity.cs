@@ -9,6 +9,5 @@ namespace DataAccess.Entities
         public int HallId { get; set; }
         public DateTime StartDateTime { get; set; }
         public bool IsDeleted { get; set; }
-        public HallEntity Hall { get; set; } = null!;
     }
 }

@@ -31,7 +31,7 @@ namespace BusinessLogic.Services
                 return null;
             }
             CinemaServiceModel model = entity.Adapt<CinemaServiceModel>();
-            model.Price = new PriceModel(entity.Price, entity.Currency.Name);
+            model.Price = new PriceModel(entity.Price, entity.Currency.Adapt<CurrencyModel>());
             return model;
         }
 

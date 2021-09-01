@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using BusinessLogic.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -35,19 +36,19 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSum([FromBody] OrderRequest request)
+        [HttpPost]
+        public async Task<IActionResult> CalculateSum([FromBody] OrderRequest request)
         {
-            PriceModel price = await _orderService.GetSum(request.Adapt<OrderModel>());
+            PriceModel price = await _orderService.GetSumAsync(request.Adapt<OrderModel>());
             return Ok(price);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(OrderParameters parameters)
+        public async Task<IActionResult> GetAll(OrderRequestSearchParameters parameters)
         {
             IReadOnlyCollection<OrderModel> services = await _orderService
                 .GetAllByAsync(
-                    parameters.Adapt<BusinessLogic.Parameters.OrderParameters>()
+                    parameters.Adapt<OrderModelSearchParameters>()
                 );
             IReadOnlyCollection<OrderResponse> response = services.Adapt<IReadOnlyCollection<OrderResponse>>();
             return Ok(response);
@@ -57,7 +58,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] OrderRequest request)
         {
             OrderModel model = request.Adapt<OrderModel>();
-            PriceModel price = await _orderService.GetSum(request.Adapt<OrderModel>());
+            PriceModel price = await _orderService.GetSumAsync(request.Adapt<OrderModel>());
             await _orderService.CreateAsync(model);
             return Ok();
         }

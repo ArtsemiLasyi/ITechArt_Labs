@@ -2,7 +2,6 @@
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -48,8 +47,6 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SeatOrderEntity>> GetAllByAsync(int orderId)
         {
             List<SeatOrderEntity> entities = await _context.SeatOrders
-                .Include("Seats")
-                .Where(seatOrder => seatOrder.OrderId == orderId)
                 .ToListAsync();
             return entities;
         }

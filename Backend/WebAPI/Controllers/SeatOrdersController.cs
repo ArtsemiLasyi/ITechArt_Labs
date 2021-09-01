@@ -22,7 +22,6 @@ namespace WebAPI.Controllers
             _seatOrderService = seatOrderService;
         }
 
-        [AllowAnonymous]
         [HttpGet("{seatId}")]
         public async Task<IActionResult> Get(int seatId, int orderId)
         {
@@ -31,10 +30,10 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            SeatOrderResponse response = model.Adapt<SeatOrderResponse>();
+            return Ok(response);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(int orderId)
         {

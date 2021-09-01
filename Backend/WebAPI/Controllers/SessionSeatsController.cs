@@ -30,6 +30,22 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SessionSeatsRequest request)
         {
+            SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
+            await _sessionSeatService.CreateAsync(model);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] SessionSeatsRequest request)
+        {
+            SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
+            await _sessionSeatService.UpdateSeatStatuses(model);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] SessionSeatRequest request)
+        {
             SessionSeatModel model = request.Adapt<SessionSeatModel>();
             await _sessionSeatService.CreateAsync(model);
             return Ok();

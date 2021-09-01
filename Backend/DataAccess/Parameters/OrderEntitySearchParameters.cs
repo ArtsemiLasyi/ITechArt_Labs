@@ -1,8 +1,8 @@
 ﻿namespace DataAccess.Parameters
 {
-    public class OrderParameters
+    public class OrderEntitySearchParameters
     {
-        public bool IsPast { get; set; }
+        public bool PastOrders { get; set; }
         public int UserId { get; set; }
     }
 }

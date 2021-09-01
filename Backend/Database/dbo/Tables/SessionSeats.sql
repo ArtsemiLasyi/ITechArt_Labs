@@ -2,7 +2,7 @@
 (
     [SeatId] INT NOT NULL,
     [SessionId] INT NOT NULL,
-    [UserId] INT NULL,
+    [UserId] INT NOT NULL,
     [Status] INT NOT NULL,
     [DateTime] DateTime NOT NULL,
     CONSTRAINT [PK_SessionSeats] PRIMARY KEY ([SeatId], [SessionId]),

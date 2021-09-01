@@ -33,36 +33,34 @@ namespace BusinessLogic.Services
 
         public async Task CreateAsync(OrderModel order)
         {
-            OrderEntity? orderEntity = order.Adapt<OrderEntity>();
-            orderEntity.DateTime = DateTime.UtcNow;
+            OrderEntity orderEntity = order.Adapt<OrderEntity>();
+            orderEntity.RegistratedAt = DateTime.UtcNow;
 
-            PriceModel price = await GetSum(order);
+            PriceModel price = await GetSumAsync(order);
             orderEntity.Price = price.Value;
-
-            CurrencyModel currencyModel = await _currencyService.GetByAsync(price.Currency);
-            orderEntity.CurrencyId = currencyModel.Id;
+            orderEntity.CurrencyId = price.Currency.Id;
 
             int id = await _orderRepository.CreateAsync(orderEntity);
             await _seatOrderService.CreateAsync(id, order.Seats);
             await _sessionSeatService.OrderAsync(orderEntity.SessionId, order.Seats);
         }
 
-        public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(OrderParameters parameters)
+        public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(OrderModelSearchParameters parameters)
         {
             IReadOnlyCollection<OrderEntity> models = await _orderRepository
                 .GetAllByAsync(
-                    parameters.Adapt<DataAccess.Parameters.OrderParameters>()
+                    parameters.Adapt<DataAccess.Parameters.OrderEntitySearchParameters>()
                 );
             return models.Adapt<IReadOnlyCollection<OrderModel>>();
         }
 
-        public async Task<PriceModel> GetSum(OrderModel model)
+        public async Task<PriceModel> GetSumAsync(OrderModel model)
         {
             decimal value = 0;
-            string currency = string.Empty;
-            PriceModel seatsPrice = await GetSeatsSum(model.SessionId, model.Seats);
+            CurrencyModel currency;
+            PriceModel seatsPrice = await GetSeatsSumAsync(model.SessionId, model.Seats);
             PriceModel servicesPrice = GetServicesSum(model.SessionId, model.CinemaServices);
-            value += seatsPrice.Value;
+            value = seatsPrice.Value + servicesPrice.Value;
             currency = seatsPrice.Currency;
             PriceModel price = new PriceModel(value, currency);
             return price;
@@ -91,10 +89,10 @@ namespace BusinessLogic.Services
             return _orderRepository.DeleteByAsync(id);
         }
 
-        private async Task<PriceModel> GetSeatsSum(int sessionId, SeatsModel seatsModel)
+        private async Task<PriceModel> GetSeatsSumAsync(int sessionId, SeatsModel seatsModel)
         {
             decimal value = 0;
-            string currency = string.Empty;
+            CurrencyModel currency = new CurrencyModel();
             foreach (SeatModel seat in seatsModel.Seats)
             {
                 SeatTypePriceModel? seatTypePriceModel = await _seatTypePriceService
@@ -112,7 +110,7 @@ namespace BusinessLogic.Services
         private PriceModel GetServicesSum(int sessionId, IReadOnlyCollection<CinemaServiceModel> services)
         {
             decimal value = 0;
-            string currency = string.Empty;
+            CurrencyModel currency = new CurrencyModel();
             foreach (CinemaServiceModel service in services)
             {
                 currency = service.Price.Currency;

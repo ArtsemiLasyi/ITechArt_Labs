@@ -1,8 +1,8 @@
 ﻿namespace BusinessLogic.Parameters
 {
-    public class OrderParameters
+    public class OrderModelSearchParameters
     {
-        public bool IsPast { get; set; }
+        public bool PastOrders { get; set; }
         public bool UserId { get; set; }
     }
 }

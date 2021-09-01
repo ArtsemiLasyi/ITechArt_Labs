@@ -33,6 +33,19 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            CurrencyModel? model = await _currencyService.GetByAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            CurrencyResponse response = model.Adapt<CurrencyResponse>();
+            return Ok();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] CurrencyRequest request)
         {

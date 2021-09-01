@@ -39,17 +39,14 @@ namespace DataAccess.Repositories
         public async Task<SessionSeatEntity?> GetByAsync(int sessionId, int seatId)
         {
             SessionSeatEntity? entity = await _context.SessionSeats.FindAsync(sessionId, seatId);
-            if (entity == null)
-            {
-                return entity;
-            }
             return entity;
         }
 
         public int GetNumberOfFreeSeats(int sessionId)
         {
             return _context.SessionSeats
-                .Where(seat => seat.SessionId == sessionId).Count();
+                .Where(seat => seat.SessionId == sessionId)
+                .Count();
         }
 
         public async Task<bool> DeleteByAsync(int id)

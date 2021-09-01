@@ -28,6 +28,7 @@ using DataAccess.Options;
 using WebAPI.Responses;
 using WebAPI.Constants;
 using System.Security.Claims;
+using BusinessLogic.Options;
 
 namespace WebAPI
 {
@@ -103,10 +104,12 @@ namespace WebAPI
             services.AddTransient<PriceValidator>();
             services.AddTransient<SeatTypePriceValidator>();
             services.AddTransient<OrderValidator>();
+            services.AddTransient<CurrencyValidator>();
 
             services.AddSingleton<JwtService>();
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
+            services.Configure<SeatOprions>(Configuration.GetSection("Seats"));
 
             services.AddLogging(
                 builder =>
@@ -197,6 +200,7 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<OrderRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CurrencyRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

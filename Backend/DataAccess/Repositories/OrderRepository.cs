@@ -38,7 +38,7 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<OrderEntity>> GetAllByAsync(OrderParameters parameters)
+        public async Task<IReadOnlyCollection<OrderEntity>> GetAllByAsync(OrderEntitySearchParameters parameters)
         {
 
             IQueryable<OrderEntity>? query = _context.Orders
@@ -47,16 +47,16 @@ namespace DataAccess.Repositories
                         !order.IsDeleted
                         && order.UserId == parameters.UserId
                 );
-            if (parameters.IsPast)
+            if (parameters.PastOrders)
             {
                 query = query.Where(
-                    order => order.DateTime < DateTime.Now
+                    order => order.RegistratedAt < DateTime.UtcNow
                 );
             }
             else
             {
                 query = query.Where(
-                    order => order.DateTime >= DateTime.Now
+                    order => order.RegistratedAt >= DateTime.UtcNow
                 );
             }
             List<OrderEntity> orders = await query.ToListAsync();

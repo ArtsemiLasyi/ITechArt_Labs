@@ -20,7 +20,7 @@ namespace BusinessLogic.Services
         public async Task<CurrencyModel> CreateAsync(CurrencyModel currency)
         {
             CurrencyEntity currencyEntity = currency.Adapt<CurrencyEntity>();
-            currencyEntity.Name = currencyEntity.Name.Trim().ToLower();
+            currencyEntity.Name = currencyEntity.Name.Trim();
             await _currencyRepository.CreateAsync(currencyEntity);
             return currencyEntity.Adapt<CurrencyModel>();
         }

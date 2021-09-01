@@ -10,6 +10,5 @@ namespace DataAccess.Entities
         public int ReleaseYear { get; set; }
         public long DurationInTicks { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<SessionEntity> Sessions { get; set; } = null!;
     }
 }

@@ -8,7 +8,7 @@ namespace WebAPI.Validators
 {
     public class OrderRequestValidator : AbstractValidator<OrderRequest>
     {
-        public OrderRequestValidator(OrderValidator orderValidator, SeatValidator seatValidator)
+        public OrderRequestValidator(OrderValidator orderValidator)
         {
             RuleFor(request => request.Adapt<OrderModel>()).SetValidator(orderValidator);
         }
