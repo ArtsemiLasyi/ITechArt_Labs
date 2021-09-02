@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Parameters;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using DataAccess.Repositories;
 using Mapster;
 using System;
@@ -48,9 +49,7 @@ namespace BusinessLogic.Services
         public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(OrderModelSearchParameters parameters)
         {
             IReadOnlyCollection<OrderEntity> models = await _orderRepository
-                .GetAllByAsync(
-                    parameters.Adapt<DataAccess.Parameters.OrderEntitySearchParameters>()
-                );
+                .GetAllByAsync(parameters.Adapt<OrderEntitySearchParameters>());
             return models.Adapt<IReadOnlyCollection<OrderModel>>();
         }
 

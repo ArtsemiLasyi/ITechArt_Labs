@@ -4,6 +4,6 @@ namespace WebAPI.Requests
 {
     public class SessionSeatsRequest
     {
-        public IReadOnlyCollection<SessionSeatRequest> SessionSeats { get; set; } = null!;
+        public IReadOnlyCollection<SessionSeatRequest> Value { get; set; } = null!;
     }
 }

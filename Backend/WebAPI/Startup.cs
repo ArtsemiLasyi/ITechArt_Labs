@@ -28,7 +28,6 @@ using DataAccess.Options;
 using WebAPI.Responses;
 using WebAPI.Constants;
 using System.Security.Claims;
-using BusinessLogic.Options;
 
 namespace WebAPI
 {
@@ -109,7 +108,7 @@ namespace WebAPI
             services.AddSingleton<JwtService>();
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
-            services.Configure<SeatOprions>(Configuration.GetSection("Seats"));
+            services.Configure<SeatOptions>(Configuration.GetSection("Seats"));
 
             services.AddLogging(
                 builder =>

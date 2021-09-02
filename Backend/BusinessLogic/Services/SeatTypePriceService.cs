@@ -2,6 +2,7 @@
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace BusinessLogic.Services
             CurrencyModel? currency = await _currencyService.GetByAsync(entity.CurrencyId);
             if (currency == null)
             {
-                currency = new CurrencyModel();
+                throw new Exception("Currency does not exists!");
             }
             model.Price = new PriceModel(entity.Price, currency);
             return model;

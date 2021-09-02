@@ -35,12 +35,12 @@ namespace BusinessLogic.Services
             return currency.Adapt<CurrencyModel>();
         }
 
-        public async Task<CurrencyModel> GetByAsync(string name)
+        public async Task<CurrencyModel?> GetByAsync(string name)
         {
             CurrencyEntity? currencyEntity = await _currencyRepository.GetByAsync(name);
             if (currencyEntity == null)
             {
-                return new CurrencyModel();
+                return null;
             }
             return currencyEntity.Adapt<CurrencyModel>();
         }

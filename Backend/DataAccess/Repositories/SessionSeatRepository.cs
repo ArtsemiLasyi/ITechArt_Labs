@@ -1,6 +1,9 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
+using DataAccess.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +13,14 @@ namespace DataAccess.Repositories
     public class SessionSeatRepository
     {
         private readonly CinemabooContext _context;
+        private readonly SeatOptions _seatSnapshotOptions;
 
-        public SessionSeatRepository(CinemabooContext context)
+        public SessionSeatRepository(
+            CinemabooContext context,
+            IOptionsSnapshot<SeatOptions> seatOptionsSnapshotAssessor)
         {
             _context = context;
+            _seatSnapshotOptions = seatOptionsSnapshotAssessor.Value;
         }
 
         public Task CreateAsync(SessionSeatEntity seat)
@@ -70,6 +77,22 @@ namespace DataAccess.Repositories
         {
             _context.SessionSeats.Update(seat);
             return _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateStatusesAsync()
+        {
+            await _context.SessionSeats
+                .ForEachAsync(
+                    sessionSeat =>
+                    {
+                        if (sessionSeat.Status == 1 
+                            && DateTime.UtcNow - sessionSeat.TakenAt > _seatSnapshotOptions.SeatOccupancyInterval)
+                        {
+                            sessionSeat.Status = 0;
+                        }
+                    }
+                );
+            await _context.SaveChangesAsync();
         }
     }
 }

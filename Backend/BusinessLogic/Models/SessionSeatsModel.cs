@@ -4,11 +4,11 @@ namespace BusinessLogic.Models
 {
     public class SessionSeatsModel
     {
-        public IReadOnlyCollection<SessionSeatModel> SessionSeats { get; set; } = new List<SessionSeatModel>();
+        public IReadOnlyCollection<SessionSeatModel> Value { get; set; } = new List<SessionSeatModel>();
 
         public SessionSeatsModel(IReadOnlyCollection<SessionSeatModel> sessionSeats)
         {
-            SessionSeats = sessionSeats;
+            Value = sessionSeats;
         }
     }
 }
