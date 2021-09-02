@@ -1,5 +1,7 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using DataAccess.Repositories;
 using Mapster;
 using System.Collections.Generic;
@@ -44,9 +46,10 @@ namespace BusinessLogic.Services
             return cinemaEntity.Id;
         }
 
-        public async Task<IReadOnlyCollection<CinemaModel>> GetAllByAsync(int cityId)
+        public async Task<IReadOnlyCollection<CinemaModel>> GetAllByAsync(int cityId, CinemaModelSearchParameters parameters)
         {
-            IReadOnlyCollection<CinemaEntity> models = await _cinemaRepository.GetAllByAsync(cityId);
+            CinemaEntitySearchParameters searchParameters = parameters.Adapt<CinemaEntitySearchParameters>();
+            IReadOnlyCollection<CinemaEntity> models = await _cinemaRepository.GetAllByAsync(cityId, searchParameters);
             return models.Adapt<IReadOnlyCollection<CinemaModel>>();
         }
 

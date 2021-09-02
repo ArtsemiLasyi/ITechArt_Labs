@@ -1,11 +1,13 @@
 ﻿
 
 using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using BusinessLogic.Services;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebAPI.Parameters;
 using WebAPI.Responses;
 
 namespace WebAPI.Controllers
@@ -22,9 +24,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] CityRequestSearchParameters parameters)
         {
-            IReadOnlyCollection<CityModel> cities = await _cityService.GetAsync();
+            CityModelSearchParameters searchParameters = parameters.Adapt<CityModelSearchParameters>();
+            IReadOnlyCollection<CityModel> cities = await _cityService.GetAsync(searchParameters);
             IReadOnlyCollection<CityResponse> response = cities.Adapt<IReadOnlyCollection<CityResponse>>();
             return Ok(response);
         }

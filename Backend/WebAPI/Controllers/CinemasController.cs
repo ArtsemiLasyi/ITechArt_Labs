@@ -13,6 +13,8 @@ using MimeTypes;
 using System.Net.Mime;
 using WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
+using WebAPI.Parameters;
+using BusinessLogic.Parameters;
 
 namespace WebAPI.Controllers
 {
@@ -46,10 +48,11 @@ namespace WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> GetAllBy([FromQuery] int cityId)
+        [HttpGet("~/cities/{cityId}/cinemas")]
+        public async Task<IActionResult> GetAllBy(int cityId, [FromQuery] CinemaRequestSearchParameters parameters)
         {
-            IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId);
+            CinemaModelSearchParameters searchParameters = parameters.Adapt<CinemaModelSearchParameters>();
+            IReadOnlyCollection<CinemaModel> cinemas = await _cinemaService.GetAllByAsync(cityId, searchParameters);
             IReadOnlyCollection<CinemaResponse> response = cinemas.Adapt<IReadOnlyCollection<CinemaResponse>>();
             return Ok(response);
         }

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using WebAPI.Requests;
+using WebAPI.Parameters;
 
 namespace WebAPI.Validators
 {
-    public class PageRequestValidator : AbstractValidator<PageRequest>
+    public class FilmRequestSearchParametersValidator : AbstractValidator<FilmRequestSearchParameters>
     {
-        public PageRequestValidator()
+        public FilmRequestSearchParametersValidator()
         {
             RuleFor(request => request.PageNumber).GreaterThan(0);
             RuleFor(request => request.PageSize).GreaterThan(0);
