@@ -173,7 +173,6 @@ namespace WebAPI
                     fv =>
                     {
                         fv.RegisterValidatorsFromAssemblyContaining<FilmRequestValidator>();
-                        fv.RegisterValidatorsFromAssemblyContaining<FilmRequestSearchParametersValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignInRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SignUpRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<UserEditRequestValidator>();
