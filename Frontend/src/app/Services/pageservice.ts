@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 export class PageService {
 
     readonly DEFAULT_PAGE_SIZE : number = 10;
+    readonly INITIAL_PAGE_NUMBER : number = 1;
     
     private pageSize : number;
     private pageNumber : number;
@@ -11,7 +12,7 @@ export class PageService {
 
     constructor () {
         this.pageSize = this.DEFAULT_PAGE_SIZE;
-        this.pageNumber = 1;
+        this.pageNumber = this.INITIAL_PAGE_NUMBER;
     }
 
     nextPage() {
@@ -23,13 +24,17 @@ export class PageService {
     }
 
     previousPage() {
-        if (this.pageNumber !== 1) {
+        if (this.pageNumber !== this.INITIAL_PAGE_NUMBER) {
             this.pageNumber--;
         }
     }
 
+    clearPageNumber() {
+        this.pageNumber = this.INITIAL_PAGE_NUMBER;
+    }
+
     setPageNumber(pageNumber : number) {
-        if (pageNumber >= 1) {
+        if (pageNumber >= this.INITIAL_PAGE_NUMBER) {
             this.pageNumber = pageNumber;
         }
     }

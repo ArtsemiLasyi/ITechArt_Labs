@@ -5,8 +5,9 @@
             type="search"
             name="search"
             class="form-control form-control-dark"
-            [(ngModel)]="this.text"
-            (input)="search()"
+            [(ngModel)]="this.filmName"
+            value="{{filmName}}"
+            (keyup)="search(filmName)"
             placeholder="Input film name..."
         >
     </form>

@@ -1,5 +1,7 @@
+import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FilmModel } from 'src/app/Models/FilmModel';
+import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/filmservice';
 import { PageService } from 'src/app/Services/pageservice';
 
@@ -22,10 +24,13 @@ export class FilmsListComponent implements OnInit {
     ) { }
 
     getFilms() {
+        let request = new FilmSearchRequest();
+        request.filmName = "";
         this.filmService
             .getFilms(
                 this.pageService.getPageNumber(),
-                this.pageService.getPageSize()
+                this.pageService.getPageSize(),
+                request
             )
             .subscribe(
                 (data) =>  {
@@ -42,8 +47,7 @@ export class FilmsListComponent implements OnInit {
         this.getFilms();
     }
   
-    onScroll(event : any) {
-        console.log("a");
+    getMoreFilms() {
         this.pageService.nextPage();
         this.getFilms();
     }

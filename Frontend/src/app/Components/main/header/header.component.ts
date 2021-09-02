@@ -25,4 +25,9 @@ export class HeaderComponent {
                 }
             )
     }
+
+    setCity(cityName : string) {
+        this.activeCityName = cityName;
+        this.cityName = "";
+    }
 }

@@ -1,6 +1,7 @@
   
 import { Component, OnInit } from '@angular/core';
 import { FilmModel } from 'src/app/Models/FilmModel';
+import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/filmservice';
 import { PageService } from 'src/app/Services/pageservice';
 
@@ -16,17 +17,19 @@ import { PageService } from 'src/app/Services/pageservice';
 export class AdminFilmSearchComponent implements OnInit {
 
     films : FilmModel[] = [];
-    text : string = "";
+    filmName : string = "";
 
     constructor (
         private filmService: FilmService,
-        private pageService : PageService) { }
+        private pageService : PageService
+    ) { }
 
     getFilms() {
         this.filmService
             .getFilms(
                 this.pageService.getPageNumber(),
-                this.pageService.getPageSize()
+                this.pageService.getPageSize(),
+                new FilmSearchRequest()
             )
             .subscribe(
                 (data) =>  {
@@ -43,13 +46,19 @@ export class AdminFilmSearchComponent implements OnInit {
         this.getFilms();
     }
   
-    onScroll(event : any) {
+    getMoreFilms() {
         this.pageService.nextPage();
         this.getFilms();
     }
     
-    search() {
-        console.log(this.text);
-        // Todo
+    search(filmName : string) {
+        let request = new FilmSearchRequest();
+        request.filmName = filmName;
+        this.pageService.clearPageNumber();
+        this.filmService.getFilms(
+            this.pageService.getPageNumber(),
+            this.pageService.getPageSize(),
+            request
+        );
     }
 }

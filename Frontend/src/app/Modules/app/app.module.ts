@@ -26,6 +26,7 @@ import { AppRoutingModule } from '../app-routing/app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { CityService } from 'src/app/Services/cityservice';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations : [
@@ -50,7 +51,8 @@ import { CityService } from 'src/app/Services/cityservice';
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        ScrollingModule
+        ScrollingModule,
+        NgbModule
     ],
     providers : [
         {

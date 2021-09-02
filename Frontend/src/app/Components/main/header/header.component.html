@@ -12,17 +12,25 @@
         </ul>
 
         <button type="button" class="btn btn-primary">{{activeCityName}}</button>
-
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-            <input
-                type="search"
-                class="form-control form-control-dark"
-                (keyup)="getCities(cityName)"
-                placeholder="Choose your city..."
-                value="{{cityName}}"
-            >
+            <div class="dropdown">
+                <input
+                    type="search"
+                    class="form-control form-control-dark dropdown-toggle"
+                    (keyup)="getCities(cityName)"
+                    placeholder="Choose your city..."
+                    value="{{cityName}}"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li *ngFor="let city of cities">
+                        <a class="dropdown-item" (click)="setCity(city.name)">{{city.name}}</a>
+                    </li>
+                </ul>
+            </div>
         </form>
-
         <div class="text-end">
             <a routerLink="/account/signin" type="button" class="btn btn-outline-light me-2">Sign in</a>
             <a routerLink="/account/signup" class="btn btn-outline-light me-3">Sign up</a>
