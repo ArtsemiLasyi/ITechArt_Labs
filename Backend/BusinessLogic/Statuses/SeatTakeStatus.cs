@@ -6,6 +6,6 @@
         Taken = 1,
         Ordered = 2,
         NeedToFree = 3,
-        Error = 4
+        Empty = 4
     }
 }

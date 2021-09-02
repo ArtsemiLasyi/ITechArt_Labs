@@ -14,14 +14,14 @@ namespace BusinessLogic.Services
     public class SessionSeatService
     {
         private readonly SessionSeatRepository _sessionSeatRepository;
-        private readonly SeatOprions _seatSnapshotOptions;
+        private readonly SeatOptions _seatSnapshotOptions;
 
         public SessionSeatService(
             SessionSeatRepository seatRepository,
-            IOptionsSnapshot<SeatOprions> seatSnapshotOptionsAccessor)
+            IOptionsSnapshot<SeatOptions> seatOptionsSnapshotAssessor)
         {
             _sessionSeatRepository = seatRepository;
-            _seatSnapshotOptions = seatSnapshotOptionsAccessor.Value;
+            _seatSnapshotOptions = seatOptionsSnapshotAssessor.Value;
         }
 
         public Task CreateAsync(SessionSeatModel seat)
@@ -32,20 +32,13 @@ namespace BusinessLogic.Services
 
         public Task CreateAsync(SessionSeatsModel model)
         {
-            IReadOnlyCollection<SessionSeatEntity> entity = model.SessionSeats.Adapt<IReadOnlyCollection<SessionSeatEntity>>();
+            IReadOnlyCollection<SessionSeatEntity> entity = model.Value.Adapt<IReadOnlyCollection<SessionSeatEntity>>();
             return _sessionSeatRepository.CreateAsync(entity);
         }
 
-        public async Task UpdateSeatStatuses(SessionSeatsModel sessionSeats)
+        public Task UpdateSeatStatuses(SessionSeatsModel sessionSeats)
         {
-            foreach (SessionSeatModel model in sessionSeats.SessionSeats)
-            {
-                SeatTakeStatus status = await GetStatusAsync(model);
-                if (status == SeatTakeStatus.NeedToFree)
-                {
-                    await FreeAsync(model);
-                }
-            }
+            return _sessionSeatRepository.UpdateStatusesAsync();
         }
 
         public async Task<SessionSeatsModel> GetAllByAsync(int sessionId)
@@ -63,11 +56,11 @@ namespace BusinessLogic.Services
         public async Task OrderAsync(int sessionId, SeatsModel seats)
         {
             SessionSeatsModel sessionSeats = await GetAllByAsync(sessionId);
-            foreach (SessionSeatModel sessionSeat in sessionSeats.SessionSeats)
+            foreach (SessionSeatModel sessionSeat in sessionSeats.Value)
             {
                 foreach (SeatModel seat in seats.Seats)
                 {
-                    if(seat.Id == sessionSeat.SeatId)
+                    if (seat.Id == sessionSeat.SeatId)
                     {
                         await OrderAsync(sessionSeat);
                     }
@@ -88,14 +81,20 @@ namespace BusinessLogic.Services
 
         public async Task<SeatTakeStatus> TakeAsync(SessionSeatModel model)
         {
+            SeatTakeStatus status = await GetStatusAsync(model);
+            if (status == SeatTakeStatus.Taken || status == SeatTakeStatus.Ordered)
+            {
+                return status;
+            }
             model.TakenAt = DateTime.UtcNow;
             model.Status = SessionSeatStatus.Taken;
-            SeatTakeStatus status = await GetStatusAsync(model);
-            if (status == SeatTakeStatus.Free || status == SeatTakeStatus.NeedToFree)
+            SessionSeatEntity seatEntity = model.Adapt<SessionSeatEntity>();
+            if (status == SeatTakeStatus.Empty)
             {
-                SessionSeatEntity seatEntity = model.Adapt<SessionSeatEntity>();
                 await _sessionSeatRepository.CreateAsync(seatEntity);
+                return status;
             }
+            await _sessionSeatRepository.UpdateAsync(seatEntity);
             return status;
         }
 
@@ -126,28 +125,27 @@ namespace BusinessLogic.Services
 
         private async Task<SeatTakeStatus> GetStatusAsync(SessionSeatModel model)
         {
-            SessionSeatModel? oldEntity = await GetByAsync(model.SessionId, model.SeatId);
-            if (oldEntity == null)
+            SessionSeatModel? oldModel = await GetByAsync(model.SessionId, model.SeatId);
+            if (oldModel == null)
             {
-                return SeatTakeStatus.Error;
+                return SeatTakeStatus.Empty;
             }
-            if (model.Status == SessionSeatStatus.Ordered)
+            if (oldModel.Status == SessionSeatStatus.Ordered)
             {
                 return SeatTakeStatus.Ordered;
             }
-            if (oldEntity.Status == SessionSeatStatus.Taken 
-                && (model.TakenAt - oldEntity.TakenAt <= _seatSnapshotOptions.SeatOccupancyInterval))
+            if (oldModel.Status == SessionSeatStatus.Taken 
+                && (model.TakenAt - oldModel.TakenAt <= _seatSnapshotOptions.SeatOccupancyInterval))
             {
                 return SeatTakeStatus.Taken;
             }
-            if (oldEntity.Status == SessionSeatStatus.Taken
-                && (model.TakenAt - oldEntity.TakenAt > _seatSnapshotOptions.SeatOccupancyInterval))
+            if (oldModel.Status == SessionSeatStatus.Taken
+                && (model.TakenAt - oldModel.TakenAt > _seatSnapshotOptions.SeatOccupancyInterval))
             {
                 return SeatTakeStatus.NeedToFree;
             }
             return SeatTakeStatus.Free;
         }
-
     }
 
 }

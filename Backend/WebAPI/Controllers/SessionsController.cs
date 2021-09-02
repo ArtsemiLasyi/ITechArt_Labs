@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [Route("~/films/{filmId}/sessions")]
+        [HttpGet("~/films/{filmId}/sessions")]
         public async Task<IActionResult> GetAll(int filmId)
         {
             IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(filmId);
