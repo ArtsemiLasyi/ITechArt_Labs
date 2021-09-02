@@ -1,7 +1,10 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -39,9 +42,19 @@ namespace DataAccess.Repositories
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
-        public async Task<IReadOnlyCollection<CityEntity>> GetAsync()
+        public async Task<IReadOnlyCollection<CityEntity>> GetAsync(CityEntitySearchParameters parameters)
         {
-            List<CityEntity> cities = await _context.Cities.ToListAsync();
+            string separator = " ";
+            IQueryable<CityEntity> query = _context.Cities;
+            if (!string.IsNullOrEmpty(parameters.CityName))
+            {
+                string[] substrings = parameters.CityName.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string substring in substrings)
+                {
+                    query = query.Where(city => city.Name.Contains(substring));
+                }
+            }
+            List<CityEntity> cities = await query.ToListAsync();
             return cities;
         }
     }

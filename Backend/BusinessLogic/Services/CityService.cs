@@ -1,5 +1,7 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using DataAccess.Repositories;
 using Mapster;
 using System.Collections.Generic;
@@ -23,9 +25,10 @@ namespace BusinessLogic.Services
             return cityEntity.Id;
         }
 
-        public async Task<IReadOnlyCollection<CityModel>> GetAsync()
+        public async Task<IReadOnlyCollection<CityModel>> GetAsync(CityModelSearchParameters parameters)
         {
-            IReadOnlyCollection<CityEntity> models = await _cityRepository.GetAsync();
+            CityEntitySearchParameters searchParameters = parameters.Adapt<CityEntitySearchParameters>(); 
+            IReadOnlyCollection<CityEntity> models = await _cityRepository.GetAsync(searchParameters);
             return models.Adapt<IReadOnlyCollection<CityModel>>();
         }
 

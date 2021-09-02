@@ -1,6 +1,8 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,11 +37,22 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<CinemaEntity>> GetAllByAsync(int cityId)
+        public async Task<IReadOnlyCollection<CinemaEntity>> GetAllByAsync(int cityId, CinemaEntitySearchParameters parameters)
         {
-            List<CinemaEntity> cinemas = await _context.Cinemas
-                .Where(cinema => !cinema.IsDeleted && cinema.CityId == cityId)
-                .ToListAsync();
+            string separator = " ";
+            IQueryable<CinemaEntity> query = _context.Cinemas
+                .Where(cinema => !cinema.IsDeleted && cinema.CityId == cityId);
+
+            if (!string.IsNullOrEmpty(parameters.CinemaName))
+            {
+                string[] substrings = parameters.CinemaName.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string substring in substrings)
+                {
+                    query = query.Where(cinema => cinema.Name.Contains(substring));
+                }
+            }
+
+            List<CinemaEntity> cinemas = await query.ToListAsync();
             return cinemas;
         }
 

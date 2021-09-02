@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using DataAccess.Parameters;
+using System;
 
 namespace DataAccess.Repositories
 {
@@ -36,15 +38,68 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize)
+        public async Task<IReadOnlyCollection<FilmEntity>> GetAsync(int pageNumber, int pageSize, FilmEntitySearchParameters parameters)
         {
-            List<FilmEntity> films = await _context.Films
-                .Where(
+            string separator = " ";
+            IQueryable<FilmEntity> query = _context.Films
+                .Where(film => !film.IsDeleted);
+
+            if (!string.IsNullOrEmpty(parameters.FilmName))
+            {
+                string[] substrings = parameters.FilmName.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string substring in substrings)
+                {
+                    query = query.Where(film => film.Name.Contains(substring));
+                }
+            }
+
+            if (parameters.CinemaId != null)
+            {
+                query = query.Where(
+                    film =>
+                        _context.Sessions
+                            .Where(
+                                session =>
+                                    session.FilmId == film.Id
+                                        && _context.Halls
+                                            .Where(
+                                                hall => hall.CinemaId == parameters.CinemaId
+                                            )
+                                            .Any()
+                            )
+                            .Any()
+                        );
+            }
+
+            if (parameters.FirstSessionDateTime != null)
+            {
+                query = query.Where(
                     film => 
-                        !film.IsDeleted
-                        && _context.Sessions.Where(session => session.FilmId == film.Id).Any()
-                )
-                .OrderBy(on => on.ReleaseYear)
+                        _context.Sessions
+                            .Where(
+                                session => 
+                                    parameters.FirstSessionDateTime >= session.StartDateTime
+                                        && session.FilmId == film.Id
+                            )
+                            .Any()
+                        );
+            }
+
+            if (parameters.LastSessionDateTime != null)
+            {
+                query = query.Where(
+                    film =>
+                        _context.Sessions
+                            .Where(
+                                session =>
+                                    parameters.LastSessionDateTime <= session.StartDateTime
+                                        && session.FilmId == film.Id
+                            )
+                            .Any()
+                        );
+            }
+
+            List<FilmEntity> films = await query.OrderByDescending(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
