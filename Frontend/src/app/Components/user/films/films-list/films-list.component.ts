@@ -1,5 +1,6 @@
 import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/filmservice';
@@ -16,7 +17,7 @@ import { PageService } from 'src/app/Services/pageservice';
 })
 export class FilmsListComponent implements OnInit {
 
-    films: FilmModel[] = [];
+    films: Observable<FilmModel[]> | undefined;
 
     constructor (
         private filmService: FilmService,
@@ -26,17 +27,12 @@ export class FilmsListComponent implements OnInit {
     getFilms() {
         let request = new FilmSearchRequest();
         request.filmName = "";
-        this.filmService
+        this.films = this.filmService
             .getFilms(
                 this.pageService.getPageNumber(),
                 this.pageService.getPageSize(),
                 request
-            )
-            .subscribe(
-                (data) =>  {
-                    this.films = this.films.concat(data);
-                }
-            )
+            );
     }
 
     getPoster(id : number) {

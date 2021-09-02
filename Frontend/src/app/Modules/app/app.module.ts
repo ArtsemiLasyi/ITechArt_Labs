@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AdminFilmAddComponent } from 'src/app/Components/admin/admin-film-add/admin-film-add.component';
@@ -27,6 +27,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { CityService } from 'src/app/Services/cityservice';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
 
 @NgModule({
     declarations : [
@@ -63,7 +64,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         UserService,
         FilmService,
         PageService,
-        CityService
+        CityService,
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandler,
+        },
     ],
     bootstrap : [AppComponent]
 })

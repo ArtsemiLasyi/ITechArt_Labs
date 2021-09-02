@@ -14,7 +14,7 @@
     <br><br>
     <div class="card-group row row-cols-4 row-cols-md-3 g-4" id="scroll">
         <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
-            <div class="col" *cdkVirtualFor="let film of films" >
+            <div class="col" *cdkVirtualFor="let film of films | async" >
                 <div class="card" >
                     <img class="card-img-top" src="{{getPoster(film.id!)}}">
                     <div class="card-body">

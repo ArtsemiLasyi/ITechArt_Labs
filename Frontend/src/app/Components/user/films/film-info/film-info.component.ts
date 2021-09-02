@@ -1,6 +1,7 @@
   
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmService } from 'src/app/Services/filmservice';
@@ -9,16 +10,16 @@ import { FilmService } from 'src/app/Services/filmservice';
     selector: 'films-filminfo',
     templateUrl: './film-info.component.html',
     styleUrls: ['./film-info.component.scss'],
-    providers: [FilmService]
+    providers: [FilmService, GlobalErrorHandler]
 })
 export class FilmInfoComponent implements OnInit {
 
     film : FilmModel = new FilmModel();
-    error = new ErrorModel();
 
     constructor(
         private filmService : FilmService,
-        private route : ActivatedRoute
+        private route : ActivatedRoute,
+        private handler : GlobalErrorHandler
     ) { }
 
     ngOnInit() {
@@ -29,10 +30,10 @@ export class FilmInfoComponent implements OnInit {
         this.route.params.subscribe(params => this.film.id = params['id']);
         this.filmService.getFilm(this.film.id).subscribe(
             (data) => {
-                this.film = data as FilmModel;
+                this.film = data;
             },
             (error) => {
-                error.exists = true;
+                this.handler.handleError(error);
             }
         );
     }

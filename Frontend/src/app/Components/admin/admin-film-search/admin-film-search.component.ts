@@ -1,5 +1,7 @@
   
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/filmservice';
@@ -16,7 +18,7 @@ import { PageService } from 'src/app/Services/pageservice';
 })
 export class AdminFilmSearchComponent implements OnInit {
 
-    films : FilmModel[] = [];
+    films : Observable<FilmModel[]> | undefined;
     filmName : string = "";
 
     constructor (
@@ -25,17 +27,12 @@ export class AdminFilmSearchComponent implements OnInit {
     ) { }
 
     getFilms() {
-        this.filmService
+        this.films = this.filmService
             .getFilms(
                 this.pageService.getPageNumber(),
                 this.pageService.getPageSize(),
                 new FilmSearchRequest()
-            )
-            .subscribe(
-                (data) =>  {
-                    this.films = this.films.concat(data);
-                }
-            )
+            );
     }
 
     getPoster(id : number) : string {
