@@ -25,6 +25,7 @@ import { UserService } from 'src/app/Services/UserService';
 import { AppRoutingModule } from '../app-routing/app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
+import { CityService } from 'src/app/Services/cityservice';
 
 @NgModule({
     declarations : [
@@ -59,7 +60,8 @@ import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info
         },
         UserService,
         FilmService,
-        PageService
+        PageService,
+        CityService
     ],
     bootstrap : [AppComponent]
 })
