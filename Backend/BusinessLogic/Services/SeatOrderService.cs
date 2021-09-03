@@ -3,6 +3,7 @@ using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
@@ -25,16 +26,21 @@ namespace BusinessLogic.Services
 
         public async Task CreateAsync(int orderId, SessionSeatsModel sessionSeats)
         {
-            foreach(SessionSeatModel sessionSeat in sessionSeats.Value)
-            {
-                await CreateAsync(
-                    new SeatOrderModel()
+            await Task.WhenAll(
+                sessionSeats.Value.Select(
+                    async sessionSeat =>
                     {
-                        OrderId = orderId,
-                        SeatId = sessionSeat.SeatId
+                        await CreateAsync(
+                            new SeatOrderModel()
+                            {
+                                OrderId = orderId,
+                                SeatId = sessionSeat.SeatId
+                            }
+                        );
                     }
-                );
-            }
+                )
+            ); 
+
         }
 
         public async Task<SeatOrderModel?> GetByAsync(int orderId, int seatId)

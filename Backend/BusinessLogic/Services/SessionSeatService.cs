@@ -7,6 +7,7 @@ using Mapster;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
@@ -55,10 +56,14 @@ namespace BusinessLogic.Services
 
         public async Task OrderAsync(SessionSeatsModel sessionSeats)
         {
-            foreach (SessionSeatModel sessionSeat in sessionSeats.Value)
-            {
-                await OrderAsync(sessionSeat);
-            }
+            await Task.WhenAll(
+                sessionSeats.Value.Select(
+                    async sessionSeat =>
+                    {
+                        await OrderAsync(sessionSeat);
+                    }
+                )
+            );
         }
 
         public async Task<SessionSeatModel?> GetByAsync(int sessionId, int seatId)
