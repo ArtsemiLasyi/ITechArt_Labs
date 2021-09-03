@@ -109,6 +109,7 @@ namespace WebAPI
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
             services.Configure<SeatOptions>(Configuration.GetSection("Seats"));
+            services.Configure<BusinessLogic.Options.SeatOptions>(Configuration.GetSection("Seats"));
 
             services.AddLogging(
                 builder =>
