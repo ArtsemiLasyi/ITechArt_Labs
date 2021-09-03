@@ -3,6 +3,6 @@
     public class PriceResponse
     {
         public decimal Value { get; set; }
-        public string Currency { get; set; } = null!;
+        public CurrencyResponse Currency { get; set; } = null!;
     }
 }
