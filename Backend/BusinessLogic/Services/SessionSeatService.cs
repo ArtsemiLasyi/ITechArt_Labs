@@ -1,8 +1,10 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Options;
 using BusinessLogic.Statuses;
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -100,7 +102,7 @@ namespace BusinessLogic.Services
         {
             model.Status = SessionSeatStatus.Free;
             SessionSeatEntity seatEntity = model.Adapt<SessionSeatEntity>();
-            await DeleteAsync(model);
+            await _sessionSeatRepository.UpdateAsync(seatEntity);
         }
 
         public async Task OrderAsync(SessionSeatModel model)
