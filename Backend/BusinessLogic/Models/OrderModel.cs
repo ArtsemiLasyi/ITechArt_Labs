@@ -10,7 +10,7 @@ namespace BusinessLogic.Models
         public int SessionId { get; set; }
         public PriceModel Price { get; set; } = null!;
         public DateTime RegistratedAt { get; set; }
-        public SeatsModel Seats { get; set; } = null!;
+        public SessionSeatsModel SessionSeats { get; set; } = null!;
         public IReadOnlyCollection<CinemaServiceModel> CinemaServices { get; set; } = null!;
     }
 }

@@ -23,15 +23,15 @@ namespace BusinessLogic.Services
             return entity.Adapt<SeatOrderModel>();
         }
 
-        public async Task CreateAsync(int orderId, SeatsModel seats)
+        public async Task CreateAsync(int orderId, SessionSeatsModel sessionSeats)
         {
-            foreach(SeatModel seat in seats.Seats)
+            foreach(SessionSeatModel sessionSeat in sessionSeats.Value)
             {
                 await CreateAsync(
                     new SeatOrderModel()
                     {
                         OrderId = orderId,
-                        SeatId = seat.Id
+                        SeatId = sessionSeat.SeatId
                     }
                 );
             }

@@ -7,17 +7,11 @@ namespace BusinessLogic.Validators
 {
     public class OrderValidator : AbstractValidator<OrderModel>
     {
-        public OrderValidator(PriceValidator priceValidator, SeatValidator seatValidator)
+        public OrderValidator(PriceValidator priceValidator)
         {
             RuleFor(model => model.Price).SetValidator(priceValidator);
-            RuleFor(model => model.Seats).NotNull();
+            RuleFor(model => model.SessionSeats).NotNull();
             RuleFor(model => model.CinemaServices).NotNull();
-            RuleForEach(request => request.Seats.Adapt<IReadOnlyCollection<SeatModel>>())
-                .SetValidator(seatValidator)
-                .OverridePropertyName("Seats");
-            RuleForEach(request => request.Seats.Adapt<IReadOnlyCollection<SeatModel>>())
-                .SetValidator(seatValidator)
-                .OverridePropertyName("Seats");
         }
     }
 }
