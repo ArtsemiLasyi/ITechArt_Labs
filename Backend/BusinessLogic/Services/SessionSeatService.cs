@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
             return _sessionSeatRepository.CreateAsync(entity);
         }
 
-        public Task UpdateSeatStatuses(SessionSeatsModel sessionSeats)
+        public Task UpdateSeatStatusesAsync(SessionSeatsModel sessionSeats)
         {
             return _sessionSeatRepository.UpdateStatusesAsync();
         }
@@ -49,18 +49,18 @@ namespace BusinessLogic.Services
             return new SessionSeatsModel(sessionSeats);
         }
 
-        public int GetNumberOfFreeSeats(int sessionId)
+        public Task<int> GetNumberOfFreeSeatsAsync(int sessionId)
         {
-            return _sessionSeatRepository.GetNumberOfFreeSeats(sessionId);
+            return _sessionSeatRepository.GetNumberOfFreeSeatsAsync(sessionId);
         }
 
-        public async Task OrderAsync(SessionSeatsModel sessionSeats)
+        public Task OrderAsync(SessionSeatsModel sessionSeats)
         {
-            await Task.WhenAll(
+            return Task.WhenAll(
                 sessionSeats.Value.Select(
-                    async sessionSeat =>
+                    sessionSeat =>
                     {
-                        await OrderAsync(sessionSeat);
+                        return OrderAsync(sessionSeat);
                     }
                 )
             );

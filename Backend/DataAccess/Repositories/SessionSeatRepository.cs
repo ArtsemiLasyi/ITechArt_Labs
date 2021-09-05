@@ -49,11 +49,11 @@ namespace DataAccess.Repositories
             return entity;
         }
 
-        public int GetNumberOfFreeSeats(int sessionId)
+        public Task<int> GetNumberOfFreeSeatsAsync(int sessionId)
         {
             return _context.SessionSeats
                 .Where(seat => seat.SessionId == sessionId)
-                .Count();
+                .CountAsync();
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -64,6 +64,7 @@ namespace DataAccess.Repositories
                 return false;
             }
             _context.SessionSeats.Remove(seat);
+            await _context.SaveChangesAsync();
             return true;
         }
 

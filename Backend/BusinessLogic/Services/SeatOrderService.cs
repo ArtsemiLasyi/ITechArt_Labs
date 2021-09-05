@@ -24,13 +24,13 @@ namespace BusinessLogic.Services
             return entity.Adapt<SeatOrderModel>();
         }
 
-        public async Task CreateAsync(int orderId, SessionSeatsModel sessionSeats)
+        public Task CreateAsync(int orderId, SessionSeatsModel sessionSeats)
         {
-            await Task.WhenAll(
+            return Task.WhenAll(
                 sessionSeats.Value.Select(
-                    async sessionSeat =>
+                    sessionSeat =>
                     {
-                        await CreateAsync(
+                        return CreateAsync(
                             new SeatOrderModel()
                             {
                                 OrderId = orderId,
