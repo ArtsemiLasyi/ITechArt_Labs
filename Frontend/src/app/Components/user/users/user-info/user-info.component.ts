@@ -35,25 +35,18 @@ export class UserInfoComponent {
             );
     }
 
-    editUser() {
+    async editUser() {
         let request = new UserRequest(this.newPassword);
-        this.service
-            .editUser(this.model.id, request)
-            .subscribe(
-                () => {
-                    this.success.flag = true;
-                }
-            );
+        await this.service
+            .editUser(this.model.id, request);
+        this.success.flag = true;
     }
 
-    deleteUser() {
-        this.service
-            .deleteUser(this.model.id)
-            .subscribe(
-                () => {
-                    this.success.flag = true;
-                }
-            );
+    async deleteUser() {
+        await this.service
+            .deleteUser(this.model.id);
+        this.success.flag = true;
+        this.signOut();
     }
 
     signOut() {

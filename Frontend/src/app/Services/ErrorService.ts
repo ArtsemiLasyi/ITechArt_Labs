@@ -19,13 +19,4 @@ export class ErrorService {
         }
         return '';
     }
-
-    getServerMessage(error: HttpErrorResponse): string {
-        return error.message;
-    }
-
-    getServerStack(error: HttpErrorResponse): string {
-        // handle stack trace
-        return 'stack';
-    }
 }

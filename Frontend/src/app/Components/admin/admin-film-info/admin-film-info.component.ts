@@ -50,29 +50,21 @@ export class AdminFilmInfoComponent implements OnInit {
     }
 
 
-    editFilm() {
+    async editFilm() {
         let request = new FilmRequest(
             this.model.name,
             this.model.description,
             this.model.durationInMinutes,
             this.model.releaseYear
         );
-        this.filmService
-            .editFilm(this.model.id, request)
-            .subscribe(
-                () => {
-                    this.success.flag = true;
-                }
-            );
+        await this.filmService
+            .editFilm(this.model.id, request);
+        this.success.flag = true;
     }
 
-    deleteFilm() {
-        this.filmService
-            .deleteFilm(this.model.id)
-            .subscribe(
-                () => {
-                    this.success.flag = true;
-                }
-            );
+    async deleteFilm() {
+        await this.filmService
+            .deleteFilm(this.model.id);
+        this.success.flag = true;
     }
 }

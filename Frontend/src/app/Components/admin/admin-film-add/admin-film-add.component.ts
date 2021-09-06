@@ -39,16 +39,13 @@ export class AdminFilmAddComponent {
             this.model.releaseYear
         );
         this.filmService.addFilm(request).subscribe(
-            (data : any) => {
+            async (data : any) => {
                 console.log(data);
                 const id = data.id;
                 const formData = new FormData();
                 formData.append("formFile", this.poster!);  
-                this.filmService.addPoster(id, formData).subscribe(
-                    () => {
-                        this.success.flag = true;
-                    }
-                )
+                await this.filmService.addPoster(id, formData);
+                this.success.flag = true;
             }
         )
     }

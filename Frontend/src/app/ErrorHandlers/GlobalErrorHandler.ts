@@ -12,18 +12,14 @@ export class GlobalErrorHandler extends ErrorHandler {
 
     handleError(error: Error) {
         const errorService = this.injector.get(ErrorService);
-
         let message;
         let stackTrace;
 
-        if (error instanceof HttpErrorResponse) {
-            message = errorService.getServerMessage(error);
-            stackTrace = errorService.getServerStack(error);
-        } else {
+        if (!(error instanceof HttpErrorResponse)) {
             message = errorService.getClientMessage(error);
             stackTrace = errorService.getClientStack(error);
         }
 
-        console.error(error);
+        console.error(message);
     }
 }
