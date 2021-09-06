@@ -1,5 +1,5 @@
 <section class="content">
-    <div *ngIf="!error.exists" class="card">
+    <div class="card">
         <img class="card-img-top" src="{{getPoster(film.id!)}}">
         <div class="card-body">
             <h2 class="card-title text-center">{{film.name}}</h2>
@@ -9,8 +9,5 @@
             <h4 class="card-text text-center">{{film.releaseYear}}</h4><br>
             <h4 class="card-text text-center">{{film.durationInMinutes}} minutes</h4>
         </div>
-    </div>
-    <div *ngIf="error.exists">
-        404
     </div>
 </section>

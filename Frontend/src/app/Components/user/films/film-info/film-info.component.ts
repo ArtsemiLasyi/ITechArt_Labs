@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
-import { FilmService } from 'src/app/Services/filmservice';
+import { FilmService } from 'src/app/Services/FilmService';
 
 @Component({
     selector: 'films-filminfo',

@@ -1,27 +1,31 @@
 <section class="content">
     <div class="filters">
         <div class="col-md-8 offset-md-2">
-            <div>
-                <h5 class="text-left">Film name</h5>
-                <input
-                    type="search"
-                    class="form-control form-control-dark"
-                    placeholder="Enter film name..."
-                >
-                <button></button>
-            </div>
-            <h5 class="text-left">Start datetime</h5>
+            <h5 class="text-left">Film name</h5>
             <input
                 type="search"
                 class="form-control form-control-dark"
-                placeholder="yyyy-mm-dd"
+                placeholder="Enter film name..."
+                [(ngModel)]="filmName"
             >
-            <h5 class="text-left">Finish datetime</h5>
+            <h5 class="text-left">First session date</h5>
             <input
-                type="search"
+                type="date"
                 class="form-control form-control-dark"
-                placeholder="yyyy-mm-dd"
+                [(ngModel)]="firstSessionDate"
             >
+            <h5 class="text-left">Last session date</h5>
+            <input
+                type="date"
+                class="form-control form-control-dark"
+                [(ngModel)]="lastSessionDate"
+            >
+            <button 
+                class="btn btn-primary"
+                (click)="searchFilms()"
+            >
+                Search
+            </button>
         </div>
     </div>
     <div class="card-group row row-cols-3 row-cols-md-3 g-4">

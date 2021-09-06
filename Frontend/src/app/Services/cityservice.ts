@@ -6,7 +6,7 @@ import { CityModel } from "../Models/CityModel";
 @Injectable()
 export class CityService {
 
-    constructor(private http : HttpClient){ }
+    constructor(private http : HttpClient) { }
 
     getCities(name : string) {
         return this.http.get<CityModel[]>(

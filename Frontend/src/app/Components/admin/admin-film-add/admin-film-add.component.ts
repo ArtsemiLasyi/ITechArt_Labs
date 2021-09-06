@@ -3,7 +3,7 @@ import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { FilmRequest } from 'src/app/Requests/FilmRequest';
-import { FilmService } from 'src/app/Services/filmservice';
+import { FilmService } from 'src/app/Services/FilmService';
 
 @Component({
     selector: 'admin-film-add',

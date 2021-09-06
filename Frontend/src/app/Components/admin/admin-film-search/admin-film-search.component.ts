@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
-import { FilmService } from 'src/app/Services/filmservice';
+import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 
 @Component({

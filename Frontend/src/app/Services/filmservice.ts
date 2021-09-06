@@ -33,13 +33,10 @@ export class FilmService {
     }
 
     getFilms(pageNumber : number, pageSize : number, request : FilmSearchRequest) {
+
         return this.http.get<FilmModel[]>(
             ApiUrls.Films, {
-                params : {
-                    pageNumber : pageNumber.toString(),
-                    pageSize : pageSize.toString(),
-                    filmName : request.filmName
-                }
+                params : this.getParams(pageNumber, pageSize, request) 
             }
         );
     }
@@ -50,5 +47,21 @@ export class FilmService {
 
     deleteFilm(id : number) {
         return this.http.delete(`${ApiUrls.Films}/${id}`);
+    }
+
+    getParams(pageNumber : number, pageSize : number, request : FilmSearchRequest) {
+        let params : any = { };
+        if (request.filmName) {
+            params.filmName = request.filmName;
+        }
+        if (request.firstSessionDateTime) {
+            params.firstSessionDateTime = request.firstSessionDateTime;
+        }
+        if (request.lastSessionDateTime) {
+            params.lastSessionDateTime = request.lastSessionDateTime;
+        }
+        params.pageSize = pageSize.toString();
+        params.pageNumber = pageNumber.toString();
+        return params;
     }
 }

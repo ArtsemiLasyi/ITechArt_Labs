@@ -19,15 +19,15 @@ import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-
 import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
 import { AuthInterceptor } from 'src/app/Services/AuthInterceptor';
-import { FilmService } from 'src/app/Services/filmservice';
+import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 import { UserService } from 'src/app/Services/UserService';
 import { AppRoutingModule } from '../app-routing/app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { CityService } from 'src/app/Services/cityservice';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
+import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
 
 @NgModule({
     declarations : [
@@ -52,13 +52,17 @@ import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        ScrollingModule,
-        NgbModule
+        ScrollingModule
     ],
     providers : [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor, 
             multi: true
         },
         UserService,
