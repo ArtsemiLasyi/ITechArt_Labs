@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import { UserModel } from "../Models/UserModel";
 import { UserService } from "../Services/UserService";
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -18,16 +19,24 @@ export class UserInfoGuard implements CanActivate {
         
         let flag = false;
 
-        this.service.getCurrentUser()
-            .subscribe(
-                (data : UserModel) => {
-                    flag = true;
-                },
-                error => {
-                    flag = false;
-                    this.router.navigate(['/account/signin']);
-                }
-            );
-        return flag;
+        return this.service
+            .getCurrentUser()
+            .pipe(
+                map(
+                    (data : UserModel) => {
+                        if (data.id) {
+                            flag = true;
+                        }
+                        return flag;
+                    }
+                ),
+                catchError(
+                    (err) => {
+                        this.router.navigate(['/account/signin']);
+                        return of(false);
+                    }
+                )
+            );    
+        
     }
 }

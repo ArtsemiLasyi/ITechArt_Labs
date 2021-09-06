@@ -1,21 +1,26 @@
 .form {
-  margin-left: auto;
-  margin-right: auto;
-  width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.filters {
+    padding: 16px;
+    margin: 0 auto;
 }
 
 .card-img-top {
-  max-width: 300px;
-  margin: 0 auto;
-  height: 225px;
-  display: block;
+    width: 500px;
+    margin: 0 auto;
+    height: 500px;
+    display: block;
 }
 
 a {
-  text-decoration: none;
-  color: black;
+    text-decoration: none;
+    color: black;
 }
 
 .card-body {
-  text-align: center;
+    text-align: center;
 }

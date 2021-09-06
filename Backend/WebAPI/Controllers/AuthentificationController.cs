@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
             }
 
             string token = _jwtService.GetJwToken(user);
-            return Ok(token);
+            return Ok(new { token = token });
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageKeyNames } from 'src/app/Constants/LocalStorageKeyNames';
+import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { UserModel } from 'src/app/Models/UserModel';
 import { UserRequest } from 'src/app/Requests/UserRequest';
 import { UserService } from 'src/app/Services/UserService';
@@ -18,6 +19,7 @@ export class UserInfoComponent {
     ) { }
 
     model = new UserModel();
+    success = new SuccessModel();
     newPassword : string = '';
 
     ngOnInit() {
@@ -33,13 +35,18 @@ export class UserInfoComponent {
             );
     }
 
-    editUser() {
+    async editUser() {
         let request = new UserRequest(this.newPassword);
-        this.service.editUser(this.model.id, request);
+        await this.service
+            .editUser(this.model.id, request);
+        this.success.flag = true;
     }
 
-    deleteUser() {
-        this.service.deleteUser(this.model.id);        
+    async deleteUser() {
+        await this.service
+            .deleteUser(this.model.id);
+        this.success.flag = true;
+        this.signOut();
     }
 
     signOut() {

@@ -1,42 +1,41 @@
-import { HostListener } from '@angular/core';
+  
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 
 @Component({
-    selector: 'films-films-list',
-    templateUrl: './films-list.component.html',
-    styleUrls: ['./films-list.component.scss'],
+    selector: 'admin-film-search',
+    templateUrl: './admin-film-search.component.html',
+    styleUrls: ['./admin-film-search.component.scss'],
     providers: [
         FilmService,
         PageService
     ]
 })
-export class FilmsListComponent implements OnInit {
+export class AdminFilmSearchComponent implements OnInit {
 
     films : Observable<FilmModel[]> | undefined;
-    filmName : string | undefined;
-    firstSessionDate : Date | undefined;
-    lastSessionDate : Date | undefined;
+    filmName : string = "";
 
     constructor (
         private filmService: FilmService,
         private pageService : PageService
     ) { }
 
-    getFilms(request = new FilmSearchRequest()) {
+    getFilms() {
         this.films = this.filmService
             .getFilms(
                 this.pageService.getPageNumber(),
                 this.pageService.getPageSize(),
-                request
+                new FilmSearchRequest()
             );
     }
 
-    getPoster(id : number) {
+    getPoster(id : number) : string {
         return this.filmService.getPoster(id);
     }
 
@@ -48,13 +47,15 @@ export class FilmsListComponent implements OnInit {
         this.pageService.nextPage();
         this.getFilms();
     }
-
-    searchFilms() {
-        this.pageService.clearPageNumber();
+    
+    search(filmName : string) {
         let request = new FilmSearchRequest();
-        request.filmName = this.filmName;
-        request.firstSessionDateTime = this.firstSessionDate;
-        request.lastSessionDateTime = this.lastSessionDate;
-        this.getFilms(request);
+        request.filmName = filmName;
+        this.pageService.clearPageNumber();
+        this.filmService.getFilms(
+            this.pageService.getPageNumber(),
+            this.pageService.getPageSize(),
+            request
+        );
     }
 }

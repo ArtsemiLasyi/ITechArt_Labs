@@ -1,0 +1,28 @@
+<section>
+    <h5>Search film:</h5>
+    <form>
+        <input 
+            type="search"
+            name="search"
+            class="form-control form-control-dark"
+            [(ngModel)]="filmName"
+            (keyup)="search(filmName)"
+            placeholder="Input film name..."
+        >
+    </form>
+    <br><br>
+    <div class="card-group row row-cols-4 row-cols-md-3 g-4" id="scroll">
+        <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
+            <div class="col" *cdkVirtualFor="let film of films | async" >
+                <div class="card" >
+                    <img class="card-img-top" src="{{getPoster(film.id!)}}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{film.name}}</h5>
+                        <p class="card-text text-center">{{film.releaseYear}}</p>
+                        <a routerLink="../info/{{film.id}}" class="btn btn-lg btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </div>
+</section>

@@ -1,12 +1,51 @@
-<section class="content album py-5 bg-light">
-    <div class="card-columns">
-        <div class="card">
-            <img class="card-img-top" src="">
-            <div class="card-body">
-                <h5 class="card-title text-center"></h5>
-                <p class="card-text text-center"></p>
-                <a routerLink="" class="card-text text-center">More...</a>
+<section class="content">
+    <div class="filters">
+        <div class="col-md-8 offset-md-2">
+            <h5 class="text-left">Film name</h5>
+            <input
+                type="search"
+                class="form-control form-control-dark"
+                placeholder="Enter film name..."
+                [(ngModel)]="filmName"
+            >
+            <h5 class="text-left">First session date</h5>
+            <input
+                type="date"
+                class="form-control form-control-dark"
+                [(ngModel)]="firstSessionDate"
+            >
+            <h5 class="text-left">Last session date</h5>
+            <input
+                type="date"
+                class="form-control form-control-dark"
+                [(ngModel)]="lastSessionDate"
+            >
+            <button 
+                class="btn btn-primary"
+                (click)="searchFilms()"
+            >
+                Search
+            </button>
+        </div>
+    </div>
+    <div class="card-group row row-cols-3 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let film of films | async">
+            <div class="card">
+                <img class="card-img-top" src="{{getPoster(film.id!)}}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{film.name}}</h5>
+                    <p class="card-text text-center">{{film.releaseYear}}</p>
+                    <a routerLink="/films/{{film.id}}" class="card-text text-center">More...</a>
+                </div>
             </div>
         </div>
+    </div>
+    <div>
+        <button
+            class="btn btn-primary btn-lg"
+            (click)="getMoreFilms()"
+        >
+            More films
+        </button>
     </div>
 </section>
