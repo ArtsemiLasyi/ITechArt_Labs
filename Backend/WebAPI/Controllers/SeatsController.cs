@@ -23,6 +23,7 @@ namespace WebAPI.Controllers
             _seatService = seatService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get(int hallId)
         {

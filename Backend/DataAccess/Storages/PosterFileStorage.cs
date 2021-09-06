@@ -14,7 +14,7 @@ namespace DataAccess.Storages
             _storageSnapshotOptions = storageSnapshotOptionsAccessor.Value;
         }
 
-        public Task CreateAsync(Stream stream, string fileName)
+        public async Task CreateAsync(Stream stream, string fileName)
         {
             string path = GetPath();
 
@@ -24,7 +24,7 @@ namespace DataAccess.Storages
             }
             string fullPath = Path.Combine(path, fileName);
             using FileStream fileStream = new FileStream(fullPath, FileMode.Create);
-            return stream.CopyToAsync(fileStream);
+            await stream.CopyToAsync(fileStream);
         }
 
         public bool Delete(string fileName)
