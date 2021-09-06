@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Films]
+CREATE TABLE [dbo].[Films]
 (
     [Id] INT IDENTITY(1,1) NOT NULL, 
     [Name] NVARCHAR(100) NOT NULL, 
