@@ -21,8 +21,6 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.SeatTypePrices
-                .Include("Currencies")
-                .Include("SeatTypes")
                 .FirstOrDefaultAsync(
                     seatTypePrice =>
                         seatTypePrice.SeatTypeId == seatTypeId

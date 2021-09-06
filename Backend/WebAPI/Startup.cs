@@ -60,6 +60,10 @@ namespace WebAPI
             services.AddScoped<CinemaServiceService>();
             services.AddScoped<SessionService>();
             services.AddScoped<SeatTypePriceService>();
+            services.AddScoped<SessionSeatService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<SeatOrderService>();
+            services.AddScoped<CurrencyService>();
 
             services.AddScoped<UserRepository>();
             services.AddScoped<PasswordRepository>();
@@ -79,6 +83,10 @@ namespace WebAPI
             services.AddScoped<CinemaServiceRepository>();
             services.AddScoped<SessionRepository>();
             services.AddScoped<SeatTypePriceRepository>();
+            services.AddScoped<SeatOrderRepository>();
+            services.AddScoped<OrderRepository>();
+            services.AddScoped<SessionSeatRepository>();
+            services.AddScoped<CurrencyRepository>();
 
             services.AddTransient<SignInValidator>();
             services.AddTransient<SignUpValidator>();
@@ -94,10 +102,14 @@ namespace WebAPI
             services.AddTransient<CinemaServiceValidator>();
             services.AddTransient<PriceValidator>();
             services.AddTransient<SeatTypePriceValidator>();
+            services.AddTransient<OrderValidator>();
+            services.AddTransient<CurrencyValidator>();
 
             services.AddSingleton<JwtService>();
 
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
+            services.Configure<SeatOptions>(Configuration.GetSection("Seats"));
+            services.Configure<BusinessLogic.Options.SeatOptions>(Configuration.GetSection("Seats"));
 
             services.AddLogging(
                 builder =>
@@ -186,6 +198,8 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<FilmRequestSearchParametersValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<FormFileValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<OrderRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<CurrencyRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(

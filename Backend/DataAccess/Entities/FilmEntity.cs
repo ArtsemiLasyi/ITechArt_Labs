@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Entities
+﻿using System.Collections.Generic;
+
+namespace DataAccess.Entities
 {
     public class FilmEntity
     {

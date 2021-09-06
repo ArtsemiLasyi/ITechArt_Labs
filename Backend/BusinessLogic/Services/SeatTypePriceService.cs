@@ -2,6 +2,7 @@
 using DataAccess.Entities;
 using DataAccess.Repositories;
 using Mapster;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,10 +11,14 @@ namespace BusinessLogic.Services
     public class SeatTypePriceService
     {
         private readonly SeatTypePriceRepository _seatTypePriceRepository;
+        private readonly CurrencyService _currencyService;
 
-        public SeatTypePriceService(SeatTypePriceRepository seatTypePriceRepository)
+        public SeatTypePriceService(
+            SeatTypePriceRepository seatTypePriceRepository,
+            CurrencyService currencyService)
         {
             _seatTypePriceRepository = seatTypePriceRepository;
+            _currencyService = currencyService;
         }
 
         public async Task<SeatTypePriceModel> CreateAsync(SeatTypePriceModel model)
@@ -31,7 +36,12 @@ namespace BusinessLogic.Services
                 return null;
             }
             SeatTypePriceModel model = entity.Adapt<SeatTypePriceModel>();
-            model.Price = new PriceModel(entity.Price, entity.Currency.Name);
+            CurrencyModel? currency = await _currencyService.GetByAsync(entity.CurrencyId);
+            if (currency == null)
+            {
+                throw new Exception("Currency does not exists!");
+            }
+            model.Price = new PriceModel(entity.Price, currency);
             return model;
         }
 

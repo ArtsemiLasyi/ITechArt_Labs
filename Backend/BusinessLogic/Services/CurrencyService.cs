@@ -20,6 +20,7 @@ namespace BusinessLogic.Services
         public async Task<CurrencyModel> CreateAsync(CurrencyModel currency)
         {
             CurrencyEntity currencyEntity = currency.Adapt<CurrencyEntity>();
+            currencyEntity.Name = currencyEntity.Name.Trim();
             await _currencyRepository.CreateAsync(currencyEntity);
             return currencyEntity.Adapt<CurrencyModel>();
         }
@@ -32,6 +33,16 @@ namespace BusinessLogic.Services
                 return null;
             }
             return currency.Adapt<CurrencyModel>();
+        }
+
+        public async Task<CurrencyModel?> GetByAsync(string name)
+        {
+            CurrencyEntity? currencyEntity = await _currencyRepository.GetByAsync(name);
+            if (currencyEntity == null)
+            {
+                return null;
+            }
+            return currencyEntity.Adapt<CurrencyModel>();
         }
 
         public async Task<IReadOnlyCollection<CurrencyModel>> GetAsync()
