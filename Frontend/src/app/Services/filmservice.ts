@@ -49,7 +49,7 @@ export class FilmService {
         return this.http.delete(`${ApiUrls.Films}/${id}`);
     }
 
-    getParams(pageNumber : number, pageSize : number, request : FilmSearchRequest) {
+    private getParams(pageNumber : number, pageSize : number, request : FilmSearchRequest) {
         let params : any = { };
         if (request.filmName) {
             params.filmName = request.filmName;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageKeyNames } from 'src/app/Constants/LocalStorageKeyNames';
+import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { UserModel } from 'src/app/Models/UserModel';
 import { UserRequest } from 'src/app/Requests/UserRequest';
@@ -50,7 +50,7 @@ export class UserInfoComponent {
     }
 
     signOut() {
-        localStorage.removeItem(LocalStorageKeyNames.TOKEN);
+        localStorage.removeItem(StorageKeyNames.TOKEN);
         this.router.navigate(['/']);
     }
 }

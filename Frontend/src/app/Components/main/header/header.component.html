@@ -17,16 +17,17 @@
                 <input
                     type="search"
                     class="form-control form-control-dark dropdown-toggle"
-                    (keyup)="getCities(cityName)"
+                    name="cityName"
+                    (keyup)="getCities()"
                     placeholder="Choose your city..."
-                    value="{{cityName}}"
+                    [(ngModel)]="cityName"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li *ngFor="let city of cities">
-                        <a class="dropdown-item" (click)="setCity(city.name)">{{city.name}}</a>
+                        <a class="dropdown-item" (click)="setCity(city)">{{city.name}}</a>
                     </li>
                 </ul>
             </div>

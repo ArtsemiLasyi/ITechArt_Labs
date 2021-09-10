@@ -1,4 +1,8 @@
 import { Component } from "@angular/core";
+import { ErrorModel } from "src/app/Models/ErrorModel";
+import { HallModel } from "src/app/Models/HallModel";
+import { SuccessModel } from "src/app/Models/SuccessModel";
+import { HallRequest } from "src/app/Requests/HallRequest";
 import { HallService } from "src/app/Services/HallService";
 
 @Component({
@@ -11,12 +15,12 @@ export class AdminHallAddComponent {
     readonly defaultFileName : string = "Add photo";
 
     photo : File | undefined;
-    model : FilmModel = new FilmModel();
+    model : HallModel = new HallModel();
     error : ErrorModel = new ErrorModel();
     success : SuccessModel = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
 
-    constructor(private filmService : FilmService) { }
+    constructor(private hallService : HallService) { }
 
     loadPhoto(event : any) : any {
         this.photo = event.target.files[0];
@@ -28,18 +32,16 @@ export class AdminHallAddComponent {
     }
 
     addHall() {
-        const request = new FilmRequest(
+        const request = new HallRequest(
+            this.model.cinemaId,
             this.model.name,
-            this.model.description,
-            this.model.durationInMinutes,
-            this.model.releaseYear
         );
-        this.filmService.addFilm(request).subscribe(
+        this.hallService.addHall(request).subscribe(
             async (data : any) => {
                 const id = data.id;
                 const formData = new FormData();
                 formData.append("formFile", this.photo!);  
-                await this.filmService.addPoster(id, formData);
+                await this.hallService.addPhoto(id, formData);
                 this.success.flag = true;
             }
         )

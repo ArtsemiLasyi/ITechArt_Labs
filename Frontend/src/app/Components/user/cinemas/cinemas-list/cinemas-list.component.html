@@ -1,0 +1,10 @@
+<div class="card-group">
+    <div *ngFor="let cinema of cinemas | async" class="card mb-3">
+        <img src="{{getPhoto(cinema.id!)}}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{cinema.name}}</h5>
+            <h6 class="card-text">{{cinema.description}}</h6>
+            <a routerLink="/cinemas/{{cinema.id}}" class="btn btn-primary">Details</a>
+        </div>
+    </div>
+</div>

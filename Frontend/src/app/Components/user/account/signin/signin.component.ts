@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageKeyNames } from 'src/app/Constants/LocalStorageKeyNames';
+import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SignInModel } from 'src/app/Models/SignInModel';
 import { SignInRequest } from 'src/app/Requests/SignInRequest';
@@ -28,7 +28,7 @@ export class SignInComponent {
             .subscribe(
                 (data : any) => {
                     let token = data.token;
-                    localStorage.setItem(LocalStorageKeyNames.TOKEN, token);
+                    localStorage.setItem(StorageKeyNames.TOKEN, token);
                     this.router.navigate(['']);
                 },
                 error => {

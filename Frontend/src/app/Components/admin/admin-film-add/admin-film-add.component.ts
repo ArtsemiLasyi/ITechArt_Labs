@@ -40,7 +40,6 @@ export class AdminFilmAddComponent {
         );
         this.filmService.addFilm(request).subscribe(
             async (data : any) => {
-                console.log(data);
                 const id = data.id;
                 const formData = new FormData();
                 formData.append("formFile", this.poster!);  
