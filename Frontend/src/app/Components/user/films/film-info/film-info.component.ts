@@ -19,8 +19,8 @@ export class FilmInfoComponent implements OnInit {
     constructor(
         private filmService : FilmService,
         private route : ActivatedRoute,
-        private handler : GlobalErrorHandler) 
-    { }
+        private handler : GlobalErrorHandler
+    ) { }
 
     ngOnInit() {
         this.getFilm();

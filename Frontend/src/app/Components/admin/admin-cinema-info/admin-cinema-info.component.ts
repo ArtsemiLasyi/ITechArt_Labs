@@ -1,12 +1,12 @@
-import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { CinemaModel } from "src/app/Models/CinemaModel";
-import { CityModel } from "src/app/Models/CityModel";
-import { ErrorModel } from "src/app/Models/ErrorModel";
-import { SuccessModel } from "src/app/Models/SuccessModel";
-import { CinemaRequest } from "src/app/Requests/CinemaRequest";
-import { CinemaService } from "src/app/Services/CinemaService";
-import { CityService } from "src/app/Services/CityService";
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CinemaModel } from 'src/app/Models/CinemaModel';
+import { CityModel } from 'src/app/Models/CityModel';
+import { ErrorModel } from 'src/app/Models/ErrorModel';
+import { SuccessModel } from 'src/app/Models/SuccessModel';
+import { CinemaRequest } from 'src/app/Requests/CinemaRequest';
+import { CinemaService } from 'src/app/Services/CinemaService';
+import { CityService } from 'src/app/Services/CityService';
 
 @Component({
     selector: 'admin-cinema-info',
@@ -15,14 +15,14 @@ import { CityService } from "src/app/Services/CityService";
 })
 export class AdminCinemaInfoComponent {
 
-    readonly defaultFileName : string = "Add photo";
+    readonly defaultFileName : string = 'Add photo';
 
     photo : File | undefined;
     error = new ErrorModel();
     success = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
 
-    cityName : string = "";
+    cityName : string = '';
     city : CityModel = new CityModel();
     cities : CityModel[] = [];
     model : CinemaModel = new CinemaModel();

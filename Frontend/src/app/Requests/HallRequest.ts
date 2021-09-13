@@ -4,7 +4,8 @@ export class HallRequest {
 
     constructor(
         cinemaId : number,
-        name : string) {
+        name : string
+    ) {
         
         this.name = name;
         this.cinemaId = cinemaId;

@@ -16,7 +16,7 @@ import { FilmService } from 'src/app/Services/FilmService';
 })
 export class AdminFilmInfoComponent implements OnInit {
 
-    readonly defaultFileName : string = "Add poster";
+    readonly defaultFileName : string = 'Add poster';
 
     poster : File | undefined;
     model = new FilmModel();

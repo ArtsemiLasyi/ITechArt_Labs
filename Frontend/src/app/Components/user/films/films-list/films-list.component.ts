@@ -1,6 +1,7 @@
 import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map, reduce, scan } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/FilmService';
@@ -33,6 +34,14 @@ export class FilmsListComponent implements OnInit {
                 this.pageService.getPageNumber(),
                 this.pageService.getPageSize(),
                 request
+            )
+            .pipe(
+                scan(
+                    (accumulator, value) => {
+                        accumulator.push(...value);
+                        return accumulator;
+                    }
+                )
             );
     }
 

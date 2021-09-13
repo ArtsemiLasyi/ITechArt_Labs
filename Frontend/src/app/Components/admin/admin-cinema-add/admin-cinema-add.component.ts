@@ -15,7 +15,7 @@ import { CityService } from 'src/app/Services/CityService';
 })
 export class AdminCinemaAddComponent {
 
-    readonly defaultFileName : string = "Add photo";
+    readonly defaultFileName : string = 'Add photo';
 
     photo : File | undefined;
     model : CinemaModel = new CinemaModel();
@@ -64,7 +64,7 @@ export class AdminCinemaAddComponent {
             async (data : any) => {
                 const id = data.id;
                 const formData = new FormData();
-                formData.append("formFile", this.photo!);  
+                formData.append('formFile', this.photo!);  
                 await this.cinemaService.addPhoto(id, formData);
                 this.success.flag = true;
             }

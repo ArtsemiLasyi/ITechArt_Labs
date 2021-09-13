@@ -1,10 +1,10 @@
-import { Component } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
-import { CinemaModel } from "src/app/Models/CinemaModel";
-import { CityModel } from "src/app/Models/CityModel";
-import { CinemaSearchRequest } from "src/app/Requests/CinemaSearchRequest";
-import { CinemaService } from "src/app/Services/CinemaService";
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { CinemaModel } from 'src/app/Models/CinemaModel';
+import { CityModel } from 'src/app/Models/CityModel';
+import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
+import { CinemaService } from 'src/app/Services/CinemaService';
 
 @Component({
     selector: 'admin-cinema-search',
@@ -15,7 +15,7 @@ import { CinemaService } from "src/app/Services/CinemaService";
 export class AdminCinemaSearchComponent {
 
     cinemas : Observable<CinemaModel[]> | undefined;
-    cinemaName : string = "";
+    cinemaName : string = '';
     city : CityModel = new CityModel();
 
     constructor (
@@ -47,8 +47,8 @@ export class AdminCinemaSearchComponent {
     search(cinemaName : string) {
         let request = new CinemaSearchRequest();
         request.cinemaName = cinemaName;
-        this.cinemaService.getCinemas(
-            1,
+        this.cinemas = this.cinemaService.getCinemas(
+            this.city.id,
             request
         );
     }

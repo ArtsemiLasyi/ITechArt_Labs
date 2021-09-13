@@ -38,7 +38,7 @@ import { StoreModule } from '@ngrx/store';
 import { cityReducer } from 'src/app/Reducers/city.reducer';
 import { CinemasNodeComponent } from 'src/app/Components/user/cinemas/cinemas-node/cinemas-node.component';
 import { HallViewDialogComponent } from 'src/app/Components/user/halls/hall-view-dialog/hall-view-dialog.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
 import { AdminCinemaAddComponent } from 'src/app/Components/admin/admin-cinema-add/admin-cinema-add.component';
 import { AdminCinemaSearchComponent } from 'src/app/Components/admin/admin-cinema-search/admin-cinema-search.component';
@@ -46,6 +46,7 @@ import { AdminCinemaInfoComponent } from 'src/app/Components/admin/admin-cinema-
 import { AdminHallAddComponent } from 'src/app/Components/admin/admin-hall-add/admin-hall-add.component';
 import { AdminHallInfoComponent } from 'src/app/Components/admin/admin-hall-info/admin-hall-info.component';
 import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-search/admin-hall-search.component';
+import { AdminHallConstructorDialogComponent } from 'src/app/Components/admin/admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
 
 @NgModule({
     declarations : [
@@ -74,7 +75,11 @@ import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-se
         AdminCinemaInfoComponent,
         AdminHallAddComponent,
         AdminHallInfoComponent,
-        AdminHallSearchComponent
+        AdminHallSearchComponent,
+        AdminHallConstructorDialogComponent
+    ],
+    entryComponents : [
+        HallViewDialogComponent
     ],
     imports : [
         BrowserModule,
@@ -107,6 +112,10 @@ import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-se
             provide: ErrorHandler,
             useClass: GlobalErrorHandler,
         },
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {hasBackdrop: false}
+        }
     ],
     bootstrap : [AppComponent]
 })

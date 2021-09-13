@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { HallService } from "src/app/Services/HallService";
+import { Component } from '@angular/core';
+import { HallService } from 'src/app/Services/HallService';
 
 @Component({
     selector: 'admin-hall-search',

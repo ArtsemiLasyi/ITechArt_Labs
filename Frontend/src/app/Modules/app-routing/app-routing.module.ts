@@ -55,9 +55,9 @@ const adminRoutes : Routes = [
 ];
 
 const appRoutes: Routes = [
-    { path: '', component : FilmsListComponent },
+    { path : '', component : FilmsListComponent },
     {
-        path: 'admin',
+        path : 'admin',
         component : AdminPanelComponent,
         canActivate : [AdminPanelGuard],
         children : adminRoutes 

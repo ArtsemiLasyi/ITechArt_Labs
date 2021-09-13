@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HallModel } from 'src/app/Models/HallModel';
 import { HallService } from 'src/app/Services/HallService';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { HallViewDialogComponent } from '../hall-view-dialog/hall-view-dialog.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class HallsListComponent implements OnInit {
 
     constructor (
         private hallService: HallService,
-        public dialog: MatDialog
+        private dialog: MatDialog
     ) { }
 
     getHalls(cinemaId : number) {
@@ -39,7 +39,11 @@ export class HallsListComponent implements OnInit {
 
         const dialogRef = this.dialog.open(HallViewDialogComponent, {
             restoreFocus: false,
-            data : { id : model.id, cinemaId : model.cinemaId, name : model.name }
+            data : { 
+                id : model.id,
+                cinemaId : model.cinemaId,
+                name : model.name 
+            }
         });
       }
 }

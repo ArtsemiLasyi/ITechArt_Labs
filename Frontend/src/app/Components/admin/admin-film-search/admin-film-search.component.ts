@@ -19,7 +19,7 @@ import { PageService } from 'src/app/Services/pageservice';
 export class AdminFilmSearchComponent implements OnInit {
 
     films : Observable<FilmModel[]> | undefined;
-    filmName : string = "";
+    filmName : string = '';
 
     constructor (
         private filmService: FilmService,
@@ -48,11 +48,11 @@ export class AdminFilmSearchComponent implements OnInit {
         this.getFilms();
     }
     
-    search(filmName : string) {
+    search() {
         let request = new FilmSearchRequest();
-        request.filmName = filmName;
+        request.filmName = this.filmName;
         this.pageService.clearPageNumber();
-        this.filmService.getFilms(
+        this.films = this.filmService.getFilms(
             this.pageService.getPageNumber(),
             this.pageService.getPageSize(),
             request
