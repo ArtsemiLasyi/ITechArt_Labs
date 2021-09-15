@@ -7,7 +7,10 @@ namespace BusinessLogic.Validators
     {
         public CityValidator()
         {
-            RuleFor(city => city.Name).NotNull().MaximumLength(50);
+            RuleFor(city => city.Name)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50);
         }
     }
 }

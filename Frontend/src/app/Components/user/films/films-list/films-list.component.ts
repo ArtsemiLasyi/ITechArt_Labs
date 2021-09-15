@@ -1,6 +1,6 @@
 import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, reduce, scan } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';

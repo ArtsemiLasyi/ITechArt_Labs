@@ -49,8 +49,8 @@ const adminRoutes : Routes = [
     { path : 'cinemas/search', component : AdminCinemaSearchComponent },
     { path : 'cinemas/info/:id', component : AdminCinemaInfoComponent },
     { path : 'halls', component : AdminHallAddComponent },
-    { path : 'halls/search', component : AdminFilmSearchComponent },
-    { path : 'halls/info/:id', component : AdminFilmInfoComponent },
+    { path : 'halls/search', component : AdminHallSearchComponent },
+    { path : 'halls/info/:id', component : AdminHallInfoComponent },
     { path : '', component : UserInfoComponent }
 ];
 

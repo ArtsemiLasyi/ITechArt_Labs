@@ -7,8 +7,14 @@ namespace BusinessLogic.Validators
     {
         public CinemaValidator()
         {
-            RuleFor(model => model.CityName).NotNull().MaximumLength(50);
-            RuleFor(model => model.Name).NotNull().MaximumLength(50);
+            RuleFor(model => model.CityName)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50);
+            RuleFor(model => model.Name)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50);
             RuleFor(model => model.Description).NotNull();
         }
     }

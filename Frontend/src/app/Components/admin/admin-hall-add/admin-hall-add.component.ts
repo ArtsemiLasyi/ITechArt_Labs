@@ -59,6 +59,9 @@ export class AdminHallAddComponent {
                 formData.append('formFile', this.photo!);  
                 await this.hallService.addPhoto(id, formData);
                 this.success.flag = true;
+            },
+            (error) => {
+                this.error.exists = true;
             }
         )
     }

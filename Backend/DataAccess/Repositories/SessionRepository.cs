@@ -16,9 +16,11 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task CreateAsync(SessionEntity film)
+        public Task CreateAsync(SessionEntity session)
         {
-            _context.Sessions.Add(film);
+            int freeSeatsNumber = _context.Seats.Where(seat => seat.HallId == session.HallId).Count();
+            session.FreeSeatsNumber = freeSeatsNumber;
+            _context.Sessions.Add(session);
             return _context.SaveChangesAsync();
         }
 

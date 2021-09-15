@@ -8,6 +8,7 @@ namespace DataAccess.Entities
         public int FilmId { get; set; }
         public int HallId { get; set; }
         public DateTime StartDateTime { get; set; }
+        public int FreeSeatsNumber { get; set; }
         public bool IsDeleted { get; set; }
     }
 }
