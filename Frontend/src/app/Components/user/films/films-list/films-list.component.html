@@ -47,6 +47,7 @@
         <button
             class="btn btn-primary btn-lg"
             (click)="getMoreFilms()"
+            *ngIf="!allFilmsAreShown"
         >
             More films
         </button>

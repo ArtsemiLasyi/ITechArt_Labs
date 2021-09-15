@@ -19,9 +19,13 @@ import { PageService } from 'src/app/Services/pageservice';
 export class FilmsListComponent implements OnInit {
 
     films : Observable<FilmModel[]> | undefined;
+    oldFilms : FilmModel[] = [];
+
     filmName : string | undefined;
     firstSessionDate : Date | undefined;
     lastSessionDate : Date | undefined;
+
+    allFilmsAreShown : boolean = false;
 
     constructor (
         private filmService: FilmService,
@@ -36,10 +40,14 @@ export class FilmsListComponent implements OnInit {
                 request
             )
             .pipe(
-                scan(
-                    (accumulator, value) => {
-                        accumulator.push(...value);
-                        return accumulator;
+                map(
+                    (films) => {
+                        if (!films.length) {
+                            this.allFilmsAreShown = true;
+                        }
+                        films = this.oldFilms.concat(films);
+                        this.oldFilms = films;
+                        return films;
                     }
                 )
             );
@@ -54,11 +62,14 @@ export class FilmsListComponent implements OnInit {
     }
   
     getMoreFilms() {
-        this.pageService.nextPage();
-        this.getFilms();
+        if (!this.allFilmsAreShown) {
+            this.pageService.nextPage();
+            this.getFilms();
+        }
     }
 
     searchFilms() {
+        this.allFilmsAreShown = false;
         this.pageService.clearPageNumber();
         let request = new FilmSearchRequest();
         request.filmName = this.filmName;
