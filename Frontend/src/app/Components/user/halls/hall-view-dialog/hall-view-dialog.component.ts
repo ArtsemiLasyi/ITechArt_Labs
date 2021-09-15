@@ -1,6 +1,6 @@
-import { Component, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { HallModel } from "src/app/Models/HallModel";
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HallModel } from 'src/app/Models/HallModel';
 
 @Component({
     selector: 'hall-view-dialog',

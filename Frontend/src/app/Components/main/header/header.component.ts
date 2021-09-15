@@ -5,6 +5,7 @@ import { saveCity } from 'src/app/Actions/city.actions';
 import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { CityModel } from 'src/app/Models/CityModel';
 import { CityService } from 'src/app/Services/CityService';
+import { StorageService } from 'src/app/Services/StorageService';
 
 @Component({
     selector : 'app-header',
@@ -14,19 +15,17 @@ import { CityService } from 'src/app/Services/CityService';
 export class HeaderComponent { 
     cities: CityModel[] = [];
     model = new CityModel();
-    activeCityName : string = "No city selected"; 
-    cityName : string = "";
+    activeCityName : string = 'No city selected'; 
+    cityName : string = '';
 
     constructor (
         private cityService : CityService,
+        private storageService : StorageService,
         private store : Store<{ city : CityModel }>
-    ) { 
-        let name = sessionStorage.getItem(StorageKeyNames.CURRENT_CITY_NAME);
-        let id = sessionStorage.getItem(StorageKeyNames.CURRENT_CITY_ID);
-        if (id && name) {
-            this.model.name = name;
-            this.model.id = Number.parseInt(id);
-            this.setCity(this.model);
+    ) {
+        let city = storageService.getCurrentCity();
+        if (city) {
+            this.setNewActiveCity(city);
         }
     }
 
@@ -41,12 +40,19 @@ export class HeaderComponent {
     }
 
     setCity(city : CityModel) {
+        this.cities = [];
+        this.setNewActiveCity(city);
+        this.saveCity(city);
+    }
+
+    setNewActiveCity(city : CityModel) {
         this.activeCityName = city.name;
         this.cityName = "";
         this.model = city;
-        this.cities = [];
         this.store.dispatch(saveCity({city}));
-        sessionStorage.setItem(StorageKeyNames.CURRENT_CITY_NAME, city.name);
-        sessionStorage.setItem(StorageKeyNames.CURRENT_CITY_ID, city.id.toString());
+    }
+
+    saveCity(city : CityModel) {
+        this.storageService.setNewCity(city);
     }
 }

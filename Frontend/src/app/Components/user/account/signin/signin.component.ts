@@ -4,18 +4,23 @@ import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SignInModel } from 'src/app/Models/SignInModel';
 import { SignInRequest } from 'src/app/Requests/SignInRequest';
+import { AccountStorageService } from 'src/app/Services/AccountStorageService';
 import { AuthentificationService } from 'src/app/Services/AuthentificationService';
 
 @Component({
     selector : 'account-signin',
     templateUrl : './signin.component.html',
     styleUrls : ['./signin.component.scss'],
-    providers : [ AuthentificationService]
+    providers : [ 
+        AuthentificationService,
+        AccountStorageService
+    ]
 })
 export class SignInComponent {
 
     constructor(
         private service : AuthentificationService,
+        private acccountStorage : AccountStorageService,
         private router : Router
     ) { }
 
@@ -28,7 +33,7 @@ export class SignInComponent {
             .subscribe(
                 (data : any) => {
                     let token = data.token;
-                    localStorage.setItem(StorageKeyNames.TOKEN, token);
+                    this.acccountStorage.saveToken(token);
                     this.router.navigate(['']);
                 },
                 error => {

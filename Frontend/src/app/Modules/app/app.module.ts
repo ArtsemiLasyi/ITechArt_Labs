@@ -47,6 +47,8 @@ import { AdminHallAddComponent } from 'src/app/Components/admin/admin-hall-add/a
 import { AdminHallInfoComponent } from 'src/app/Components/admin/admin-hall-info/admin-hall-info.component';
 import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-search/admin-hall-search.component';
 import { AdminHallConstructorDialogComponent } from 'src/app/Components/admin/admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
+import { StorageService } from 'src/app/Services/StorageService';
+import { AccountStorageService } from 'src/app/Services/AccountStorageService';
 
 @NgModule({
     declarations : [
@@ -108,6 +110,8 @@ import { AdminHallConstructorDialogComponent } from 'src/app/Components/admin/ad
         CityService,
         CinemaService,
         HallService,
+        StorageService,
+        AccountStorageService,
         {
             provide: ErrorHandler,
             useClass: GlobalErrorHandler,

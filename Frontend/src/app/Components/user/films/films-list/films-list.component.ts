@@ -8,10 +8,10 @@ import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 
 @Component({
-    selector: 'films-films-list',
-    templateUrl: './films-list.component.html',
-    styleUrls: ['./films-list.component.scss'],
-    providers: [
+    selector : 'films-films-list',
+    templateUrl : './films-list.component.html',
+    styleUrls : ['./films-list.component.scss'],
+    providers : [
         FilmService,
         PageService
     ]
