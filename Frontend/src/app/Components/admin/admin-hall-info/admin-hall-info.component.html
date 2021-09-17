@@ -20,12 +20,12 @@
                     type="search"
                     class="form-control form-control-dark dropdown-toggle"
                     name="cinemaName"
-                    (keyup)="getCinemas()"
                     placeholder="Choose new cinema..."
-                    [(ngModel)]="cinemaName"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    (keyup)="getCinemas()"
+                    [(ngModel)]="cinemaName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li *ngFor="let cinema of cinemas | async">

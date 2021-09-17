@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
+import { autocomplete } from 'src/app/Operators/autocomplete.operator';
 import { CinemaRequest } from 'src/app/Requests/CinemaRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { CityService } from 'src/app/Services/CityService';
@@ -24,7 +26,10 @@ export class AdminCinemaInfoComponent {
 
     cityName : string = '';
     city : CityModel = new CityModel();
-    cities : CityModel[] = [];
+    term = new BehaviorSubject<string>(''); 
+    cities : Observable<CityModel[]> = this.term.pipe(
+        autocomplete(500, ((term: string) => this.cityService.getCities(term)))
+    );
     model : CinemaModel = new CinemaModel();
 
     constructor(
@@ -33,22 +38,15 @@ export class AdminCinemaInfoComponent {
         private activateRoute: ActivatedRoute) { }
 
     getCities() {
-        this.cityService
-            .getCities(this.cityName)
-            .subscribe(
-                (data) =>  {
-                    this.cities = data;
-                }
-            )
+        this.term.next(this.cityName);
     }
 
     setCity(city : CityModel) {
         this.city = city;
-        this.cities = [];
     }
 
-    loadPhoto(event : any) : any {
-        this.photo = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.photo = (event.target as HTMLInputElement).files![0];
         if (this.photo === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;
@@ -74,14 +72,12 @@ export class AdminCinemaInfoComponent {
             this.model.description,
             this.model.cityName
         );
-        await this.cinemaService
-            .editCinema(this.model.id, request);
+        await this.cinemaService.editCinema(this.model.id, request);
         this.success.flag = true;
     }
 
     async deleteCinema() {
-        await this.cinemaService
-            .deleteCinema(this.model.id);
+        await this.cinemaService.deleteCinema(this.model.id);
         this.success.flag = true;
     }
 }

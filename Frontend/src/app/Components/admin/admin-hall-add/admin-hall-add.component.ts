@@ -38,8 +38,8 @@ export class AdminHallAddComponent {
         private cinemaService : CinemaService
     ) { }
 
-    loadPhoto(event : any) : any {
-        this.photo = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.photo = (event.target as HTMLInputElement).files![0];
         if (this.photo === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;

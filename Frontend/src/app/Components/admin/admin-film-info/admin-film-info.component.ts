@@ -29,8 +29,8 @@ export class AdminFilmInfoComponent implements OnInit {
         private activateRoute: ActivatedRoute
     ) { }
 
-    loadPhoto(event : any) : any {
-        this.poster = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.poster = (event.target as HTMLInputElement).files![0];
         if (this.poster === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;

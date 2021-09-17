@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { props, Store } from '@ngrx/store';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { saveCity } from 'src/app/Actions/city.actions';
 import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { CityModel } from 'src/app/Models/CityModel';
+import { autocomplete } from 'src/app/Operators/autocomplete.operator';
 import { CityService } from 'src/app/Services/CityService';
 import { StorageService } from 'src/app/Services/StorageService';
 
@@ -12,8 +14,11 @@ import { StorageService } from 'src/app/Services/StorageService';
     templateUrl : './header.component.html',
     styleUrls : ['./header.component.scss']
 })
-export class HeaderComponent { 
-    cities: CityModel[] = [];
+export class HeaderComponent {
+    term = new BehaviorSubject<string>(''); 
+    cities : Observable<CityModel[]> = this.term.pipe(
+        autocomplete(500, ((term: string) => this.cityService.getCities(term)))
+    );
     model = new CityModel();
     activeCityName : string = 'No city selected'; 
     cityName : string = '';
@@ -30,17 +35,10 @@ export class HeaderComponent {
     }
 
     getCities() {
-        this.cityService
-            .getCities(this.cityName)
-            .subscribe(
-                (data) =>  {
-                    this.cities = data;
-                }
-            )
+        this.term.next(this.cityName);
     }
 
     setCity(city : CityModel) {
-        this.cities = [];
         this.setNewActiveCity(city);
         this.saveCity(city);
     }

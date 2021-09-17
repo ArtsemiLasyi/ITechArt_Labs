@@ -39,8 +39,8 @@ export class AdminHallInfoComponent {
         private store : Store<{ city : CityModel }>
     ) { }
 
-    loadPhoto(event : any) : any {
-        this.photo = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.photo = (event.target as HTMLInputElement).files![0];
         if (this.photo === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;
@@ -92,20 +92,20 @@ export class AdminHallInfoComponent {
             this.model.cinemaId,
             this.model.name
         );
-        await this.hallService
-            .editHall(this.model.id, request);
+        await this.hallService.editHall(this.model.id, request);
         this.success.flag = true;
     }
 
     async deleteHall() {
-        await this.hallService
-            .deleteHall(this.model.id);
+        await this.hallService.deleteHall(this.model.id);
         this.success.flag = true;
     }
 
     editSeats() {
-        const dialogRef = this.dialog.open(AdminHallConstructorDialogComponent, {
-            restoreFocus: false
-        });
+        const dialogRef = this.dialog.open(
+            AdminHallConstructorDialogComponent, {
+                restoreFocus: false
+            }
+        );
     }
 }

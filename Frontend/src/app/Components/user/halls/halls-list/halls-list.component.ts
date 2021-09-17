@@ -37,13 +37,15 @@ export class HallsListComponent implements OnInit {
 
     openDialog(model : HallModel) : void {
 
-        const dialogRef = this.dialog.open(HallViewDialogComponent, {
-            restoreFocus: false,
-            data : { 
-                id : model.id,
-                cinemaId : model.cinemaId,
-                name : model.name 
+        const dialogRef = this.dialog.open(
+            HallViewDialogComponent, {
+                restoreFocus: false,
+                data : { 
+                    id : model.id,
+                    cinemaId : model.cinemaId,
+                    name : model.name 
+                }
             }
-        });
+        );
       }
 }

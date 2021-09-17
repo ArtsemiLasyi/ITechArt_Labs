@@ -8,26 +8,39 @@
                 width="72"
                 height="57"
             >
-            <h1 class="h3 mb-3 fw-normal">User info</h1>
-  
+            <h1 class="h3 mb-3 fw-normal">
+                User info
+            </h1>
             <div class="form-floating">
                 <input 
                     readonly
-                    type="email"
+                    required
                     #email="ngModel"
+                    type="email"
                     name="email"
-                    [(ngModel)]="model.email"
                     class="form-control"
                     id="emailInput"
                     placeholder="emailInput"
-                    required
+                    [(ngModel)]="model.email"
                 >
                 <label for="emailInput">You email:</label>
             </div>
 
             <div class="form-floating">
-                <input type="password" name="password" [(ngModel)]="newPassword" #password="ngModel" minlength="6" class="form-control" id="passwordInput" placeholder="passwordInput" required>
-                <label for="passwordInput">Enter new password...</label>
+                <input
+                    required
+                    #password="ngModel"
+                    type="password"
+                    name="password"
+                    minlength="6"
+                    class="form-control"
+                    id="passwordInput"
+                    placeholder="passwordInput"
+                    [(ngModel)]="newPassword"
+                >
+                <label for="passwordInput">
+                    Enter new password...
+                </label>
             </div>
 
             <div 
@@ -58,10 +71,7 @@
         >
             Sign Out
         </button>
-        <div
-            [hidden]="!success.flag"
-            class="alert alert-success"
-        >
+        <div class="alert alert-success" [hidden]="!success.flag">
             {{success.text}}
         </div>
     </div>
@@ -71,7 +81,9 @@
         </div>
         <form>
             <div class="form-group form-inline">
-                <h4>Past orders:<input class="form-check-input" type="checkbox"/> </h4>
+                <h4>
+                    Past orders:<input class="form-check-input" type="checkbox"/> 
+                </h4>
             </div>
         </form>
         <div class="accordion" id="accordionExample">

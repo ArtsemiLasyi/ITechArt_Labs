@@ -5,37 +5,70 @@
             <h1 class="h3 mb-3 fw-normal">Cinema info</h1>
   
             <div class="form-floating">
-                <input type="text" #name="ngModel" name="name" [(ngModel)]="model.name" class="form-control" id="nameInput" placeholder="nameInput" required>
+                <input
+                    required
+                    #name="ngModel" 
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="nameInput"
+                    placeholder="nameInput"
+                    [(ngModel)]="model.name"
+                >
                 <label for="nameInput">Enter name...</label>
             </div>
             <div class="form-control">
                 <label for="descriptionInput">Enter description...</label>
-                <textarea type="text" rows="3" name="description" [(ngModel)]="model.description" #description="ngModel" class="form-control rounded-0" id="descriptionInput" placeholder="..." required></textarea>
+                <textarea
+                    required 
+                    type="text"
+                    rows="3"
+                    name="description"
+                    #description="ngModel"
+                    class="form-control rounded-0"
+                    id="descriptionInput"
+                    placeholder="..."
+                    [(ngModel)]="model.description"
+                ></textarea>
             </div>
             <div class="dropdown form-control">
                 <input
                     type="search"
                     class="form-control form-control-dark dropdown-toggle"
                     name="cityName"
-                    (keyup)="getCities()"
-                    placeholder="Enter new city name..."
-                    [(ngModel)]="model.cityName"
+                    placeholder="Enter new city name..."  
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    (keyup)="getCities()"
+                    [(ngModel)]="model.cityName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li *ngFor="let city of cities">
+                    <li *ngFor="let city of cities | async">
                         <a class="dropdown-item" (click)="setCity(city)">{{city.name}}</a>
                     </li>
                 </ul>
             </div>
             <div class="form-floating">
-                <input type="file" name="file" accept=".jpg, .png, .jpeg|image/*" style="display: none;" (change)="loadPhoto($event)" #fileInput>
-                <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">{{selectedFileName}}</button><br><br>
+                <input
+                    #fileInput 
+                    type="file"
+                    name="file"
+                    accept=".jpg, .png, .jpeg|image/*"
+                    style="display: none;"
+                    (change)="loadPhoto($event)"
+                >
+                <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">
+                    {{selectedFileName}}
+                </button>
+                <br><br>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editCinema()">Edit</button>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteCinema()">Delete</button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editCinema()">
+                Edit
+            </button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteCinema()">
+                Delete
+            </button>
             <div [hidden]="!error.exists" class="alert alert-danger">
                 {{error.text}}
             </div>

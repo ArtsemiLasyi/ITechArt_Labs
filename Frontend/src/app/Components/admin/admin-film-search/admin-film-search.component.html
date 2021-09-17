@@ -5,9 +5,9 @@
             type="search"
             name="search"
             class="form-control form-control-dark"
-            [(ngModel)]="filmName"
-            (keyup)="search()"
             placeholder="Input film name..."
+            (keyup)="search()"
+            [(ngModel)]="filmName"
         >
     </form>
     <br><br>
@@ -17,9 +17,15 @@
                 <div class="card" >
                     <img class="card-img-top" src="{{getPoster(film.id!)}}">
                     <div class="card-body">
-                        <h5 class="card-title text-center">{{film.name}}</h5>
-                        <p class="card-text text-center">{{film.releaseYear}}</p>
-                        <a routerLink="../info/{{film.id}}" class="btn btn-lg btn-primary">Details</a>
+                        <h5 class="card-title text-center">
+                            {{film.name}}
+                        </h5>
+                        <p class="card-text text-center">
+                            {{film.releaseYear}}
+                        </p>
+                        <a routerLink="../info/{{film.id}}" class="btn btn-lg btn-primary">
+                            Details
+                        </a>
                     </div>
                 </div>
             </div>

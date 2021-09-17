@@ -20,19 +20,16 @@
                     type="search"
                     class="form-control form-control-dark dropdown-toggle"
                     name="cinemaName"
-                    (keyup)="getCinemas()"
                     placeholder="Choose your cinema..."
-                    [(ngModel)]="cinemaName"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    (keyup)="getCinemas()"
+                    [(ngModel)]="cinemaName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li *ngFor="let cinema of cinemas | async">
-                        <a 
-                            class="dropdown-item" 
-                            (click)="setCinema(cinema)"
-                        >
+                        <a class="dropdown-item" (click)="setCinema(cinema)">
                             {{cinema.name}} ({{cinema.cityName}})
                         </a>
                     </li>
@@ -70,16 +67,10 @@
             >
                 Add
             </button>
-            <div 
-                [hidden]="!error.exists" 
-                class="alert alert-danger"
-            >
+            <div class="alert alert-danger" [hidden]="!error.exists">
                 {{error.text}}
             </div>
-            <div 
-                [hidden]="!success.flag"
-                class="alert alert-success"
-            >
+            <div class="alert alert-success" [hidden]="!success.flag">
                 {{success.text}}
             </div>
         </form>

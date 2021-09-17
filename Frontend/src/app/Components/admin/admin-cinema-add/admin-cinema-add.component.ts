@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
+import { autocomplete } from 'src/app/Operators/autocomplete.operator';
 import { CinemaRequest } from 'src/app/Requests/CinemaRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { CityService } from 'src/app/Services/CityService';
@@ -24,14 +26,17 @@ export class AdminCinemaAddComponent {
     success : SuccessModel = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
     cityName : string = "";
-    cities : CityModel[] = []; 
+    term = new BehaviorSubject<string>(''); 
+    cities : Observable<CityModel[]> = this.term.pipe(
+        autocomplete(500, ((term: string) => this.cityService.getCities(term)))
+    ); 
 
     constructor(
         private cinemaService : CinemaService,
         private cityService : CityService) { }
 
-    loadPhoto(event : any) : any {
-        this.photo = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.photo = (event.target as HTMLInputElement).files![0];
         if (this.photo === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;
@@ -40,18 +45,11 @@ export class AdminCinemaAddComponent {
     }
 
     getCities() {
-        this.cityService
-            .getCities(this.cityName)
-            .subscribe(
-                (data) =>  {
-                    this.cities = data;
-                }
-            )
+        this.term.next(this.cityName);
     }
 
     setCity(city : CityModel) {
         this.city = city;
-        this.cities = [];
     }
 
     addCinema() {
