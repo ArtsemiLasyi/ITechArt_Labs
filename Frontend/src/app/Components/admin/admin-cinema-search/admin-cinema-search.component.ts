@@ -49,7 +49,6 @@ export class AdminCinemaSearchComponent {
     }
     
     search(cinemaName : string) {
-        console.log(cinemaName);
         let request = new CinemaSearchRequest();
         request.cinemaName = cinemaName;
         this.term.next(request);
