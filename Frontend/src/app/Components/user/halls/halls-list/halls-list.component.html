@@ -1,0 +1,11 @@
+<div class="card-group">
+    <div *ngFor="let hall of halls | async" class="card mb-3">
+        <img src="{{getPhoto(hall.id!)}}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{hall.name}}</h5>
+            <button class="btn btn-primary" (click)="openDialog(hall)">
+                Details
+            </button>
+        </div>
+    </div>
+</div>

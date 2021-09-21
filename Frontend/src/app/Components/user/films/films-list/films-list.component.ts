@@ -1,16 +1,17 @@
 import { HostListener } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, reduce, scan } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 
 @Component({
-    selector: 'films-films-list',
-    templateUrl: './films-list.component.html',
-    styleUrls: ['./films-list.component.scss'],
-    providers: [
+    selector : 'films-films-list',
+    templateUrl : './films-list.component.html',
+    styleUrls : ['./films-list.component.scss'],
+    providers : [
         FilmService,
         PageService
     ]
@@ -18,9 +19,13 @@ import { PageService } from 'src/app/Services/pageservice';
 export class FilmsListComponent implements OnInit {
 
     films : Observable<FilmModel[]> | undefined;
+    oldFilms : FilmModel[] = [];
+
     filmName : string | undefined;
     firstSessionDate : Date | undefined;
     lastSessionDate : Date | undefined;
+
+    allFilmsAreShown : boolean = false;
 
     constructor (
         private filmService: FilmService,
@@ -33,6 +38,18 @@ export class FilmsListComponent implements OnInit {
                 this.pageService.getPageNumber(),
                 this.pageService.getPageSize(),
                 request
+            )
+            .pipe(
+                map(
+                    (films) => {
+                        if (!films.length) {
+                            this.allFilmsAreShown = true;
+                        }
+                        films = this.oldFilms.concat(films);
+                        this.oldFilms = films;
+                        return films;
+                    }
+                )
             );
     }
 
@@ -45,11 +62,14 @@ export class FilmsListComponent implements OnInit {
     }
   
     getMoreFilms() {
-        this.pageService.nextPage();
-        this.getFilms();
+        if (!this.allFilmsAreShown) {
+            this.pageService.nextPage();
+            this.getFilms();
+        }
     }
 
     searchFilms() {
+        this.allFilmsAreShown = false;
         this.pageService.clearPageNumber();
         let request = new FilmSearchRequest();
         request.filmName = this.filmName;

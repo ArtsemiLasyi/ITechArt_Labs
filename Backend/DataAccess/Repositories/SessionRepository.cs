@@ -16,10 +16,14 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public Task CreateAsync(SessionEntity film)
+        public async Task CreateAsync(SessionEntity session)
         {
-            _context.Sessions.Add(film);
-            return _context.SaveChangesAsync();
+            int freeSeatsNumber = await _context.Seats
+                .Where(seat => seat.HallId == session.HallId)
+                .CountAsync();
+            session.FreeSeatsNumber = freeSeatsNumber;
+            _context.Sessions.Add(session);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteByAsync(int id)

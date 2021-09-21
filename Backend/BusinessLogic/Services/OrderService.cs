@@ -46,10 +46,13 @@ namespace BusinessLogic.Services
             await _sessionSeatService.OrderAsync(order.SessionSeats);
         }
 
-        public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(OrderModelSearchParameters parameters)
+        public async Task<IReadOnlyCollection<OrderModel>> GetAllByAsync(int userId, OrderModelSearchParameters parameters)
         {
             IReadOnlyCollection<OrderEntity> models = await _orderRepository
-                .GetAllByAsync(parameters.Adapt<OrderEntitySearchParameters>());
+                .GetAllByAsync(
+                    userId,
+                    parameters.Adapt<OrderEntitySearchParameters>()
+                );
             return models.Adapt<IReadOnlyCollection<OrderModel>>();
         }
 

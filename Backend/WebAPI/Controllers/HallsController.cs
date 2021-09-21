@@ -46,8 +46,8 @@ namespace WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> GetAllBy([FromQuery] int cinemaId)
+        [HttpGet("~/cinemas/{cinemaId}/halls")]
+        public async Task<IActionResult> GetAllBy(int cinemaId)
         {
             IReadOnlyCollection<HallModel> halls = await _hallService.GetAllByAsync(cinemaId);
             IReadOnlyCollection<HallResponse> response = halls.Adapt<IReadOnlyCollection<HallResponse>>();

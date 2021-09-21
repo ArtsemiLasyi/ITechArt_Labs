@@ -16,7 +16,7 @@ import { FilmService } from 'src/app/Services/FilmService';
 })
 export class AdminFilmInfoComponent implements OnInit {
 
-    readonly defaultFileName : string = "Add poster";
+    readonly defaultFileName : string = 'Add poster';
 
     poster : File | undefined;
     model = new FilmModel();
@@ -29,8 +29,8 @@ export class AdminFilmInfoComponent implements OnInit {
         private activateRoute: ActivatedRoute
     ) { }
 
-    loadPhoto(event : any) : any {
-        this.poster = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.poster = (event.target as HTMLInputElement).files![0];
         if (this.poster === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;

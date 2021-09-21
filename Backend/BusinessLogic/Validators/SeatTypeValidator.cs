@@ -7,7 +7,10 @@ namespace BusinessLogic.Validators
     {
         public SeatTypeValidator()
         {
-            RuleFor(seatType => seatType.Name).NotNull().MaximumLength(50);
+            RuleFor(seatType => seatType.Name)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50);
         }
     }
 }

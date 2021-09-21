@@ -1,0 +1,42 @@
+<section>
+    <h5>Search hall:</h5>
+    <form>
+        <div class="dropdown form-control">
+            <input
+                type="search"
+                class="form-control form-control-dark dropdown-toggle"
+                name="cinemaName"
+                (keyup)="getCinemas()"
+                placeholder="Choose your cinema..."
+                [(ngModel)]="cinemaName"
+                id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li *ngFor="let cinema of cinemas | async">
+                    <a 
+                        class="dropdown-item" 
+                        (click)="setCinema(cinema)"
+                    >
+                        {{cinema.name}} ({{cinema.cityName}})
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </form>
+    <br><br>
+    <div class="card-group row row-cols-4 row-cols-md-3 g-4" id="scroll">
+        <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
+            <div class="col" *cdkVirtualFor="let hall of halls | async" >
+                <div class="card" >
+                    <img class="card-img-top" src="{{getPhoto(hall.id!)}}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{hall.name}}</h5>
+                        <a routerLink="../info/{{hall.id}}" class="btn btn-lg btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </div>
+</section>

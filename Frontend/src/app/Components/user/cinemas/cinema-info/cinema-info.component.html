@@ -1,0 +1,11 @@
+<section class="content">
+    <div class="card">
+        <img class="card-img-top" src="{{getPhoto(cinema.id!)}}">
+        <div class="card-body">
+            <h2 class="card-title text-center">{{cinema.name}}</h2>
+            <h3 class="card-title text-center">{{cinema.cityName}}</h3>
+            <h5 class="card-text text-center">{{cinema.description}}</h5>
+        </div>
+    </div>
+    <halls-list [cinemaId]="cinema.id"></halls-list>
+</section>

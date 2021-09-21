@@ -38,14 +38,14 @@ namespace DataAccess.Repositories
             return false;
         }
 
-        public async Task<IReadOnlyCollection<OrderEntity>> GetAllByAsync(OrderEntitySearchParameters parameters)
+        public async Task<IReadOnlyCollection<OrderEntity>> GetAllByAsync(int userId, OrderEntitySearchParameters parameters)
         {
 
             IQueryable<OrderEntity>? query = _context.Orders
                 .Where(
                     order =>
                         !order.IsDeleted
-                        && order.UserId == parameters.UserId
+                        && order.UserId == userId
                 );
             if (parameters.PastOrders)
             {

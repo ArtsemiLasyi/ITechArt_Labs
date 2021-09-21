@@ -74,10 +74,13 @@ namespace DataAccess.Repositories
             return _context.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(SessionSeatEntity seat)
+        public async Task UpdateAsync(SessionSeatEntity seat)
         {
             _context.SessionSeats.Update(seat);
-            return _context.SaveChangesAsync();
+            SessionEntity session = await _context.Sessions.FindAsync(seat.SessionId);
+            session.FreeSeatsNumber--;
+            _context.Sessions.Update(session);
+            await _context.SaveChangesAsync();
         }
 
         public Task UpdateStatusesAsync()

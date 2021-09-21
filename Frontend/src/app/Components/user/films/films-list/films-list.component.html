@@ -33,17 +33,27 @@
             <div class="card">
                 <img class="card-img-top" src="{{getPoster(film.id!)}}">
                 <div class="card-body">
-                    <h5 class="card-title text-center">{{film.name}}</h5>
-                    <p class="card-text text-center">{{film.releaseYear}}</p>
-                    <a routerLink="/films/{{film.id}}" class="card-text text-center">More...</a>
+                    <h5 class="card-title text-center">
+                        {{film.name}}
+                    </h5>
+                    <p class="card-text text-center">
+                        {{film.releaseYear}}
+                    </p>
+                    <a routerLink="/films/{{film.id}}" class="card-text text-center">
+                        More...
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <div>
+    <div 
+        align="center"
+        class="paginator"
+    >
         <button
             class="btn btn-primary btn-lg"
             (click)="getMoreFilms()"
+            *ngIf="!allFilmsAreShown"
         >
             More films
         </button>

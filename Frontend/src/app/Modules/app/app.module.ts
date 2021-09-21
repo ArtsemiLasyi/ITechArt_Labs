@@ -2,6 +2,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminFilmAddComponent } from 'src/app/Components/admin/admin-film-add/admin-film-add.component';
 import { AdminFilmSearchComponent } from 'src/app/Components/admin/admin-film-search/admin-film-search.component';
 import { AdminPanelComponent } from 'src/app/Components/admin/admin-panel/admin-panel.component';
@@ -14,7 +15,7 @@ import { SignInComponent } from 'src/app/Components/user/account/signin/signin.c
 import { SignUpComponent } from 'src/app/Components/user/account/signup/signup.component';
 import { FilmInfoComponent } from 'src/app/Components/user/films/film-info/film-info.component';
 import { FilmsListComponent } from 'src/app/Components/user/films/films-list/films-list.component';
-import { FilmsNodeComponent } from 'src/app/Components/user/films/filmsnode/films-node.component';
+import { FilmsNodeComponent } from 'src/app/Components/user/films/films-node/films-node.component';
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
 import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
@@ -25,9 +26,29 @@ import { UserService } from 'src/app/Services/UserService';
 import { AppRoutingModule } from '../app-routing/app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
-import { CityService } from 'src/app/Services/cityservice';
+import { CityService } from 'src/app/Services/CityService';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
 import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
+import { CinemaService } from 'src/app/Services/CinemaService';
+import { HallService } from 'src/app/Services/HallService';
+import { CinemaInfoComponent } from 'src/app/Components/user/cinemas/cinema-info/cinema-info.component';
+import { HallsListComponent } from 'src/app/Components/user/halls/halls-list/halls-list.component';
+import { CinemasListComponent } from 'src/app/Components/user/cinemas/cinemas-list/cinemas-list.component';
+import { StoreModule } from '@ngrx/store';
+import { cityReducer } from 'src/app/Reducers/city.reducer';
+import { CinemasNodeComponent } from 'src/app/Components/user/cinemas/cinemas-node/cinemas-node.component';
+import { HallViewDialogComponent } from 'src/app/Components/user/halls/hall-view-dialog/hall-view-dialog.component';
+import { MatDialog, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { Overlay } from '@angular/cdk/overlay';
+import { AdminCinemaAddComponent } from 'src/app/Components/admin/admin-cinema-add/admin-cinema-add.component';
+import { AdminCinemaSearchComponent } from 'src/app/Components/admin/admin-cinema-search/admin-cinema-search.component';
+import { AdminCinemaInfoComponent } from 'src/app/Components/admin/admin-cinema-info/admin-cinema-info.component';
+import { AdminHallAddComponent } from 'src/app/Components/admin/admin-hall-add/admin-hall-add.component';
+import { AdminHallInfoComponent } from 'src/app/Components/admin/admin-hall-info/admin-hall-info.component';
+import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-search/admin-hall-search.component';
+import { AdminHallConstructorDialogComponent } from 'src/app/Components/admin/admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
+import { StorageService } from 'src/app/Services/StorageService';
+import { AccountStorageService } from 'src/app/Services/AccountStorageService';
 
 @NgModule({
     declarations : [
@@ -41,18 +62,36 @@ import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
         AdminFilmSearchComponent,
         AccountNodeComponent,
         FilmsNodeComponent,
+        CinemasNodeComponent,
         SignInComponent,
         SignUpComponent,
         UserInfoComponent,
         AdminPanelComponent,
-        AdminFilmInfoComponent
+        AdminFilmInfoComponent,
+        CinemaInfoComponent,
+        HallsListComponent,
+        CinemasListComponent,
+        HallViewDialogComponent,
+        AdminCinemaAddComponent,
+        AdminCinemaSearchComponent,
+        AdminCinemaInfoComponent,
+        AdminHallAddComponent,
+        AdminHallInfoComponent,
+        AdminHallSearchComponent,
+        AdminHallConstructorDialogComponent
+    ],
+    entryComponents : [
+        HallViewDialogComponent
     ],
     imports : [
         BrowserModule,
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
-        ScrollingModule
+        ScrollingModule,
+        MatDialogModule,
+        BrowserAnimationsModule,
+        StoreModule.forRoot({ city: cityReducer })
     ],
     providers : [
         {
@@ -69,10 +108,18 @@ import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
         FilmService,
         PageService,
         CityService,
+        CinemaService,
+        HallService,
+        StorageService,
+        AccountStorageService,
         {
             provide: ErrorHandler,
             useClass: GlobalErrorHandler,
         },
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {hasBackdrop: false}
+        }
     ],
     bootstrap : [AppComponent]
 })

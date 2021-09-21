@@ -41,6 +41,7 @@ namespace DataAccess.Repositories
         {
             string separator = " ";
             IQueryable<CinemaEntity> query = _context.Cinemas
+                .Include("City")
                 .Where(cinema => !cinema.IsDeleted && cinema.CityId == cityId);
 
             if (!string.IsNullOrEmpty(parameters.CinemaName))

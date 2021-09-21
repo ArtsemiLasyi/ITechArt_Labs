@@ -1,20 +1,25 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageKeyNames } from 'src/app/Constants/LocalStorageKeyNames';
+import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { UserModel } from 'src/app/Models/UserModel';
 import { UserRequest } from 'src/app/Requests/UserRequest';
+import { AccountStorageService } from 'src/app/Services/AccountStorageService';
 import { UserService } from 'src/app/Services/UserService';
 
 @Component({
     selector: 'users-user-info',
     templateUrl: './user-info.component.html',
-    providers: [UserService]
+    providers: [
+        UserService,
+        AccountStorageService
+    ]
 })
 export class UserInfoComponent {
 
     constructor(
         private service : UserService,
+        private accountStorageService : AccountStorageService,
         private router : Router
     ) { }
 
@@ -50,7 +55,7 @@ export class UserInfoComponent {
     }
 
     signOut() {
-        localStorage.removeItem(LocalStorageKeyNames.TOKEN);
+        this.accountStorageService.deleteToken();
         this.router.navigate(['/']);
     }
 }

@@ -22,8 +22,8 @@ export class AdminFilmAddComponent {
 
     constructor(private filmService : FilmService) { }
 
-    loadPhoto(event : any) : any {
-        this.poster = event.target.files[0];
+    loadPhoto(event : Event) : any {
+        this.poster = (event.target as HTMLInputElement).files![0];
         if (this.poster === undefined) {
             this.selectedFileName = this.defaultFileName;
             return;
@@ -40,7 +40,6 @@ export class AdminFilmAddComponent {
         );
         this.filmService.addFilm(request).subscribe(
             async (data : any) => {
-                console.log(data);
                 const id = data.id;
                 const formData = new FormData();
                 formData.append("formFile", this.poster!);  

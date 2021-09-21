@@ -11,10 +11,11 @@ namespace BusinessLogic.Validators
         {
             RuleFor(film => film.Name)
                 .NotNull()
+                .NotEmpty()
                 .MaximumLength(50);
             RuleFor(film => film.ReleaseYear).GreaterThanOrEqualTo(FIRST_FILM_RELEASE_YEAR);
             RuleFor(film => film.Duration.TotalMinutes).GreaterThan(0);
-            RuleFor(film => film.Description).NotNull();
+            RuleFor(film => film.Description).NotNull().NotEmpty();
         }
     }
 }

@@ -5,15 +5,45 @@
             <h1 class="h3 mb-3 fw-normal">Add film</h1>
   
             <div class="form-floating">
-                <input type="text" #name="ngModel" name="name" [(ngModel)]="model.name" class="form-control" id="nameInput" placeholder="nameInput" required>
-                <label for="nameInput">Enter name...</label>
+                <input
+                    #name="ngModel"
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="nameInput"
+                    placeholder="nameInput"
+                    [(ngModel)]="model.name"
+                    required
+                >
+                <label for="nameInput">
+                    Enter name...
+                </label>
             </div>
             <div class="form-control">
                 <label for="descriptionInput">Enter description...</label>
-                <textarea type="text" rows="3" name="description" [(ngModel)]="model.description" #description="ngModel" class="form-control rounded-0" id="descriptionInput" placeholder="..." required></textarea>
+                <textarea
+                    #description="ngModel"
+                    type="text"
+                    rows="3"
+                    name="description"
+                    class="form-control rounded-0"
+                    id="descriptionInput"
+                    placeholder="..."
+                    [(ngModel)]="model.description"
+                    required
+                ></textarea>
             </div>
             <div class="form-floating">
-                <input type="number" name="releaseYear" [(ngModel)]="model.releaseYear" #releaseYear="ngModel" class="form-control" id="releaseYearInput" placeholder="releaseYearInput" required>
+                <input
+                    #releaseYear="ngModel" 
+                    type="number"
+                    name="releaseYear"
+                    class="form-control"
+                    id="releaseYearInput"
+                    placeholder="releaseYearInput"
+                    [(ngModel)]="model.releaseYear"
+                    required
+                >
                 <label for="releaseYearInput">Enter release year...</label>
             </div>
             <div class="form-floating">

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebAPI.Constants;
+using WebAPI.Extensions;
 using WebAPI.Parameters;
 using WebAPI.Requests;
 using WebAPI.Responses;
@@ -44,10 +45,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(OrderRequestSearchParameters parameters)
+        public async Task<IActionResult> GetAll([FromQuery] OrderRequestSearchParameters parameters)
         {
+            int? userId = HttpContext.User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             IReadOnlyCollection<OrderModel> services = await _orderService
                 .GetAllByAsync(
+                    userId.Value,
                     parameters.Adapt<OrderModelSearchParameters>()
                 );
             IReadOnlyCollection<OrderResponse> response = services.Adapt<IReadOnlyCollection<OrderResponse>>();
