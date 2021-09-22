@@ -49,6 +49,15 @@ import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-se
 import { AdminHallConstructorDialogComponent } from 'src/app/Components/admin/admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
 import { StorageService } from 'src/app/Services/StorageService';
 import { AccountStorageService } from 'src/app/Services/AccountStorageService';
+import { CurrencyService } from 'src/app/Services/CurrencyService';
+import { ServiceService } from 'src/app/Services/ServiceService';
+import { CinemaServiceService } from 'src/app/Services/CinemaServiceService';
+import { AdminCurrencyAddComponent } from 'src/app/Components/admin/admin-currency-add/admin-currency-add.component';
+import { AdminCurrencyInfoComponent } from 'src/app/Components/admin/admin-currency-info/admin-currency-info.component';
+import { AdminCurrencySearchComponent } from 'src/app/Components/admin/admin-currency-search/admin-currency-search.component';
+import { AdminServiceAddComponent } from 'src/app/Components/admin/admin-service-add/admin-service-add.component';
+import { AdminServiceInfoComponent } from 'src/app/Components/admin/admin-service-info/admin-service-info.component';
+import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-service-search/admin-service-search.component';
 
 @NgModule({
     declarations : [
@@ -78,7 +87,13 @@ import { AccountStorageService } from 'src/app/Services/AccountStorageService';
         AdminHallAddComponent,
         AdminHallInfoComponent,
         AdminHallSearchComponent,
-        AdminHallConstructorDialogComponent
+        AdminHallConstructorDialogComponent,
+        AdminCurrencyAddComponent,
+        AdminCurrencyInfoComponent,
+        AdminCurrencySearchComponent,
+        AdminServiceAddComponent,
+        AdminServiceInfoComponent,
+        AdminServiceSearchComponent
     ],
     entryComponents : [
         HallViewDialogComponent
@@ -110,6 +125,9 @@ import { AccountStorageService } from 'src/app/Services/AccountStorageService';
         CityService,
         CinemaService,
         HallService,
+        CurrencyService,
+        ServiceService,
+        CinemaServiceService,
         StorageService,
         AccountStorageService,
         {

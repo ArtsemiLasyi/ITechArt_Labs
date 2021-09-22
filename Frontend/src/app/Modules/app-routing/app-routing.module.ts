@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminCinemaAddComponent } from 'src/app/Components/admin/admin-cinema-add/admin-cinema-add.component';
 import { AdminCinemaInfoComponent } from 'src/app/Components/admin/admin-cinema-info/admin-cinema-info.component';
 import { AdminCinemaSearchComponent } from 'src/app/Components/admin/admin-cinema-search/admin-cinema-search.component';
+import { AdminCurrencyAddComponent } from 'src/app/Components/admin/admin-currency-add/admin-currency-add.component';
+import { AdminCurrencyInfoComponent } from 'src/app/Components/admin/admin-currency-info/admin-currency-info.component';
+import { AdminCurrencySearchComponent } from 'src/app/Components/admin/admin-currency-search/admin-currency-search.component';
 import { AdminFilmAddComponent } from 'src/app/Components/admin/admin-film-add/admin-film-add.component';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { AdminFilmSearchComponent } from 'src/app/Components/admin/admin-film-search/admin-film-search.component';
@@ -10,6 +13,9 @@ import { AdminHallAddComponent } from 'src/app/Components/admin/admin-hall-add/a
 import { AdminHallInfoComponent } from 'src/app/Components/admin/admin-hall-info/admin-hall-info.component';
 import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-search/admin-hall-search.component';
 import { AdminPanelComponent } from 'src/app/Components/admin/admin-panel/admin-panel.component';
+import { AdminServiceAddComponent } from 'src/app/Components/admin/admin-service-add/admin-service-add.component';
+import { AdminServiceInfoComponent } from 'src/app/Components/admin/admin-service-info/admin-service-info.component';
+import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-service-search/admin-service-search.component';
 import { AdminUserAddComponent } from 'src/app/Components/admin/admin-user-add/admin-user-add.component';
 import { NotFoundComponent } from 'src/app/Components/main/notfound/notfound.component';
 import { AccountNodeComponent } from 'src/app/Components/user/account/accountnode/accountnode.component';
@@ -51,6 +57,12 @@ const adminRoutes : Routes = [
     { path : 'halls', component : AdminHallAddComponent },
     { path : 'halls/search', component : AdminHallSearchComponent },
     { path : 'halls/info/:id', component : AdminHallInfoComponent },
+    { path : 'currencies', component : AdminCurrencyAddComponent },
+    { path : 'currencies/search', component : AdminCurrencySearchComponent },
+    { path : 'currencies/info/:id', component : AdminCurrencyInfoComponent },
+    { path : 'services', component : AdminServiceAddComponent },
+    { path : 'services/search', component : AdminServiceSearchComponent },
+    { path : 'services/info/:id', component : AdminServiceInfoComponent },
     { path : '', component : UserInfoComponent }
 ];
 
