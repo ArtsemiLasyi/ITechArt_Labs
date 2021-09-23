@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CurrencyModel } from 'src/app/Models/CurrencyModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
@@ -21,6 +21,12 @@ export class AdminCurrencyInfoComponent implements OnInit {
         private currencyService: CurrencyService,
         private activateRoute: ActivatedRoute
     ) { }
+
+    @HostListener('document:click', ['$event'])
+    click(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
+    }
 
     ngOnInit() {
         this.model.id = this.activateRoute.snapshot.params['id'];
@@ -60,6 +66,11 @@ export class AdminCurrencyInfoComponent implements OnInit {
                     this.error.exists = true;
                 }
             );
+    }
 
+    @HostListener('document:click', ['$event'])
+    documentClick(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

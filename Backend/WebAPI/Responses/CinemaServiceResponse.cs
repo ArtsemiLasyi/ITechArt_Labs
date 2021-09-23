@@ -5,5 +5,6 @@
         public int CinemaId { get; set; }
         public int ServiceId { get; set; }
         public PriceResponse Price { get; set; } = null!;
+        public string Name { get; set; } = null!;
     }
 }

@@ -66,10 +66,10 @@
             <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addCinema()">
                 Add
             </button>
-            <div [hidden]="!error.exists" class="alert alert-danger">
+            <div *ngIf="error.exists" class="alert alert-danger">
                 {{error.text}}
             </div>
-            <div [hidden]="!success.flag" class="alert alert-success">
+            <div *ngIf="success.flag" class="alert alert-success">
                 {{success.text}}
             </div>
         </form>

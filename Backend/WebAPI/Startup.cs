@@ -261,6 +261,31 @@ namespace WebAPI
 
         private void ConfigureAdapters()
         {
+            TypeAdapterConfig<CinemaServiceEntity, CinemaServiceModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Name,
+                    src => src.Service.Name
+                )
+                .Map(
+                    dest => dest.Price,
+                    src => new PriceModel(
+                        src.Price,
+                        src.Currency.Adapt<CurrencyModel>()
+                    )
+                );
+
+            TypeAdapterConfig<CinemaServiceModel, CinemaServiceEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Value
+                )
+                .Map(
+                    dest => dest.CurrencyId,
+                    src => src.Price.Currency.Id
+                );
+
             TypeAdapterConfig<FilmRequest, FilmModel>
                 .NewConfig()
                 .Map(

@@ -16,7 +16,7 @@ import { HallService } from 'src/app/Services/HallService';
     providers : [HallService]
 })
 export class AdminHallSearchComponent {
-    cinemaName : string = "";
+    cinemaName : string = '';
     city : CityModel = new CityModel();
     term = new BehaviorSubject<CinemaSearchRequest>(new CinemaSearchRequest());
     cinemas : Observable<CinemaModel[]> = this.term.pipe(

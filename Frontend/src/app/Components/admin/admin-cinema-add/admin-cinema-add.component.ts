@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
@@ -50,6 +50,13 @@ export class AdminCinemaAddComponent {
 
     setCity(city : CityModel) {
         this.city = city;
+        this.cityName = city.name;
+    }
+
+    @HostListener('document:click', ['$event'])
+    click(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 
     addCinema() {
@@ -59,12 +66,18 @@ export class AdminCinemaAddComponent {
             this.cityName
         );
         this.cinemaService.addCinema(request).subscribe(
-            async (data : any) => {
-                const id = data.id;
+            (data : any) => {
+                const id = data;
                 const formData = new FormData();
                 formData.append('formFile', this.photo!);  
-                await this.cinemaService.addPhoto(id, formData);
-                this.success.flag = true;
+                this.cinemaService.addPhoto(id, formData).subscribe(
+                    () => {
+                        this.success.flag = true;
+                    }
+                );
+            },
+            (error : Error) => {
+                this.error.exists = true;
             }
         )
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { ServiceModel } from 'src/app/Models/ServiceModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -27,5 +27,11 @@ export class AdminServiceAddComponent {
                 this.error.exists = true;
             }
         )
+    }
+
+    @HostListener('document:click', ['$event'])
+    documentClick(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

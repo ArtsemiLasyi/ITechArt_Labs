@@ -58,6 +58,9 @@ import { AdminCurrencySearchComponent } from 'src/app/Components/admin/admin-cur
 import { AdminServiceAddComponent } from 'src/app/Components/admin/admin-service-add/admin-service-add.component';
 import { AdminServiceInfoComponent } from 'src/app/Components/admin/admin-service-info/admin-service-info.component';
 import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-service-search/admin-service-search.component';
+import { AdminCinemaServiceAddComponent } from 'src/app/Components/admin/admin-cinema-service-add/admin-cinema-service-add.component';
+import { AdminCinemaServiceListComponent } from 'src/app/Components/admin/admin-cinema-service-list/admin-cinema-service-list.component';
+import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-cinema-service-info/admin-cinema-service-info.component';
 
 @NgModule({
     declarations : [
@@ -93,7 +96,10 @@ import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-serv
         AdminCurrencySearchComponent,
         AdminServiceAddComponent,
         AdminServiceInfoComponent,
-        AdminServiceSearchComponent
+        AdminServiceSearchComponent,
+        AdminCinemaServiceAddComponent,
+        AdminCinemaServiceListComponent,
+        AdminCinemaServiceInfoComponent
     ],
     entryComponents : [
         HallViewDialogComponent
@@ -119,6 +125,7 @@ import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-serv
             useClass: HttpErrorInterceptor, 
             multi: true
         },
+        GlobalErrorHandler,
         UserService,
         FilmService,
         PageService,

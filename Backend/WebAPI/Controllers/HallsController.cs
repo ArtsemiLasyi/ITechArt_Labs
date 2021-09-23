@@ -76,8 +76,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] HallRequest request)
         {
             HallModel model = request.Adapt<HallModel>();
-            await _hallService.CreateAsync(model);
-            return Ok();
+            model.Id = await _hallService.CreateAsync(model);
+            return Ok(model.Id);
         }
 
         [HttpPost("{id}/photo")]

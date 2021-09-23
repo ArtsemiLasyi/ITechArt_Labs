@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -39,13 +39,22 @@ export class AdminFilmAddComponent {
             this.model.releaseYear
         );
         this.filmService.addFilm(request).subscribe(
-            async (data : any) => {
-                const id = data.id;
+            (data : any) => {
+                const id = data;
                 const formData = new FormData();
                 formData.append("formFile", this.poster!);  
-                await this.filmService.addPoster(id, formData);
-                this.success.flag = true;
+                this.filmService.addPoster(id, formData).subscribe(
+                    () => {
+                        this.success.flag = true;
+                    }
+                );
             }
         )
+    }
+
+    @HostListener('document:click', ['$event'])
+    documentClick(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

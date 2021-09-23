@@ -45,7 +45,8 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.CinemaServices
-                .Include("Currencies")
+                .Include("Currency")
+                .Include("Service")
                 .FirstOrDefaultAsync(
                     cinemaService => cinemaService.CinemaId == cinemaId && cinemaService.ServiceId == serviceId
                 );
@@ -56,6 +57,8 @@ namespace DataAccess.Repositories
         {
             List<CinemaServiceEntity> entities = await _context.CinemaServices
                 .Where(cinemaService => cinemaService.CinemaId == cinemaId)
+                .Include("Currency")
+                .Include("Service")
                 .ToListAsync();
             return entities;
         }

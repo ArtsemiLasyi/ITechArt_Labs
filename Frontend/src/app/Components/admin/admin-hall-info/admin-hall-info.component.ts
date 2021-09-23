@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -107,5 +107,11 @@ export class AdminHallInfoComponent {
                 restoreFocus: false
             }
         );
+    }
+
+    @HostListener('document:click', ['$event'])
+    documentClick(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

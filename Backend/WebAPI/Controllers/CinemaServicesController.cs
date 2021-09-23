@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(model);
         }
 
         [AllowAnonymous]

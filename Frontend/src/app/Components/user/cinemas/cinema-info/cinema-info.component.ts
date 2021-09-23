@@ -7,9 +7,10 @@ import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { CinemaService } from 'src/app/Services/CinemaService';
 
 @Component({
-    selector: 'cinemas-cinemainfo',
-    templateUrl: './cinema-info.component.html',
-    providers: [CinemaService, GlobalErrorHandler]
+    selector : 'cinemas-cinemainfo',
+    templateUrl : './cinema-info.component.html',
+    styleUrls : ['./cinema-info.component.scss'],
+    providers : [CinemaService, GlobalErrorHandler]
 })
 export class CinemaInfoComponent implements OnInit {
 

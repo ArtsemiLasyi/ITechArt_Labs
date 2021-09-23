@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminCinemaAddComponent } from 'src/app/Components/admin/admin-cinema-add/admin-cinema-add.component';
 import { AdminCinemaInfoComponent } from 'src/app/Components/admin/admin-cinema-info/admin-cinema-info.component';
 import { AdminCinemaSearchComponent } from 'src/app/Components/admin/admin-cinema-search/admin-cinema-search.component';
+import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-cinema-service-info/admin-cinema-service-info.component';
 import { AdminCurrencyAddComponent } from 'src/app/Components/admin/admin-currency-add/admin-currency-add.component';
 import { AdminCurrencyInfoComponent } from 'src/app/Components/admin/admin-currency-info/admin-currency-info.component';
 import { AdminCurrencySearchComponent } from 'src/app/Components/admin/admin-currency-search/admin-currency-search.component';
@@ -63,6 +64,7 @@ const adminRoutes : Routes = [
     { path : 'services', component : AdminServiceAddComponent },
     { path : 'services/search', component : AdminServiceSearchComponent },
     { path : 'services/info/:id', component : AdminServiceInfoComponent },
+    { path : 'cinemas/info/:cinemaId/services/:id', component : AdminCinemaServiceInfoComponent },
     { path : '', component : UserInfoComponent }
 ];
 

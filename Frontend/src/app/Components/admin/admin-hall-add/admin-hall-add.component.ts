@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -53,14 +53,17 @@ export class AdminHallAddComponent {
             this.model.name,
         );
         this.hallService.addHall(request).subscribe(
-            async (data : any) => {
-                const id = data.id;
+            (data : any) => {
+                const id = data;
                 const formData = new FormData();
                 formData.append('formFile', this.photo!);  
-                await this.hallService.addPhoto(id, formData);
-                this.success.flag = true;
+                this.hallService.addPhoto(id, formData).subscribe(
+                    () => {
+                        this.success.flag = true;
+                    }
+                );
             },
-            (error) => {
+            (error : Error) => {
                 this.error.exists = true;
             }
         )
@@ -89,5 +92,11 @@ export class AdminHallAddComponent {
         const dialogRef = this.dialog.open(AdminHallConstructorDialogComponent, {
             restoreFocus: false
         });
+    }
+
+    @HostListener('document:click', ['$event'])
+    documentClick(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }
