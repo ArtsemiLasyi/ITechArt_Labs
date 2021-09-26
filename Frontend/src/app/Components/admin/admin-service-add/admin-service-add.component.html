@@ -11,6 +11,7 @@
                     class="form-control"
                     id="nameInput"
                     placeholder="nameInput"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.name"
                     required
                 >

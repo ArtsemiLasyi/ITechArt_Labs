@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceModel } from 'src/app/Models/ServiceModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
@@ -62,8 +62,7 @@ export class AdminServiceInfoComponent implements OnInit {
             );
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }

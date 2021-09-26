@@ -1,5 +1,5 @@
   
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
@@ -68,8 +68,7 @@ export class AdminFilmInfoComponent implements OnInit {
         this.success.flag = true;
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }

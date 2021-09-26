@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CurrencyModel } from 'src/app/Models/CurrencyModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -17,12 +17,6 @@ export class AdminCurrencyAddComponent {
 
     constructor(private currencyService : CurrencyService) { }
 
-    @HostListener('document:click', ['$event'])
-    click(event : Event) {
-        this.success.flag = false;
-        this.error.exists = false;
-    }
-
     addCurrency() {
         const request = new CurrencyRequest(this.model.name);
         this.currencyService.addCurrency(request).subscribe(
@@ -35,8 +29,7 @@ export class AdminCurrencyAddComponent {
         )
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }

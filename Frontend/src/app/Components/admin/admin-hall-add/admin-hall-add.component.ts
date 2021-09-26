@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -94,8 +94,7 @@ export class AdminHallAddComponent {
         });
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }

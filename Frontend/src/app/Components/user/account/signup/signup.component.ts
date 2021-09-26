@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SignUpModel } from 'src/app/Models/SignUpModel';
@@ -41,8 +41,7 @@ export class SignUpComponent {
             || error.error.title;     
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.error.exists = false;
     }
 }

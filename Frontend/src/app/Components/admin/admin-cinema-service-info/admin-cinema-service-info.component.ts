@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
@@ -7,6 +7,8 @@ import { CurrencyModel } from 'src/app/Models/CurrencyModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { ServiceModel } from 'src/app/Models/ServiceModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
+import { CinemaServiceRequest } from 'src/app/Requests/CinemaServiceRequest';
+import { PriceRequest } from 'src/app/Requests/PriceRequest';
 import { CinemaServiceService } from 'src/app/Services/CinemaServiceService';
 import { CurrencyService } from 'src/app/Services/CurrencyService';
 import { ServiceService } from 'src/app/Services/ServiceService';
@@ -50,18 +52,19 @@ export class AdminCinemaServiceInfoComponent implements OnInit  {
             )
     }
 
-    @HostListener('document:click', ['$event'])
-    click(event : Event) {
+    clearForm() {
         this.success.flag = false;
         this.error.exists = false;
     }
 
     getCurrencies() {
-        this.currencies = this.currencyService.getCurrencies()
+        this.currencies = this.currencyService.getCurrencies();
+        this.clearForm();
     }
 
     getServices() {
-        this.services = this.serviceService.getServices()
+        this.services = this.serviceService.getServices();
+        this.clearForm();
     }
 
     selectCurrency(currency : CurrencyModel) {
@@ -73,7 +76,21 @@ export class AdminCinemaServiceInfoComponent implements OnInit  {
         this.model.name = service.name;
     }
 
-    editCinemaService() {
-        
+    async editCinemaService() {
+        await this.cinemaServiceService
+            .editCinemaService(
+                this.model.serviceId,
+                this.model.cinemaId,
+                new CinemaServiceRequest(
+                    this.model.serviceId,
+                    this.model.cinemaId,
+                    new PriceRequest(
+                        this.model.price.value,
+                        this.model.price.currency
+                    )
+                )
+            )
+            .toPromise();
+        this.success.flag = true;
     }
 }

@@ -28,6 +28,7 @@
                     class="form-control rounded-0"
                     id="descriptionInput"
                     placeholder="..."
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.description"
                 ></textarea>
             </div>
@@ -41,6 +42,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     (keyup)="getCities()"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.cityName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -57,6 +59,7 @@
                     accept=".jpg, .png, .jpeg|image/*"
                     style="display: none;"
                     (change)="loadPhoto($event)"
+                    (focus)="clearForm($event)"
                 >
                 <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">
                     {{selectedFileName}}

@@ -5,14 +5,15 @@
             <h1 class="h3 mb-3 fw-normal">Currency info</h1>
             <div class="form-floating">
                 <input
+                    required
                     #name="ngModel"
                     type="text"
                     name="name"
                     class="form-control"
                     id="nameInput"
                     placeholder="nameInput"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.name"
-                    required
                 >
                 <label for="nameInput">
                     Enter new currency name...

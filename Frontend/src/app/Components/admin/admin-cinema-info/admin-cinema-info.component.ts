@@ -48,8 +48,7 @@ export class AdminCinemaInfoComponent {
         this.city = city;
     }
 
-    @HostListener('document:click', ['$event'])
-    click(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }
@@ -86,6 +85,7 @@ export class AdminCinemaInfoComponent {
             .subscribe(
                 () => {
                     this.success.flag = true;
+                    this.clearModel();
                 }
             );
     }
@@ -96,6 +96,7 @@ export class AdminCinemaInfoComponent {
             .subscribe(
                 () => {
                     this.success.flag = true;
+                    this.clearModel();
                 }
             );
     }
@@ -108,5 +109,9 @@ export class AdminCinemaInfoComponent {
     addService() {
         this.showServiceList = false;
         this.showServiceAdd = true;
+    }
+
+    clearModel() {
+        this.model = new CinemaModel();
     }
 }

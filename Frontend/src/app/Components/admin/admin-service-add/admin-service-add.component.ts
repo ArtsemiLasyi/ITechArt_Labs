@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { ServiceModel } from 'src/app/Models/ServiceModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -29,8 +29,7 @@ export class AdminServiceAddComponent {
         )
     }
 
-    @HostListener('document:click', ['$event'])
-    documentClick(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }

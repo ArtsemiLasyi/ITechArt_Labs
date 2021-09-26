@@ -38,22 +38,22 @@ export class AdminCinemaServiceAddComponent implements OnInit {
         this.model.cinemaId = this.cinemaId;
     }
 
-    @HostListener('document:click', ['$event'])
-    click(event : Event) {
+    clearForm() {
         this.success.flag = false;
         this.error.exists = false;
     }
 
     getCurrencies() {
-        this.currencies = this.currencyService.getCurrencies()
+        this.currencies = this.currencyService.getCurrencies();
+        this.clearForm();
     }
 
     getServices() {
-        this.services = this.serviceService.getServices()
+        this.services = this.serviceService.getServices();
+        this.clearForm();
     }
 
     addCinemaService() {
-        console.log(this.model);
         let request = new CinemaServiceRequest(
             this.model.cinemaId,
             this.model.serviceId,

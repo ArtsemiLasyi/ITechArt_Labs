@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
@@ -53,8 +53,7 @@ export class AdminCinemaAddComponent {
         this.cityName = city.name;
     }
 
-    @HostListener('document:click', ['$event'])
-    click(event : Event) {
+    clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
     }
@@ -73,6 +72,7 @@ export class AdminCinemaAddComponent {
                 this.cinemaService.addPhoto(id, formData).subscribe(
                     () => {
                         this.success.flag = true;
+                        this.model = new CinemaModel();
                     }
                 );
             },
