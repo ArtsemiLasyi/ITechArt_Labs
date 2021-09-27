@@ -1,0 +1,14 @@
+<h3>Services:</h3>
+<div class="list-group">
+    <div *ngFor="let cinemaService of cinemaServices | async" >
+        <a
+            routerLink="./services/{{cinemaService.serviceId}}"
+            class="list-group-item list-group-item-action"
+        >
+            <strong>{{cinemaService.name}}</strong><br>
+            <strong>Price:</strong>
+            <small>{{cinemaService.price.value}}</small>
+            <small>{{cinemaService.price.currency.name}}</small>
+        </a>
+    </div>
+</div>

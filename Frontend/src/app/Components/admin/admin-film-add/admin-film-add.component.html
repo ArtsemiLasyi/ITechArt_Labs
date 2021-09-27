@@ -6,6 +6,7 @@
   
             <div class="form-floating">
                 <input
+                    required
                     #name="ngModel"
                     type="text"
                     name="name"
@@ -13,7 +14,7 @@
                     id="nameInput"
                     placeholder="nameInput"
                     [(ngModel)]="model.name"
-                    required
+                    (focus)="clearForm($event)"
                 >
                 <label for="nameInput">
                     Enter name...
@@ -22,6 +23,7 @@
             <div class="form-control">
                 <label for="descriptionInput">Enter description...</label>
                 <textarea
+                    required
                     #description="ngModel"
                     type="text"
                     rows="3"
@@ -30,29 +32,55 @@
                     id="descriptionInput"
                     placeholder="..."
                     [(ngModel)]="model.description"
-                    required
+                    (focus)="clearForm($event)"
                 ></textarea>
             </div>
             <div class="form-floating">
                 <input
+                    required
                     #releaseYear="ngModel" 
                     type="number"
                     name="releaseYear"
                     class="form-control"
                     id="releaseYearInput"
                     placeholder="releaseYearInput"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.releaseYear"
-                    required
                 >
                 <label for="releaseYearInput">Enter release year...</label>
             </div>
             <div class="form-floating">
-                <input type="number" name="duration" [(ngModel)]="model.durationInMinutes" #duration="ngModel" class="form-control" id="durationInput" placeholder="durationInput" required>
+                <input
+                    required
+                    type="number"
+                    name="duration"
+                    #duration="ngModel"
+                    class="form-control"
+                    id="durationInput"
+                    placeholder="durationInput"
+                    (focus)="clearForm($event)"
+                    [(ngModel)]="model.durationInMinutes"
+                >
                 <label for="durationInput">Enter duration in minutes...</label>
             </div>
             <div class="form-floating">
-                <input type="file" name="file" accept=".jpg, .png, .jpeg|image/*" style="display: none;" (change)="loadPhoto($event)" #fileInput>
-                <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">{{selectedFileName}}</button><br><br>
+                <input 
+                    type="file"
+                    name="file"
+                    accept=".jpg, .png, .jpeg|image/*"
+                    style="display: none;"
+                    (focus)="clearForm($event)"
+                    (change)="loadPhoto($event)"
+                    #fileInput
+                >
+                <button
+                    type="button"
+                    class="w-100 btn btn-primary"
+                    (click)="fileInput.click()"
+                >
+                    {{selectedFileName}}
+                </button>
+                <br><br>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addFilm()">Add</button>
             <div [hidden]="!error.exists" class="alert alert-danger">

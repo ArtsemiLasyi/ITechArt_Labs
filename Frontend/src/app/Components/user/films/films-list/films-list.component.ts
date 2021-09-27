@@ -70,6 +70,7 @@ export class FilmsListComponent implements OnInit {
 
     searchFilms() {
         this.allFilmsAreShown = false;
+        this.oldFilms = [];
         this.pageService.clearPageNumber();
         let request = new FilmSearchRequest();
         request.filmName = this.filmName;

@@ -11,7 +11,7 @@
         >
     </form>
     <br><br>
-    <div class="card-group row row-cols-4 row-cols-md-3 g-4" id="scroll">
+    <div class="card-group row row-cols-4 row-cols-md-3 g-4">
         <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
             <div class="col" *cdkVirtualFor="let film of films | async" >
                 <div class="card" >

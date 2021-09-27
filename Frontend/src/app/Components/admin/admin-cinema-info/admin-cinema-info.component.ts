@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
@@ -18,6 +18,9 @@ import { CityService } from 'src/app/Services/CityService';
 export class AdminCinemaInfoComponent {
 
     readonly defaultFileName : string = 'Add photo';
+
+    showServiceAdd : boolean = false;
+    showServiceList : boolean = false;
 
     photo : File | undefined;
     error = new ErrorModel();
@@ -45,6 +48,11 @@ export class AdminCinemaInfoComponent {
         this.city = city;
     }
 
+    clearForm(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
+    }
+
     loadPhoto(event : Event) : any {
         this.photo = (event.target as HTMLInputElement).files![0];
         if (this.photo === undefined) {
@@ -66,18 +74,44 @@ export class AdminCinemaInfoComponent {
     }
 
 
-    async editCinema() {
+    editCinema() {
         let request = new CinemaRequest(
             this.model.name,
             this.model.description,
             this.model.cityName
         );
-        await this.cinemaService.editCinema(this.model.id, request);
-        this.success.flag = true;
+        this.cinemaService
+            .editCinema(this.model.id, request)
+            .subscribe(
+                () => {
+                    this.success.flag = true;
+                    this.clearModel();
+                }
+            );
     }
 
-    async deleteCinema() {
-        await this.cinemaService.deleteCinema(this.model.id);
-        this.success.flag = true;
+    deleteCinema() {
+        this.cinemaService
+            .deleteCinema(this.model.id)
+            .subscribe(
+                () => {
+                    this.success.flag = true;
+                    this.clearModel();
+                }
+            );
+    }
+
+    showServices() {
+        this.showServiceList = true;
+        this.showServiceAdd = false;
+    }
+
+    addService() {
+        this.showServiceList = false;
+        this.showServiceAdd = true;
+    }
+
+    clearModel() {
+        this.model = new CinemaModel();
     }
 }

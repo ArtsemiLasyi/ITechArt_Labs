@@ -49,4 +49,8 @@ export class SignInComponent {
             || error.error.errors.Password
             || error.error.title;     
     }
+
+    clearForm(event : Event) {
+        this.error.exists = false;
+    }
 }

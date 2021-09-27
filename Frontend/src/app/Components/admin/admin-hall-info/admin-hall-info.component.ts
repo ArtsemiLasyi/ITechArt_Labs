@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -107,5 +107,10 @@ export class AdminHallInfoComponent {
                 restoreFocus: false
             }
         );
+    }
+
+    clearForm(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

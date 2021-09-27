@@ -7,4 +7,6 @@ export class UrlSegments {
     static readonly Authentification : string = '/account';
     static readonly SignIn : string = '/signin';
     static readonly SignUp : string = '/signup';
+    static readonly Currencies : string = '/currencies';
+    static readonly Services : string = '/services';
 }

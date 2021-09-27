@@ -8,11 +8,12 @@
                 #email="ngModel"
                 type="email"
                 name="email"
-                [(ngModel)]="model.email"
                 class="form-control"
                 id="emailInput"
                 placeholder="emailInput"
                 required pattern="[a-zA-Z_0-9]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}"
+                (focus)="clearForm($event)"
+                [(ngModel)]="model.email"
             >
           <label for="emailInput">Enter email...</label>
         </div>
@@ -21,6 +22,7 @@
         </div>
         <div class="form-floating">
             <input
+                required
                 #password="ngModel" 
                 type="password"
                 name="password"
@@ -28,8 +30,8 @@
                 class="form-control"
                 id="passwordInput"
                 placeholder="passwordInput"
+                (focus)="clearForm($event)"
                 [(ngModel)]="model.password"
-                required
             >
           <label for="passwordInput">Enter password...</label>
         </div>

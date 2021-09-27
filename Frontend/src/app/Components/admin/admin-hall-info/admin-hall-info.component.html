@@ -5,14 +5,17 @@
             <h1 class="h3 mb-3 fw-normal">Hall info</h1>
   
             <div class="form-floating">
-                <input 
+                <input
+                    required 
                     type="text"
                     #name="ngModel"
                     name="name"
-                    [(ngModel)]="model.name"
                     class="form-control"
                     id="nameInput"
-                    placeholder="nameInput" required>
+                    placeholder="nameInput"
+                    (focus)="clearForm($event)"
+                    [(ngModel)]="model.name"
+                >
                 <label for="nameInput">Enter new name...</label>
             </div>
             <div class="dropdown form-control">
@@ -25,6 +28,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     (keyup)="getCinemas()"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="cinemaName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -45,6 +49,7 @@
                     accept=".jpg, .png, .jpeg|image/*"
                     style="display: none;"
                     (change)="loadPhoto($event)"
+                    (focus)="clearForm($event)"
                     #fileInput
                 >
                 <button

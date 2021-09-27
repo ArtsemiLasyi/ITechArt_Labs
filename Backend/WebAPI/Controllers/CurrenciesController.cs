@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
             CurrencyResponse response = model.Adapt<CurrencyResponse>();
-            return Ok();
+            return Ok(response);
         }
 
         [HttpPut("{id}")]

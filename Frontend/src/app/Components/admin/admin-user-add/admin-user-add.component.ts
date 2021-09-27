@@ -42,4 +42,9 @@ export class AdminUserAddComponent {
             || error.error.errors.Password 
             || error.error.title;     
     }
+
+    clearForm(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
+    }
 }

@@ -58,13 +58,18 @@ export class AdminFilmInfoComponent implements OnInit {
             this.model.releaseYear
         );
         await this.filmService
-            .editFilm(this.model.id, request);
+            .editFilm(this.model.id, request).toPromise();
         this.success.flag = true;
     }
 
     async deleteFilm() {
         await this.filmService
-            .deleteFilm(this.model.id);
+            .deleteFilm(this.model.id).toPromise();
         this.success.flag = true;
+    }
+
+    clearForm(event : Event) {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

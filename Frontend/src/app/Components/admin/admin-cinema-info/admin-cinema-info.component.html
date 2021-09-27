@@ -28,6 +28,7 @@
                     class="form-control rounded-0"
                     id="descriptionInput"
                     placeholder="..."
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.description"
                 ></textarea>
             </div>
@@ -41,6 +42,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     (keyup)="getCities()"
+                    (focus)="clearForm($event)"
                     [(ngModel)]="model.cityName"
                 >
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -57,6 +59,7 @@
                     accept=".jpg, .png, .jpeg|image/*"
                     style="display: none;"
                     (change)="loadPhoto($event)"
+                    (focus)="clearForm($event)"
                 >
                 <button type="button" class="w-100 btn btn-primary"  (click)="fileInput.click()">
                     {{selectedFileName}}
@@ -69,12 +72,28 @@
             <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteCinema()">
                 Delete
             </button>
-            <div [hidden]="!error.exists" class="alert alert-danger">
+            <div *ngIf="error.exists" class="alert alert-danger">
                 {{error.text}}
             </div>
-            <div [hidden]="!success.flag" class="alert alert-success">
+            <div *ngIf="success.flag" class="alert alert-success">
                 {{success.text}}
             </div>
         </form>
     </div>
+    <div class="btn-group" role="group">
+        <button class="w-100 btn btn-lg btn-primary" (click)="showServices()">
+            Show services
+        </button>
+        <button class="w-100 btn btn-lg btn-primary" (click)="addService()">
+            Add service
+        </button>
+    </div>
+    <admin-cinema-service-add 
+        *ngIf="showServiceAdd"
+        [cinemaId]="model.id"
+    ></admin-cinema-service-add>
+    <admin-cinema-service-list
+        *ngIf="showServiceList"
+        [cinemaId]="model.id"
+    ></admin-cinema-service-list>
 </section>

@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
             FilmModel model = request.Adapt<FilmModel>();
             model.Id = await _filmService.CreateAsync(model);
 
-            return Ok(model.Adapt<FilmResponse>());
+            return Ok(model.Id);
         }
 
         [HttpPost("{id}/poster")]
