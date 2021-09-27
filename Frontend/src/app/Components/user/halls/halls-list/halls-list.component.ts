@@ -6,9 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { HallViewDialogComponent } from '../hall-view-dialog/hall-view-dialog.component';
 
 @Component({
-    selector: 'halls-list',
-    templateUrl: './halls-list.component.html',
-    providers: [
+    selector : 'halls-list',
+    templateUrl : './halls-list.component.html',
+    styleUrls : ['./halls-list.component.scss'],
+    providers : [
         HallService
     ]
 })
@@ -37,9 +38,9 @@ export class HallsListComponent implements OnInit {
 
     openDialog(model : HallModel) : void {
 
-        const dialogRef = this.dialog.open(
+        this.dialog.open(
             HallViewDialogComponent, {
-                restoreFocus: false,
+                restoreFocus: true,
                 data : { 
                     id : model.id,
                     cinemaId : model.cinemaId,

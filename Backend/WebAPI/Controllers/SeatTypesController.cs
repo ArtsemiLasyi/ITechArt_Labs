@@ -33,6 +33,17 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            SeatTypeModel? model = await _seatTypeService.GetByAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return Ok(model.Adapt<SeatTypeResponse>());
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SeatTypeRequest request)
         {

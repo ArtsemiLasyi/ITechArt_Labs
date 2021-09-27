@@ -7,9 +7,10 @@ import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 
 @Component({
-    selector: 'cinemas-list',
-    templateUrl: './cinemas-list.component.html',
-    providers: [
+    selector : 'cinemas-list',
+    templateUrl : './cinemas-list.component.html',
+    styleUrls : ['./cinemas-list.component.scss'],
+    providers : [
         CinemaService
     ]
 })

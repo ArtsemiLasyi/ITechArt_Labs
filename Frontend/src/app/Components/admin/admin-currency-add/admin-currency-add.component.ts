@@ -5,7 +5,7 @@ import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { CurrencyRequest } from 'src/app/Requests/CurrencyRequest';
 import { CurrencyService } from 'src/app/Services/CurrencyService';
 @Component({
-    selector: 'admin-currrency-add',
+    selector: 'admin-currency-add',
     templateUrl: './admin-currency-add.component.html',
     providers: [CurrencyService]
 })

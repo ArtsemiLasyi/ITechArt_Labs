@@ -2,7 +2,7 @@
     <div>
         <form>
             <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
-            <h1 class="h3 mb-3 fw-normal">Add currency</h1>
+            <h1 class="h3 mb-3 fw-normal">Seat type info</h1>
             <div class="form-floating">
                 <input
                     required
@@ -16,11 +16,29 @@
                     [(ngModel)]="model.name"
                 >
                 <label for="nameInput">
-                    Enter currency name...
+                    Enter new seat type name...
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addCurrency()">
-                Add
+            <div class="form-floating">
+                <input
+                    required
+                    #color="ngModel"
+                    type="color"
+                    name="color"
+                    class="form-control"
+                    id="nameInput"
+                    placeholder="nameInput"
+                    [(ngModel)]="model.colorRgb"
+                >
+                <label for="nameInput">
+                    Choose seat type color...
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editSeatType()">
+                Edit
+            </button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteSeatType()">
+                Delete
             </button>
             <div *ngIf="error.exists" class="alert alert-danger">
                 {{error.text}}

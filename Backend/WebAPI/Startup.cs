@@ -261,6 +261,13 @@ namespace WebAPI
 
         private void ConfigureAdapters()
         {
+            TypeAdapterConfig<SeatEntity, SeatModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.ColorRgb,
+                    src => src.SeatType.ColorRgb
+                );
+
             TypeAdapterConfig<CinemaServiceEntity, CinemaServiceModel>
                 .NewConfig()
                 .Map(

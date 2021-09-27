@@ -61,6 +61,13 @@ import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-serv
 import { AdminCinemaServiceAddComponent } from 'src/app/Components/admin/admin-cinema-service-add/admin-cinema-service-add.component';
 import { AdminCinemaServiceListComponent } from 'src/app/Components/admin/admin-cinema-service-list/admin-cinema-service-list.component';
 import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-cinema-service-info/admin-cinema-service-info.component';
+import { AdminSeatTypeAddComponent } from 'src/app/Components/admin/admin-seat-type-add/admin-seat-type-add.component';
+import { AdminSeatTypeInfoComponent } from 'src/app/Components/admin/admin-seat-type-info/admin-seat-type-info.component';
+import { AdminSeatTypeSearchComponent } from 'src/app/Components/admin/admin-seat-type-search/admin-seat-type-search.component';
+import { SeatTypeService } from 'src/app/Services/SeatTypeService';
+import { SeatService } from 'src/app/Services/SeatService';
+import { HallSizeService } from 'src/app/Services/HallSizeService';
+import { HallDrawingService } from 'src/app/Services/HallDrawingService';
 
 @NgModule({
     declarations : [
@@ -99,7 +106,10 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         AdminServiceSearchComponent,
         AdminCinemaServiceAddComponent,
         AdminCinemaServiceListComponent,
-        AdminCinemaServiceInfoComponent
+        AdminCinemaServiceInfoComponent,
+        AdminSeatTypeAddComponent,
+        AdminSeatTypeInfoComponent,
+        AdminSeatTypeSearchComponent
     ],
     entryComponents : [
         HallViewDialogComponent
@@ -134,8 +144,12 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         HallService,
         CurrencyService,
         ServiceService,
+        SeatService,
+        HallSizeService,
+        HallDrawingService,
         CinemaServiceService,
         StorageService,
+        SeatTypeService,
         AccountStorageService,
         {
             provide: ErrorHandler,
@@ -143,7 +157,7 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         },
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
-            useValue: {hasBackdrop: false}
+            useValue: {hasBackdrop: true}
         }
     ],
     bootstrap : [AppComponent]

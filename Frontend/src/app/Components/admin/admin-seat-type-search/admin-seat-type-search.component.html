@@ -1,0 +1,21 @@
+<section>
+    <h5>Search seat type:</h5>
+    <div class="dropdown form-control">
+        <input
+            readonly
+            type="search"
+            class="form-control form-control-dark dropdown-toggle"
+            placeholder="Select seat type for getting more info..."  
+            id="dropdownMenu"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+        >
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+            <li *ngFor="let seatType of seatTypes | async">
+                <a class="dropdown-item" routerLink="../info/{{seatType.id}}">
+                    {{seatType.name}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>

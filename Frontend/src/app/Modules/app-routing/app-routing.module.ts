@@ -14,6 +14,9 @@ import { AdminHallAddComponent } from 'src/app/Components/admin/admin-hall-add/a
 import { AdminHallInfoComponent } from 'src/app/Components/admin/admin-hall-info/admin-hall-info.component';
 import { AdminHallSearchComponent } from 'src/app/Components/admin/admin-hall-search/admin-hall-search.component';
 import { AdminPanelComponent } from 'src/app/Components/admin/admin-panel/admin-panel.component';
+import { AdminSeatTypeAddComponent } from 'src/app/Components/admin/admin-seat-type-add/admin-seat-type-add.component';
+import { AdminSeatTypeInfoComponent } from 'src/app/Components/admin/admin-seat-type-info/admin-seat-type-info.component';
+import { AdminSeatTypeSearchComponent } from 'src/app/Components/admin/admin-seat-type-search/admin-seat-type-search.component';
 import { AdminServiceAddComponent } from 'src/app/Components/admin/admin-service-add/admin-service-add.component';
 import { AdminServiceInfoComponent } from 'src/app/Components/admin/admin-service-info/admin-service-info.component';
 import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-service-search/admin-service-search.component';
@@ -65,6 +68,9 @@ const adminRoutes : Routes = [
     { path : 'services/search', component : AdminServiceSearchComponent },
     { path : 'services/info/:id', component : AdminServiceInfoComponent },
     { path : 'cinemas/info/:cinemaId/services/:id', component : AdminCinemaServiceInfoComponent },
+    { path : 'seat-types', component : AdminSeatTypeAddComponent },
+    { path : 'seat-types/search', component : AdminSeatTypeSearchComponent },
+    { path : 'seat-types/info/:id', component : AdminSeatTypeInfoComponent },
     { path : '', component : UserInfoComponent }
 ];
 

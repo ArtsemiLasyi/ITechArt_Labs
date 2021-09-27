@@ -9,4 +9,6 @@ export class UrlSegments {
     static readonly SignUp : string = '/signup';
     static readonly Currencies : string = '/currencies';
     static readonly Services : string = '/services';
+    static readonly SeatTypes : string = '/seat-types';
+    static Seats: string = '/seats';
 }

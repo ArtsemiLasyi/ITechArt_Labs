@@ -31,6 +31,7 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SeatEntity>> GetAllBy(int hallId)
         {
             List<SeatEntity> seats = await _context.Seats
+                .Include("SeatType")
                 .Where(seat => seat.HallId == hallId)
                 .ToListAsync();
             return seats;
