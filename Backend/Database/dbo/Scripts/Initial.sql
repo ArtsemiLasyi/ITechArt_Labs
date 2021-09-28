@@ -41,7 +41,7 @@ DELETE FROM [SeatTypes]
 
 
 -- Filling data
-DECLARE @TicksPerMinute AS INT = 600000000
+DECLARE @TicksPerMinute AS BIGINT = 600000000
 
 
 INSERT INTO [UserRoles] ([Id], [Name]) 
