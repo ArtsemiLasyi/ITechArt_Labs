@@ -534,7 +534,7 @@ SET IDENTITY_INSERT [Films] OFF
 
 INSERT INTO [Posters] ([FilmId], [FileName])
 VALUES
-(1, '1jpg'),
+(1, '1.jpg'),
 (2, '2.jpg'),
 (3, '3.jpg'),
 (4, '4.jpg'),
