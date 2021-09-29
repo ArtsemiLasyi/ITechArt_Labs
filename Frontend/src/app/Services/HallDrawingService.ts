@@ -20,8 +20,10 @@ export class HallDrawingService {
         this.context = canvas.getContext('2d');
     }
 
-    drawHall(seats : SeatModel[], canvas : HTMLCanvasElement) : SeatDrawModel[] {
-        let size = this.hallSizeService.getHallSize(seats);
+    drawHall(
+        seats : SeatModel[], canvas : HTMLCanvasElement,
+        size = this.hallSizeService.getHallSize(seats)
+    ) : SeatDrawModel[] {
         this.setCanvasSize(canvas, size);
         this.drawRect(canvas);
         let seatDrawModels = this.drawSeats(seats, size);

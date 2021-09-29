@@ -32,7 +32,7 @@ namespace DataAccess.Repositories
         {
             List<SeatEntity> seats = await _context.Seats
                 .Include("SeatType")
-                .Where(seat => seat.HallId == hallId)
+                .Where(seat => seat.HallId == hallId && !seat.IsDeleted)
                 .ToListAsync();
             return seats;
         }
@@ -48,10 +48,19 @@ namespace DataAccess.Repositories
             return true;
         }
 
-        public Task DeleteAllByAsync(int hallId)
+        public async Task DeleteAllByAsync(int hallId)
         {
-            _context.Seats.RemoveRange(_context.Seats.Where(seat => seat.HallId == hallId));
-            return _context.SaveChangesAsync();
+            IReadOnlyCollection<SeatEntity> seats = await GetAllBy(hallId);
+            _context.Seats.UpdateRange(
+                seats.Select(
+                    seat => 
+                    {
+                        seat.IsDeleted = true;
+                        return seat;
+                    }
+                )
+            );
+            await _context.SaveChangesAsync();
         }
 
         public async Task<SeatEntity?> GetByAsync(int id)

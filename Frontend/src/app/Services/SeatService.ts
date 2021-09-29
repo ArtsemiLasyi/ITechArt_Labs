@@ -30,4 +30,10 @@ export class SeatService {
             `${ApiUrls.Halls}/${hallId}${UrlSegments.Seats}`
         );
     }
+
+    deleteSeats(hallId : number) {
+        return this.http.delete(
+            `${ApiUrls.Halls}/${hallId}${UrlSegments.Seats}`
+        );
+    }
 }

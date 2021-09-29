@@ -6,11 +6,14 @@ import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { HallModel } from 'src/app/Models/HallModel';
+import { SeatsModel } from 'src/app/Models/SeatsModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
 import { HallRequest } from 'src/app/Requests/HallRequest';
+import { SeatsRequest } from 'src/app/Requests/SeatsRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { HallService } from 'src/app/Services/HallService';
+import { SeatService } from 'src/app/Services/SeatService';
 import { AdminHallConstructorDialogComponent } from '../admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
 
 @Component({
@@ -30,11 +33,13 @@ export class AdminHallAddComponent {
     success : SuccessModel = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
     cinemaName : string = '';
+    seats : SeatsModel = new SeatsModel();
 
     constructor(
         private hallService : HallService,
         private dialog: MatDialog,
         private store : Store<{ city : CityModel }>,
+        private seatService : SeatService,
         private cinemaService : CinemaService
     ) { }
 
@@ -53,15 +58,19 @@ export class AdminHallAddComponent {
             this.model.name,
         );
         this.hallService.addHall(request).subscribe(
-            (data : any) => {
+            async (data : any) => {
                 const id = data;
                 const formData = new FormData();
                 formData.append('formFile', this.photo!);  
-                this.hallService.addPhoto(id, formData).subscribe(
-                    () => {
-                        this.success.flag = true;
-                    }
-                );
+                await this.hallService.addPhoto(id, formData).toPromise();
+                if (this.seats.value.length === 0) {
+                    return;
+                }
+                await this.seatService.addSeats(
+                    id,
+                    new SeatsRequest(this.seats.value)
+                ).toPromise();
+                this.success.flag = true;
             },
             (error : Error) => {
                 this.error.exists = true;
@@ -90,8 +99,17 @@ export class AdminHallAddComponent {
 
     addSeats() {
         const dialogRef = this.dialog.open(AdminHallConstructorDialogComponent, {
-            restoreFocus: false
+            restoreFocus : false,
+            data : {
+                value : this.seats.value
+            }
         });
+
+        dialogRef.afterClosed().subscribe(
+            result => {
+                this.seats.value = result;
+            }
+        );
     }
 
     clearForm(event : Event) {

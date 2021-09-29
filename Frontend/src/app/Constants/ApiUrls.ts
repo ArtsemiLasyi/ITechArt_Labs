@@ -1,4 +1,4 @@
-import * as Config from '../../../config.json';
+import Config from '../../../config.json';
 import { UrlSegments } from './UrlSegments';
 
 export class ApiUrls {
