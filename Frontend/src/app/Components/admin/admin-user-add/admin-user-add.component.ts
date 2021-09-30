@@ -31,17 +31,10 @@ export class AdminUserAddComponent {
                 },
                 error => {
                     this.error.exists = true;
-                    this.error.text = this.getError(error);
+                    this.error.text = error;
                 }
             );
       }
-
-    getError(error : any) : string {
-        return error.error.errorText 
-            || error.error.errors.Email 
-            || error.error.errors.Password 
-            || error.error.title;     
-    }
 
     clearForm(event : Event) {
         this.success.flag = false;

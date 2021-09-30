@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
+import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { UserModel } from 'src/app/Models/UserModel';
 import { UserRequest } from 'src/app/Requests/UserRequest';
@@ -24,6 +25,7 @@ export class UserInfoComponent {
     ) { }
 
     model = new UserModel();
+    error = new ErrorModel();
     success = new SuccessModel();
     newPassword : string = '';
 
@@ -33,6 +35,7 @@ export class UserInfoComponent {
                 (data : UserModel) => {
                     this.model.email = data.email;
                     this.model.id = data.id;
+                    this.model.role = data.role;
                 },
                 error => {
                     this.router.navigate(['/account/signin']);
@@ -40,16 +43,26 @@ export class UserInfoComponent {
             );
     }
 
-    async editUser() {
+    editUser() {
         let request = new UserRequest(this.newPassword);
-        await this.service
-            .editUser(this.model.id, request);
-        this.success.flag = true;
+        this.service
+            .editUser(this.model.id, request)
+            .subscribe(
+                () => {
+                    this.success.flag = true;
+                },
+                (error) => {
+                    console.log(error);
+                    this.error.exists = true;
+                    this.error.text = error;
+                }
+            )
     }
 
     async deleteUser() {
         await this.service
-            .deleteUser(this.model.id);
+            .deleteUser(this.model.id)
+            .toPromise();
         this.success.flag = true;
         this.signOut();
     }
@@ -57,5 +70,10 @@ export class UserInfoComponent {
     signOut() {
         this.accountStorageService.deleteToken();
         this.router.navigate(['/']);
+    }
+
+    clearForm() {
+        this.success.flag = false;
+        this.error.exists = false;
     }
 }

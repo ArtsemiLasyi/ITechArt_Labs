@@ -60,7 +60,7 @@ export class AdminHallConstructorDialogComponent implements OnInit {
                 }
             }
         );
-        this.dialogRef.close(this.newSeats);
+        this.dialogRef.close(this.newSeats.value);
     }
 
     drawHall() {

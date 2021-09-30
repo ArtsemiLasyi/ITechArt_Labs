@@ -17,7 +17,7 @@ import { StorageService } from 'src/app/Services/StorageService';
 export class HeaderComponent {
     term = new BehaviorSubject<string>(''); 
     cities : Observable<CityModel[]> = this.term.pipe(
-        autocomplete(500, ((term: string) => this.cityService.getCities(term)))
+        autocomplete(100, ((term: string) => this.cityService.getCities(term)))
     );
     model = new CityModel();
     activeCityName : string = 'No city selected'; 
@@ -45,7 +45,7 @@ export class HeaderComponent {
 
     setNewActiveCity(city : CityModel) {
         this.activeCityName = city.name;
-        this.cityName = "";
+        this.cityName = '';
         this.model = city;
         this.store.dispatch(saveCity({city}));
     }

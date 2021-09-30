@@ -1,4 +1,4 @@
-<div class="card-group">
+<div class="row row-cols-1 row-cols-md-2 g-4">
     <div *ngFor="let hall of halls | async" class="card mb-3">
         <img src="{{getPhoto(hall.id!)}}" class="card-img-top" alt="...">
         <div class="card-body">

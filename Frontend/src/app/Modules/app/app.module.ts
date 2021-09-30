@@ -19,7 +19,7 @@ import { FilmsNodeComponent } from 'src/app/Components/user/films/films-node/fil
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
 import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
-import { AuthInterceptor } from 'src/app/Services/AuthInterceptor';
+import { AuthInterceptor } from 'src/app/Interceptors/AuthInterceptor';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 import { UserService } from 'src/app/Services/UserService';
@@ -28,7 +28,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { CityService } from 'src/app/Services/CityService';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
-import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
+import { HttpErrorInterceptor } from 'src/app/Interceptors/HttpErrorInterceptor';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { HallService } from 'src/app/Services/HallService';
 import { CinemaInfoComponent } from 'src/app/Components/user/cinemas/cinema-info/cinema-info.component';

@@ -64,6 +64,20 @@ namespace WebAPI.Controllers
             UserModel model = request.Adapt<UserModel>();
             model.Id = id;
 
+            int? role = HttpContext.User.Identity.GetUserRole();
+            if (role == null)
+            {
+                return BadRequest(new { errorText = "Token is invalid" });
+            }
+
+            string? email = HttpContext.User.Identity.GetUserEmail();
+            if (email == null)
+            {
+                return BadRequest(new { errorText = "Token is invalid" });
+            }
+
+            model.Email = email;
+            model.Role = (UserRole)role;
             await _userService.EditAsync(model);
             if (request.Password != null)
             {

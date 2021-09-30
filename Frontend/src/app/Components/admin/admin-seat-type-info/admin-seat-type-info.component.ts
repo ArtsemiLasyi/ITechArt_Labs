@@ -46,8 +46,9 @@ export class AdminSeatTypeInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                 },
-                (error : Error) => {
+                (error) => {
                     this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }
@@ -59,8 +60,9 @@ export class AdminSeatTypeInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                 },
-                (error : Error) => {
+                (error) => {
                     this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }

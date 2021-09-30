@@ -99,6 +99,14 @@ export class AdminHallInfoComponent {
             this.model.name
         );
         await this.hallService.editHall(this.model.id, request).toPromise();
+        if (this.photo) {
+            const formData = new FormData();
+            formData.append('formFile', this.photo);  
+            await this.hallService
+                .addPhoto(this.model.id, formData)
+                .toPromise();
+        }
+        this.seats.value.forEach(seat => seat.hallId = this.model.id);
         await this.seatService
             .editSeats(
                 this.model.id, 

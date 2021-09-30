@@ -7,7 +7,7 @@ namespace BusinessLogic.Validators
     {
         public SignUpValidator()
         {
-            RuleFor(model => model.Email);
+            RuleFor(model => model.Email).EmailAddress().WithMessage("It is not valid email address");
             RuleFor(model => model.Password).SetValidator(new PasswordValidator());
         }
     }

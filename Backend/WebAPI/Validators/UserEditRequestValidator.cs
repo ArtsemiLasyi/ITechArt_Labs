@@ -10,8 +10,10 @@ namespace WebAPI.Validators
     {
         public UserEditRequestValidator(UserValidator userValidator, PasswordValidator passwordValidator)
         {
-            RuleFor(request => request.Adapt<UserModel>()).SetValidator(userValidator);
-            RuleFor(request => request.Password).SetValidator(passwordValidator);
+            When(
+                request => request.Password != null,
+                () => RuleFor(request => request.Password).SetValidator(passwordValidator)
+            );
         }
     }
 }

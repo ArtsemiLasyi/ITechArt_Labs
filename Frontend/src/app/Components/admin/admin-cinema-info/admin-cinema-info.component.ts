@@ -84,8 +84,16 @@ export class AdminCinemaInfoComponent {
             .editCinema(this.model.id, request)
             .subscribe(
                 () => {
+                    if (this.photo) {
+                        const formData = new FormData();
+                        formData.append('formFile', this.photo);
+                        this.cinemaService.addPhoto(this.model.id, formData).toPromise();
+                    }
                     this.success.flag = true;
-                    this.clearModel();
+                },
+                (error) => {
+                    this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }
@@ -97,6 +105,10 @@ export class AdminCinemaInfoComponent {
                 () => {
                     this.success.flag = true;
                     this.clearModel();
+                },
+                (error) => {
+                    this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }

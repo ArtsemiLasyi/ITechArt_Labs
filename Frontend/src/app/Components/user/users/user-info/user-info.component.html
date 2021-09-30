@@ -21,6 +21,7 @@
                     class="form-control"
                     id="emailInput"
                     placeholder="emailInput"
+                    (focus)="clearForm()"
                     [(ngModel)]="model.email"
                 >
                 <label for="emailInput">You email:</label>
@@ -36,6 +37,7 @@
                     class="form-control"
                     id="passwordInput"
                     placeholder="passwordInput"
+                    (focus)="clearForm()"
                     [(ngModel)]="newPassword"
                 >
                 <label for="passwordInput">
@@ -71,7 +73,10 @@
         >
             Sign Out
         </button>
-        <div class="alert alert-success" [hidden]="!success.flag">
+        <div class="alert alert-danger" *ngIf="error.exists">
+            {{error.text}}
+        </div>
+        <div class="alert alert-success" *ngIf="success.flag">
             {{success.text}}
         </div>
     </div>

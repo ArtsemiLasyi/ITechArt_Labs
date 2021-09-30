@@ -23,8 +23,9 @@ export class AdminCurrencyAddComponent {
             () => {
                 this.success.flag = true;
             },
-            (error : Error) => {
+            (error) => {
                 this.error.exists = true;
+                this.error.text = error;
             }
         )
     }

@@ -61,19 +61,28 @@ export class AdminHallAddComponent {
             async (data : any) => {
                 const id = data;
                 const formData = new FormData();
-                formData.append('formFile', this.photo!);  
-                await this.hallService.addPhoto(id, formData).toPromise();
+                if (this.photo) {
+                    formData.append('formFile', this.photo);  
+                    await this.hallService
+                        .addPhoto(id, formData)
+                        .toPromise();
+                }
                 if (this.seats.value.length === 0) {
                     return;
                 }
-                await this.seatService.addSeats(
-                    id,
-                    new SeatsRequest(this.seats.value)
-                ).toPromise();
+                this.seats.value.forEach(seat => seat.hallId = id);
+                await this.seatService
+                    .addSeats(
+                        id,
+                        new SeatsRequest(this.seats.value)
+                    )
+                    .toPromise();
                 this.success.flag = true;
+                this.model = new HallModel();
             },
-            (error : Error) => {
+            (error) => {
                 this.error.exists = true;
+                this.error.text = error;
             }
         )
     }

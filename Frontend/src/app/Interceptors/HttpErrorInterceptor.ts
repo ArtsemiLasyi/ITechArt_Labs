@@ -21,20 +21,21 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
         return next.handle(request).pipe(
             retry(1),
-            catchError((error : HttpErrorResponse) => {
-                let errorMessage = '';
-
-                if (error.error instanceof ErrorEvent) {
-                    // client-side error
-                    errorMessage = `Error: ${error.error.message}`;
-                } else {
-
-                    // server-side error
-                    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            catchError(
+                (error : HttpErrorResponse) => {
+                    if (error.error.errorText) {
+                        return throwError(error.error.errorText);
+                    }
+                    if (error.error.errors) {
+                        let message = '';
+                        for (let key in error.error.errors) {
+                            message += error.error.errors[key] + '\r\n';
+                        }
+                        return throwError(message);
+                    }
+                    return throwError(error.error.title);                 
                 }
-                
-                return throwError(errorMessage);
-            })
+            )
         )
     }
 }

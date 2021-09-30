@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageKeyNames } from 'src/app/Constants/StorageKeyNames';
@@ -36,18 +37,11 @@ export class SignInComponent {
                     this.acccountStorage.saveToken(token);
                     this.router.navigate(['']);
                 },
-                error => {
+                (error) => {
                     this.error.exists = true;
-                    this.error.text = this.getError(error);
+                    this.error.text = error;
                 }
             );  
-    }
-
-    getError(error : any) : string {
-        return error.error.errorText 
-            || error.error.errors.Email
-            || error.error.errors.Password
-            || error.error.title;     
     }
 
     clearForm(event : Event) {

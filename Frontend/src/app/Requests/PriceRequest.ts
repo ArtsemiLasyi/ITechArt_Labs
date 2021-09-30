@@ -1,11 +1,12 @@
+import { CurrencyModel } from "../Models/CurrencyModel";
 import { CurrencyRequest } from "./CurrencyRequest";
 
 export class PriceRequest {
     value : number;
-    currency : CurrencyRequest;
+    currencyId : number;
 
-    constructor(value : number, currency : CurrencyRequest) {
+    constructor(value : number, currencyId : number) {
         this.value = value;
-        this.currency = currency;
+        this.currencyId = currencyId;
     }
 }

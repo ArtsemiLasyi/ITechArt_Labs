@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SeatsRequest request)
         {
-            SeatModel model = request.Adapt<SeatModel>();
+            SeatsModel model = request.Adapt<SeatsModel>();
             await _seatService.CreateAsync(model);
             return Ok();
         }
