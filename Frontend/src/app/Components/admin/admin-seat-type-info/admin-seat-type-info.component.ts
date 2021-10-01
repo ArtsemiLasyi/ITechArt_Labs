@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SeatTypeModel } from 'src/app/Models/SeatTypeModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -16,6 +16,8 @@ export class AdminSeatTypeInfoComponent implements OnInit {
     model = new SeatTypeModel();
     error = new ErrorModel();
     success = new SuccessModel();
+
+    disabledButton : boolean = false;
 
     constructor (
         private seatTypeService: SeatTypeService,
@@ -38,8 +40,6 @@ export class AdminSeatTypeInfoComponent implements OnInit {
             this.model.name,
             this.model.colorRgb
         );
-        console.log(this.model);
-        console.log(this.model.colorRgb.length);
         this.seatTypeService
             .editSeatType(this.model.id, request)
             .subscribe(
@@ -59,12 +59,17 @@ export class AdminSeatTypeInfoComponent implements OnInit {
             .subscribe(
                 () => {
                     this.success.flag = true;
+                    this.disableButtons();
                 },
                 (error  : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }
             );
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 
     clearForm(event : Event) {

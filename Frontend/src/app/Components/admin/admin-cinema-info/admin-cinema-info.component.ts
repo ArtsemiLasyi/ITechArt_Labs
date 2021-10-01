@@ -35,6 +35,8 @@ export class AdminCinemaInfoComponent {
     );
     model : CinemaModel = new CinemaModel();
 
+    disabledButton : boolean = false;
+
     constructor(
         private cityService : CityService,
         private cinemaService : CinemaService,
@@ -69,6 +71,11 @@ export class AdminCinemaInfoComponent {
             .subscribe(
                 (cinema : CinemaModel) => {
                     this.model = cinema;
+                },
+                (error : string) => {
+                    this.error.exists = true;
+                    this.error.text = error;
+                    this.disableButtons();
                 }
             )
     }
@@ -105,12 +112,17 @@ export class AdminCinemaInfoComponent {
                 () => {
                     this.success.flag = true;
                     this.clearModel();
+                    this.disableButtons();
                 },
                 (error : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }
             );
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 
     showServices() {

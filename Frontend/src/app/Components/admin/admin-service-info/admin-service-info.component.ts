@@ -17,6 +17,8 @@ export class AdminServiceInfoComponent implements OnInit {
     error = new ErrorModel();
     success = new SuccessModel();
 
+    disabledButton : boolean = false;
+
     constructor (
         private serviceService: ServiceService,
         private activateRoute: ActivatedRoute
@@ -56,6 +58,7 @@ export class AdminServiceInfoComponent implements OnInit {
             .subscribe(
                 () => {
                     this.success.flag = true;
+                    this.disableButtons();
                 },
                 (error  : string) => {
                     this.error.exists = true;
@@ -67,5 +70,9 @@ export class AdminServiceInfoComponent implements OnInit {
     clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 }

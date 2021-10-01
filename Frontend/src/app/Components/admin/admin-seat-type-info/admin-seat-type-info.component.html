@@ -34,10 +34,19 @@
                     Choose seat type color...
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editSeatType()">
+            <button 
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="editSeatType()"
+            >
                 Edit
             </button>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteSeatType()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="deleteSeatType()">
                 Delete
             </button>
             <div *ngIf="error.exists" class="alert alert-danger">

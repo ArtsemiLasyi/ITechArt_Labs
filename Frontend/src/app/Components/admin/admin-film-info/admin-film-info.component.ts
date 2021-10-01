@@ -24,6 +24,8 @@ export class AdminFilmInfoComponent implements OnInit {
     success = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
 
+    disabledButton : boolean = false;
+
     constructor (
         private filmService: FilmService,
         private activateRoute: ActivatedRoute
@@ -82,10 +84,15 @@ export class AdminFilmInfoComponent implements OnInit {
             .deleteFilm(this.model.id)
             .toPromise();
         this.success.flag = true;
+        this.disableButtons();
     }
 
     clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 }

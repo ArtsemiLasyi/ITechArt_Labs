@@ -169,7 +169,7 @@ namespace WebAPI
                         {
                             policy.RequireClaim(
                                 ClaimTypes.Role,
-                                ((int)UserRole.Administrator).ToString()
+                                (UserRole.Administrator).ToString()
                             );
                         }
                     );

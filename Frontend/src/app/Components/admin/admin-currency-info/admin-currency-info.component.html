@@ -19,10 +19,20 @@
                     Enter new currency name...
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editCurrency()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="editCurrency()"
+            >
                 Edit
             </button>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteCurrency()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="deleteCurrency()"
+            >
                 Delete
             </button>
             <div *ngIf="error.exists" class="alert alert-danger">

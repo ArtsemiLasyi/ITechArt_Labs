@@ -84,16 +84,26 @@
                 </button>
                 <br><br>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editFilm()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="editFilm()"
+            >
                 Edit
             </button>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteFilm()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="deleteFilm()"
+            >
                 Delete
             </button>
-            <div [hidden]="!error.exists" class="alert alert-danger">
+            <div *ngIf="error.exists" class="alert alert-danger">
                 {{error.text}}
             </div>
-            <div [hidden]="!success.flag" class="alert alert-success">
+            <div *ngIf="success.flag" class="alert alert-success">
                 {{success.text}}
             </div>
         </form>

@@ -35,6 +35,8 @@ export class AdminHallInfoComponent {
     cinemas : Observable<CinemaModel[]> | undefined;
     seats : SeatsModel = new SeatsModel();
 
+    disabledButton : boolean = false;
+
     constructor(
         private hallService : HallService,
         private cinemaService : CinemaService,
@@ -119,6 +121,7 @@ export class AdminHallInfoComponent {
         await this.hallService.deleteHall(this.model.id).toPromise();
         await this.seatService.deleteSeats(this.model.id).toPromise();
         this.success.flag = true;
+        this.disableButtons();
     }
 
     editSeats() {
@@ -139,5 +142,9 @@ export class AdminHallInfoComponent {
     clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 }
