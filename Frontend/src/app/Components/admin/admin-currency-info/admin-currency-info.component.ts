@@ -43,7 +43,7 @@ export class AdminCurrencyInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                 },
-                (error) => {
+                (error  : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }

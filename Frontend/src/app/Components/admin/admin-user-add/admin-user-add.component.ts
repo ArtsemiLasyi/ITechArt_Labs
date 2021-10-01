@@ -27,9 +27,9 @@ export class AdminUserAddComponent {
         this.service.signUp(request)
             .subscribe(
                 () => {
-                    this.router.navigate(['/account/signin']);
+                    this.success.flag = true;
                 },
-                error => {
+                (error  : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }

@@ -1,5 +1,6 @@
 export class HallDrawingParameters {
     static readonly CAPTION_COLOR_RGB : string = 'rgb(0, 0, 200)';
+    static readonly COMMON_COLOR_RGB : string = '#000000';
     static readonly MAX_ANGLE : number = 2 * Math.PI;
     static readonly MIN_ANGLE : number = 0;
     static readonly FONT : string = 'roboto';

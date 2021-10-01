@@ -50,7 +50,7 @@ export class AdminFilmAddComponent {
                 this.success.flag = true;
                 this.model = new FilmModel();
             },
-            (error) => {
+            (error  : string) => {
                 this.error.exists = true;
                 this.error.text = error;
             }

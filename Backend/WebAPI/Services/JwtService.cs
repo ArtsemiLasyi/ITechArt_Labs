@@ -49,7 +49,7 @@ namespace WebAPI.Services
                 ),
                 new Claim(
                     ClaimTypes.Role,
-                    ((int)userInfo.Role).ToString()
+                    userInfo.Role.ToString()
                 )
             };
 

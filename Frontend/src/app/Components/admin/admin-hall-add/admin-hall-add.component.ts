@@ -80,7 +80,7 @@ export class AdminHallAddComponent {
                 this.success.flag = true;
                 this.model = new HallModel();
             },
-            (error) => {
+            (error  : string) => {
                 this.error.exists = true;
                 this.error.text = error;
             }

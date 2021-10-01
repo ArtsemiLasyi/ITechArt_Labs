@@ -75,7 +75,7 @@ export class AdminCinemaAddComponent {
                 this.success.flag = true;  
                 this.model = new CinemaModel();
             },
-            (error) => {
+            (error : string) => {
                 this.error.exists = true;
                 this.error.text = error;
             }

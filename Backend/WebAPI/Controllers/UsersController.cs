@@ -67,13 +67,13 @@ namespace WebAPI.Controllers
             int? role = HttpContext.User.Identity.GetUserRole();
             if (role == null)
             {
-                return BadRequest(new { errorText = "Token is invalid" });
+                return Unauthorized();
             }
 
             string? email = HttpContext.User.Identity.GetUserEmail();
             if (email == null)
             {
-                return BadRequest(new { errorText = "Token is invalid" });
+                return Unauthorized();
             }
 
             model.Email = email;

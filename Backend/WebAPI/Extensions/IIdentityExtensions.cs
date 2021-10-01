@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -47,7 +48,7 @@ namespace WebAPI.Extensions
                 return null;
             }
 
-            bool converted = int.TryParse(
+            bool converted = Enum.TryParse(
                 claimsIdentity
                     .Claims
                     .Where(c => c.Type == ClaimTypes.Role)

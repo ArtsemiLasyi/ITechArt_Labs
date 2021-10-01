@@ -51,8 +51,7 @@ export class UserInfoComponent {
                 () => {
                     this.success.flag = true;
                 },
-                (error) => {
-                    console.log(error);
+                (error  : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }

@@ -37,7 +37,7 @@ export class SignInComponent {
                     this.acccountStorage.saveToken(token);
                     this.router.navigate(['']);
                 },
-                (error) => {
+                (error  : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }

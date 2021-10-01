@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Colors } from "../Constants/Colors";
 import { HallDrawingParameters } from "../Constants/HallDrawingParameters";
 import { DrawModel } from "../Models/DrawModel";
 import { HallSizeModel } from "../Models/HallSizeModel";
@@ -56,7 +55,7 @@ export class HallDrawingService {
     }
 
     drawEmptyPlace(row : number, place : number) : SeatDrawModel {
-        this.context!.fillStyle = Colors.Black;
+        this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
         this.context!.beginPath();
 
         let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
@@ -104,7 +103,7 @@ export class HallDrawingService {
             HallDrawingParameters.SEAT_RADIUS
         );
 
-        this.context!.fillStyle = Colors.Black;
+        this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
 
         this.context!.arc(
             x,
@@ -139,7 +138,7 @@ export class HallDrawingService {
     }
 
     private drawRect(canvas : HTMLCanvasElement) {
-        this.context!.fillStyle = Colors.Black;
+        this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
         this.context!.strokeRect(
             HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER,
             HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER,
@@ -151,7 +150,7 @@ export class HallDrawingService {
     }
 
     clearSeat(row : number, place : number) {
-        this.context!.fillStyle = Colors.White;
+        this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
         this.context!.beginPath();
 
         let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 

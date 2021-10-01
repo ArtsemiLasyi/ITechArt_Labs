@@ -39,6 +39,15 @@ namespace WebAPI
         {
             Configuration = configuration;
             ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en");
+            CultureInfo culture = new("en-Us", false)
+            {
+                DateTimeFormat =
+                {
+                    ShortDatePattern = "MM/dd/yyyy"
+                }
+            };
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
         }
 
         public IConfiguration Configuration { get; }

@@ -106,7 +106,7 @@ export class AdminCinemaInfoComponent {
                     this.success.flag = true;
                     this.clearModel();
                 },
-                (error) => {
+                (error : string) => {
                     this.error.exists = true;
                     this.error.text = error;
                 }
