@@ -48,6 +48,11 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] CinemaServiceRequest request)
         {
             CinemaServiceModel model = request.Adapt<CinemaServiceModel>();
+            CinemaServiceModel? oldModel = await _cinemaServiceService.GetByAsync(model.ServiceId, model.CinemaId);
+            if (oldModel != null)
+            {
+                return BadRequest(new { errorText = "Service already exists!" });
+            }
             await _cinemaServiceService.CreateAsync(model);
             return Ok();
         }

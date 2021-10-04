@@ -11,7 +11,7 @@ namespace BusinessLogic.Validators
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(50);
-            RuleFor(seatType => seatType.ColorRbg)
+            RuleFor(seatType => seatType.ColorRgb)
                 .NotNull()
                 .NotEmpty()
                 .Length(7);

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[SeatTypes]
 (
-    [Id] INT NOT NULL,
+    [Id] INT IDENTITY(1,1) NOT NULL,
     [Name] NVARCHAR(50) NOT NULL,
     [ColorRgb] NVARCHAR(7) NOT NULL, 
     CONSTRAINT [PK_SeatTypes] PRIMARY KEY CLUSTERED ([Id] ASC)

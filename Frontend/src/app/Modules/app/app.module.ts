@@ -19,7 +19,7 @@ import { FilmsNodeComponent } from 'src/app/Components/user/films/films-node/fil
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
 import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
-import { AuthInterceptor } from 'src/app/Services/AuthInterceptor';
+import { AuthInterceptor } from 'src/app/Interceptors/AuthInterceptor';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
 import { UserService } from 'src/app/Services/UserService';
@@ -28,7 +28,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdminFilmInfoComponent } from 'src/app/Components/admin/admin-film-info/admin-film-info.component';
 import { CityService } from 'src/app/Services/CityService';
 import { GlobalErrorHandler } from 'src/app/ErrorHandlers/GlobalErrorHandler';
-import { HttpErrorInterceptor } from 'src/app/Services/HttpErrorInterceptor';
+import { HttpErrorInterceptor } from 'src/app/Interceptors/HttpErrorInterceptor';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { HallService } from 'src/app/Services/HallService';
 import { CinemaInfoComponent } from 'src/app/Components/user/cinemas/cinema-info/cinema-info.component';
@@ -61,6 +61,13 @@ import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-serv
 import { AdminCinemaServiceAddComponent } from 'src/app/Components/admin/admin-cinema-service-add/admin-cinema-service-add.component';
 import { AdminCinemaServiceListComponent } from 'src/app/Components/admin/admin-cinema-service-list/admin-cinema-service-list.component';
 import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-cinema-service-info/admin-cinema-service-info.component';
+import { AdminSeatTypeAddComponent } from 'src/app/Components/admin/admin-seat-type-add/admin-seat-type-add.component';
+import { AdminSeatTypeInfoComponent } from 'src/app/Components/admin/admin-seat-type-info/admin-seat-type-info.component';
+import { AdminSeatTypeSearchComponent } from 'src/app/Components/admin/admin-seat-type-search/admin-seat-type-search.component';
+import { SeatTypeService } from 'src/app/Services/SeatTypeService';
+import { SeatService } from 'src/app/Services/SeatService';
+import { HallSizeService } from 'src/app/Services/HallSizeService';
+import { HallDrawingService } from 'src/app/Services/HallDrawingService';
 
 @NgModule({
     declarations : [
@@ -99,7 +106,10 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         AdminServiceSearchComponent,
         AdminCinemaServiceAddComponent,
         AdminCinemaServiceListComponent,
-        AdminCinemaServiceInfoComponent
+        AdminCinemaServiceInfoComponent,
+        AdminSeatTypeAddComponent,
+        AdminSeatTypeInfoComponent,
+        AdminSeatTypeSearchComponent
     ],
     entryComponents : [
         HallViewDialogComponent
@@ -134,8 +144,12 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         HallService,
         CurrencyService,
         ServiceService,
+        SeatService,
+        HallSizeService,
+        HallDrawingService,
         CinemaServiceService,
         StorageService,
+        SeatTypeService,
         AccountStorageService,
         {
             provide: ErrorHandler,
@@ -143,7 +157,7 @@ import { AdminCinemaServiceInfoComponent } from 'src/app/Components/admin/admin-
         },
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
-            useValue: {hasBackdrop: false}
+            useValue: {hasBackdrop: true}
         }
     ],
     bootstrap : [AppComponent]

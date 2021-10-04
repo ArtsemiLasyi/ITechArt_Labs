@@ -72,10 +72,10 @@
             >
                 Add
             </button>
-            <div class="alert alert-danger" [hidden]="!error.exists">
+            <div class="alert alert-danger" *ngIf="error.exists">
                 {{error.text}}
             </div>
-            <div class="alert alert-success" [hidden]="!success.flag">
+            <div class="alert alert-success" *ngIf="success.flag">
                 {{success.text}}
             </div>
         </form>

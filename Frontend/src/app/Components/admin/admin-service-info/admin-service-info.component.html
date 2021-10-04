@@ -19,10 +19,20 @@
                     Enter new service name...
                 </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="editService()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="editService()"
+            >
                 Edit
             </button>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="deleteService()">
+            <button
+                class="w-100 btn btn-lg btn-primary"
+                type="submit"
+                [disabled]="disabledButton"
+                (click)="deleteService()"
+            >
                 Delete
             </button>
             <div *ngIf="error.exists" class="alert alert-danger">

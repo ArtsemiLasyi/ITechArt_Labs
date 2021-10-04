@@ -65,19 +65,19 @@ export class AdminCinemaAddComponent {
             this.cityName
         );
         this.cinemaService.addCinema(request).subscribe(
-            (data : any) => {
-                const id = data;
-                const formData = new FormData();
-                formData.append('formFile', this.photo!);  
-                this.cinemaService.addPhoto(id, formData).subscribe(
-                    () => {
-                        this.success.flag = true;
-                        this.model = new CinemaModel();
-                    }
-                );
+            async (data : any) => {  
+                if (this.photo) {
+                    const id = data;
+                    const formData = new FormData();
+                    formData.append('formFile', this.photo);
+                    this.cinemaService.addPhoto(id, formData).toPromise();
+                }
+                this.success.flag = true;  
+                this.model = new CinemaModel();
             },
-            (error : Error) => {
+            (error : string) => {
                 this.error.exists = true;
+                this.error.text = error;
             }
         )
     }

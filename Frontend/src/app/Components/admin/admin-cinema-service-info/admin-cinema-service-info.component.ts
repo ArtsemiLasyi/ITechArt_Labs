@@ -76,8 +76,8 @@ export class AdminCinemaServiceInfoComponent implements OnInit  {
         this.model.name = service.name;
     }
 
-    async editCinemaService() {
-        await this.cinemaServiceService
+    editCinemaService() {
+        this.cinemaServiceService
             .editCinemaService(
                 this.model.serviceId,
                 this.model.cinemaId,
@@ -86,11 +86,18 @@ export class AdminCinemaServiceInfoComponent implements OnInit  {
                     this.model.cinemaId,
                     new PriceRequest(
                         this.model.price.value,
-                        this.model.price.currency
+                        this.model.price.currency.id
                     )
                 )
             )
-            .toPromise();
-        this.success.flag = true;
+            .subscribe(
+                () => {
+                    this.success.flag = true;
+                },
+                (error  : string) => {
+                    this.error.exists = true;
+                    this.error.text = error;
+                }
+            );
     }
 }

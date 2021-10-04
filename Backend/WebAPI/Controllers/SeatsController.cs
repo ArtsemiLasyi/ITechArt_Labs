@@ -35,16 +35,24 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SeatsRequest request)
         {
-            SeatModel model = request.Adapt<SeatModel>();
+            SeatsModel model = request.Adapt<SeatsModel>();
             await _seatService.CreateAsync(model);
             return Ok();
         }
 
+        [HttpPut]
         public async Task<IActionResult> Edit(int hallId, [FromBody] SeatsRequest request)
         {
             SeatsModel model = request.Adapt<SeatsModel>();
             await _seatService.EditAsync(hallId, model);
             return Ok();
         }
+
+        public async Task<IActionResult> Delete(int hallId)
+        {
+            await _seatService.DeleteAllByAsync(hallId);
+            return Ok();
+        }
+
     }
 }

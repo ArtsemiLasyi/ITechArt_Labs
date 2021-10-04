@@ -12,12 +12,14 @@
             <input
                 type="date"
                 class="form-control form-control-dark"
+                [min]="date"
                 [(ngModel)]="firstSessionDate"
             >
             <h5 class="text-left">Last session date</h5>
             <input
                 type="date"
                 class="form-control form-control-dark"
+                [min]="date"
                 [(ngModel)]="lastSessionDate"
             >
             <button 

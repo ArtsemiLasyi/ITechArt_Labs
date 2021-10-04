@@ -7,5 +7,6 @@
         public int Place { get; set; }
         public int SeatTypeId { get; set; }
         public int HallId { get; set; }
+        public string ColorRgb { get; set; } = string.Empty;
     }
 }

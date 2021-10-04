@@ -29,6 +29,7 @@ namespace DataAccess.Repositories
                 return false;
             }
             _context.SeatTypes.Remove(seatType);
+            await _context.SaveChangesAsync();
             return true;
         }
 

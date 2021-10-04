@@ -1,0 +1,47 @@
+<section class="form-signin text-center">
+    <div>
+        <form>
+            <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Add seat type</h1>
+            <div class="form-floating">
+                <input
+                    required
+                    #name="ngModel"
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="nameInput"
+                    placeholder="nameInput"
+                    [(ngModel)]="model.name"
+                >
+                <label for="nameInput">
+                    Enter seat type name...
+                </label>
+            </div>
+            <div class="form-floating">
+                <input
+                    required
+                    #color="ngModel"
+                    type="color"
+                    name="name"
+                    class="form-control"
+                    id="nameInput"
+                    placeholder="nameInput"
+                    [(ngModel)]="model.colorRgb"
+                >
+                <label for="nameInput">
+                    Choose seat type color...
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addSeatType()">
+                Add
+            </button>
+            <div *ngIf="error.exists" class="alert alert-danger">
+                {{error.text}}
+            </div>
+            <div *ngIf="success.flag" class="alert alert-success">
+                {{success.text}}
+            </div>
+        </form>
+    </div>
+</section>

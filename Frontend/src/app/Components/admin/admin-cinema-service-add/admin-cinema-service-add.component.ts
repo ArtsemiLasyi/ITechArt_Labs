@@ -59,7 +59,7 @@ export class AdminCinemaServiceAddComponent implements OnInit {
             this.model.serviceId,
             new PriceRequest(
                 this.model.price.value,
-                this.model.price.currency
+                this.model.price.currency.id
             )
         );
         this.cinemaServiceService
@@ -68,8 +68,9 @@ export class AdminCinemaServiceAddComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                 },
-                (error : Error) => {
+                (error  : string) => {
                     this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }

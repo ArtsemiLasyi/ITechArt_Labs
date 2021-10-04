@@ -25,7 +25,7 @@ namespace BusinessLogic.Services
 
         public Task CreateAsync(SeatsModel model)
         {
-            IReadOnlyCollection<SeatEntity> entity = model.Seats.Adapt<IReadOnlyCollection<SeatEntity>>();
+            IReadOnlyCollection<SeatEntity> entity = model.Value.Adapt<IReadOnlyCollection<SeatEntity>>();
             return _seatRepository.CreateAsync(entity);
         }
 

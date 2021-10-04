@@ -27,21 +27,14 @@ export class AdminUserAddComponent {
         this.service.signUp(request)
             .subscribe(
                 () => {
-                    this.router.navigate(['/account/signin']);
+                    this.success.flag = true;
                 },
-                error => {
+                (error  : string) => {
                     this.error.exists = true;
-                    this.error.text = this.getError(error);
+                    this.error.text = error;
                 }
             );
       }
-
-    getError(error : any) : string {
-        return error.error.errorText 
-            || error.error.errors.Email 
-            || error.error.errors.Password 
-            || error.error.title;     
-    }
 
     clearForm(event : Event) {
         this.success.flag = false;

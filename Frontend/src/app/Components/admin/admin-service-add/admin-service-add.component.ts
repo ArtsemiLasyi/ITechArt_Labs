@@ -23,8 +23,9 @@ export class AdminServiceAddComponent {
             () => {
                 this.success.flag = true;
             },
-            (error : Error) => {
+            (error  : string) => {
                 this.error.exists = true;
+                this.error.text = error;
             }
         )
     }

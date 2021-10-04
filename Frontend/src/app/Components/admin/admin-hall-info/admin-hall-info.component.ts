@@ -7,11 +7,14 @@ import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { HallModel } from 'src/app/Models/HallModel';
+import { SeatsModel } from 'src/app/Models/SeatsModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
 import { HallRequest } from 'src/app/Requests/HallRequest';
+import { SeatsRequest } from 'src/app/Requests/SeatsRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { HallService } from 'src/app/Services/HallService';
+import { SeatService } from 'src/app/Services/SeatService';
 import { AdminHallConstructorDialogComponent } from '../admin-hall-constructor-dialog/admin-hall-constructor-dialog.component';
 
 @Component({
@@ -30,11 +33,15 @@ export class AdminHallInfoComponent {
     model : HallModel = new HallModel();
     cinemaName : string = '';
     cinemas : Observable<CinemaModel[]> | undefined;
+    seats : SeatsModel = new SeatsModel();
+
+    disabledButton : boolean = false;
 
     constructor(
         private hallService : HallService,
         private cinemaService : CinemaService,
         private dialog : MatDialog,
+        private seatService : SeatService,
         private activateRoute: ActivatedRoute,
         private store : Store<{ city : CityModel }>
     ) { }
@@ -48,7 +55,7 @@ export class AdminHallInfoComponent {
         this.selectedFileName = this.photo.name; 
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.model.id = this.activateRoute.snapshot.params['id'];
         this.hallService
             .getHall(this.model.id)
@@ -64,6 +71,7 @@ export class AdminHallInfoComponent {
                         )
                 }
             )
+        this.seats = await this.seatService.getSeats(this.model.id).toPromise();
     }
 
     getCinemas() {
@@ -92,19 +100,41 @@ export class AdminHallInfoComponent {
             this.model.cinemaId,
             this.model.name
         );
-        await this.hallService.editHall(this.model.id, request);
+        await this.hallService.editHall(this.model.id, request).toPromise();
+        if (this.photo) {
+            const formData = new FormData();
+            formData.append('formFile', this.photo);  
+            await this.hallService
+                .addPhoto(this.model.id, formData)
+                .toPromise();
+        }
+        this.seats.value.forEach(seat => seat.hallId = this.model.id);
+        await this.seatService
+            .editSeats(
+                this.model.id, 
+                new SeatsRequest(this.seats.value)
+            ).toPromise();
         this.success.flag = true;
     }
 
     async deleteHall() {
-        await this.hallService.deleteHall(this.model.id);
+        await this.hallService.deleteHall(this.model.id).toPromise();
+        await this.seatService.deleteSeats(this.model.id).toPromise();
         this.success.flag = true;
+        this.disableButtons();
     }
 
     editSeats() {
-        const dialogRef = this.dialog.open(
-            AdminHallConstructorDialogComponent, {
-                restoreFocus: false
+        const dialogRef = this.dialog.open(AdminHallConstructorDialogComponent, {
+            restoreFocus : false,
+            data : {
+                value : this.seats.value
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(
+            result => {
+                this.seats.value = result;
             }
         );
     }
@@ -112,5 +142,9 @@ export class AdminHallInfoComponent {
     clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 }

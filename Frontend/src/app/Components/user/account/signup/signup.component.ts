@@ -27,18 +27,11 @@ export class SignUpComponent {
                 () => {
                     this.router.navigate(['/account/signin']);
                 },
-                error => {
+                (error : string) => {
                     this.error.exists = true;
-                    this.error.text = this.getError(error);
+                    this.error.text = error;
                 }
             );
-    }
-
-    getError(error : any) : string {
-        return error.error.errorText 
-            || error.error.errors.Email 
-            || error.error.errors.Password 
-            || error.error.title;     
     }
 
     clearForm(event : Event) {

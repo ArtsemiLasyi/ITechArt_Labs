@@ -28,6 +28,8 @@ using DataAccess.Options;
 using WebAPI.Responses;
 using WebAPI.Constants;
 using System.Security.Claims;
+using System.Globalization;
+using FluentValidation;
 
 namespace WebAPI
 {
@@ -36,6 +38,16 @@ namespace WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en");
+            CultureInfo culture = new("en-Us", false)
+            {
+                DateTimeFormat =
+                {
+                    ShortDatePattern = "MM/dd/yyyy"
+                }
+            };
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
         }
 
         public IConfiguration Configuration { get; }
@@ -155,7 +167,10 @@ namespace WebAPI
                         PolicyNames.Administrator,
                         policy => 
                         {
-                            policy.RequireClaim(ClaimTypes.Role, UserRole.Administrator.ToString());
+                            policy.RequireClaim(
+                                ClaimTypes.Role,
+                                (UserRole.Administrator).ToString()
+                            );
                         }
                     );
                 }
@@ -261,6 +276,13 @@ namespace WebAPI
 
         private void ConfigureAdapters()
         {
+            TypeAdapterConfig<SeatEntity, SeatModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.ColorRgb,
+                    src => src.SeatType.ColorRgb
+                );
+
             TypeAdapterConfig<CinemaServiceEntity, CinemaServiceModel>
                 .NewConfig()
                 .Map(
@@ -326,6 +348,31 @@ namespace WebAPI
                 .Map(
                     dest => dest.Role,
                     src => src.RoleId
+                );
+
+            TypeAdapterConfig<UserModel, UserEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.RoleId,
+                    src => (int)src.Role
+                );
+
+            TypeAdapterConfig<PriceRequest, PriceModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Currency,
+                    src => 
+                        new CurrencyModel()
+                        {
+                            Id = src.CurrencyId
+                        }
+                );
+
+            TypeAdapterConfig<CinemaServiceRequest, CinemaServiceModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Adapt<PriceModel>()
                 );
         }
     }

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
@@ -39,15 +40,19 @@ export class AdminFilmAddComponent {
             this.model.releaseYear
         );
         this.filmService.addFilm(request).subscribe(
-            (data : any) => {
-                const id = data;
-                const formData = new FormData();
-                formData.append("formFile", this.poster!);  
-                this.filmService.addPoster(id, formData).subscribe(
-                    () => {
-                        this.success.flag = true;
-                    }
-                );
+            async (data : any) => {
+                if (this.poster) {
+                    const id = data;
+                    const formData = new FormData();
+                    formData.append("formFile", this.poster);  
+                    await this.filmService.addPoster(id, formData).toPromise();
+                }
+                this.success.flag = true;
+                this.model = new FilmModel();
+            },
+            (error  : string) => {
+                this.error.exists = true;
+                this.error.text = error;
             }
         )
     }

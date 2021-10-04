@@ -24,22 +24,7 @@ namespace BusinessLogic.Services
 
         public async Task<int> CreateAsync(CinemaModel cinema)
         {
-            CityModel? cityModel = await _cityService.GetByAsync(cinema.CityName);
-            int cityId;
-            if (cityModel == null)
-            {
-                cityId = await _cityService.CreateAsync(
-                    new CityModel()
-                    {
-                        Name = cinema.CityName
-                    }
-                );
-            }
-            else
-            {
-                cityId = cityModel.Id;
-            }
-
+            int cityId = await GetCityIdAsync(cinema.CityName);
             CinemaEntity? cinemaEntity = cinema.Adapt<CinemaEntity>();
             cinemaEntity.CityId = cityId;
             await _cinemaRepository.CreateAsync(cinemaEntity);
@@ -64,10 +49,32 @@ namespace BusinessLogic.Services
             return _cinemaRepository.DeleteByAsync(id);
         }
 
-        public Task EditAsync(CinemaModel cinema)
+        public async Task EditAsync(CinemaModel cinema)
         {
-            CinemaEntity cinemaEntity = cinema.Adapt<CinemaEntity>();
-            return _cinemaRepository.UpdateAsync(cinemaEntity);
+            int cityId = await GetCityIdAsync(cinema.CityName);
+            CinemaEntity? cinemaEntity = cinema.Adapt<CinemaEntity>();
+            cinemaEntity.CityId = cityId;
+            await _cinemaRepository.UpdateAsync(cinemaEntity);
+        }
+
+        private async Task<int> GetCityIdAsync(string name)
+        {
+            int cityId;
+            CityModel? cityModel = await _cityService.GetByAsync(name);
+            if (cityModel == null)
+            {
+                cityId = await _cityService.CreateAsync(
+                    new CityModel()
+                    {
+                        Name = name
+                    }
+                );
+            }
+            else
+            {
+                cityId = cityModel.Id;
+            }
+            return cityId;
         }
     }
 }

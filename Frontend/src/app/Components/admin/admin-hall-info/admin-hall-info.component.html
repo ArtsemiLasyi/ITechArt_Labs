@@ -71,6 +71,7 @@
             <button 
                 class="w-100 btn btn-lg btn-primary"
                 type="submit"
+                [disabled]="disabledButton"
                 (click)="editHall()"
             >
                 Edit
@@ -78,18 +79,19 @@
             <button 
                 class="w-100 btn btn-lg btn-primary"
                 type="submit"
+                [disabled]="disabledButton"
                 (click)="deleteHall()"
             >
                 Delete
             </button>
             <div 
-                [hidden]="!error.exists" 
+                *ngIf="error.exists" 
                 class="alert alert-danger"
             >
                 {{error.text}}
             </div>
             <div 
-                [hidden]="!success.flag"
+                *ngIf="success.flag"
                 class="alert alert-success"
             >
                 {{success.text}}

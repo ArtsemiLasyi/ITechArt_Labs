@@ -17,6 +17,8 @@ export class AdminCurrencyInfoComponent implements OnInit {
     error = new ErrorModel();
     success = new SuccessModel();
 
+    disabledButton : boolean = false;
+
     constructor (
         private currencyService: CurrencyService,
         private activateRoute: ActivatedRoute
@@ -43,8 +45,9 @@ export class AdminCurrencyInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                 },
-                (error : Error) => {
+                (error  : string) => {
                     this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }
@@ -55,9 +58,11 @@ export class AdminCurrencyInfoComponent implements OnInit {
             .subscribe(
                 () => {
                     this.success.flag = true;
+                    this.disableButtons();
                 },
-                (error : Error) => {
+                (error) => {
                     this.error.exists = true;
+                    this.error.text = error;
                 }
             );
     }
@@ -65,5 +70,9 @@ export class AdminCurrencyInfoComponent implements OnInit {
     clearForm(event : Event) {
         this.success.flag = false;
         this.error.exists = false;
+    }
+
+    disableButtons() {
+        this.disabledButton = true;
     }
 }

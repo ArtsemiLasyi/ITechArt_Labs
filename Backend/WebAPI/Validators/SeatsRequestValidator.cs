@@ -11,9 +11,9 @@ namespace WebAPI.Validators
     {
         public SeatsRequestValidator(SeatValidator seatValidator)
         {
-            RuleForEach(request => request.Seats.Adapt<IReadOnlyCollection<SeatModel>>())
+            RuleForEach(request => request.Value.Adapt<IReadOnlyCollection<SeatModel>>())
                 .SetValidator(seatValidator)
-                .OverridePropertyName("Seats");
+                .OverridePropertyName("Value");
         }
     }
 }

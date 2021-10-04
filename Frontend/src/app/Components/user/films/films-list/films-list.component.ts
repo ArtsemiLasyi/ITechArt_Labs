@@ -26,6 +26,7 @@ export class FilmsListComponent implements OnInit {
     lastSessionDate : Date | undefined;
 
     allFilmsAreShown : boolean = false;
+    date : Date = new Date();
 
     constructor (
         private filmService: FilmService,

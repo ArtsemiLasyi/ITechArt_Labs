@@ -9,6 +9,7 @@ namespace DataAccess.Entities
         public int SeatTypeId { get; set; }
         public int Row { get; set; }
         public int Place { get; set; }
+        public bool IsDeleted { get; set; }
         [ForeignKey("HallId")]
         public HallEntity Hall { get; set; } = null!;
         public SeatTypeEntity SeatType { get; set; } = null!;

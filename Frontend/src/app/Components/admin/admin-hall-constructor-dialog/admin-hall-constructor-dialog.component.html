@@ -1,49 +1,68 @@
-
-    <div class="modal modal-content">
-        <div class="modal-body">
-            <canvas id="hall" width="900" height="500px"></canvas>
-        </div>
-        <div class="modal-footer">
-            <h6>Number of rows:</h6>
-            <div class="qty mt-5">
-                <span class="minus bg-dark">-</span>
-                <input type="number" class="count" name="qty" value="1">
-                <span class="plus bg-dark">+</span>
-            </div>
-            <h6>Number of places:</h6>
-            <div class="qty mt-5">
-                <span class="minus bg-dark">-</span>
-                <input type="number" class="count" name="qty" value="1">
-                <span class="plus bg-dark">+</span>
-            </div>
-            <input
-                type="search"
-                class="form-control form-control-dark dropdown-toggle"
-                name="seatTypeName"
-                placeholder="Choose seat type..."
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-            >
-            <ul
-                class="dropdown-menu"
-                aria-labelledby="dropdownMenuButton"
-            >
-                <li>
-                    <a
-                        class="dropdown-item"
-                    >
-                        Common
-                    </a>
-                </li>
-            </ul>
-            <button 
-                type="button"
-                class="btn btn-primary"
-                data-bs-dismiss="modal"
-                (click)="onNoClick()"
-            >
-                Close
-            </button>
-        </div>
+<mat-dialog-content class="modal modal-content">
+    <div class="modal-body canvas-container">
+        <canvas 
+            #canvas
+            width="900"
+            height="500px"
+            (click)="tryToAddOrDeleteSeat($event)"
+        ></canvas>
     </div>
+    <div class="modal-footer">
+        <h6>Number of rows:</h6>
+        <div class="qty mt-5">
+            <span class="minus bg-light">-</span>
+            <input
+                type="number"
+                class="count"
+                name="qty"
+                min="1"
+                max="50"
+                (ngModelChange)="rowsNumberChanged($event)"
+                [(ngModel)]="size.rowsNumber"
+            >
+            <span class="plus bg-light">+</span>
+        </div>
+        <h6>Number of places:</h6>
+        <div class="qty mt-5">
+            <span class="minus bg-light">-</span>
+            <input
+                type="number"
+                class="count"
+                name="qty"
+                min="1"
+                max="50"
+                (ngModelChange)="placesNumberChanged($event)"
+                [(ngModel)]="size.placesNumber"
+            >
+            <span class="plus bg-light">+</span>
+        </div>
+        <input
+            type="search"
+            class="form-control form-control-dark dropdown-toggle"
+            name="seatTypeName"
+            placeholder="Choose seat type..."
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            [(ngModel)]="activeSeatType.name"
+        >
+        <ul
+            class="dropdown-menu"
+            aria-labelledby="dropdownMenuButton"
+        >
+            <li *ngFor="let seatType of seatTypes | async">
+                <a class="dropdown-item" (click)="selectSeatType(seatType)">
+                    {{seatType.name}}
+                </a>
+            </li>
+        </ul>
+        <button 
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            (click)="onNoClick()"
+        >
+            Close
+        </button>
+    </div>
+</mat-dialog-content>
