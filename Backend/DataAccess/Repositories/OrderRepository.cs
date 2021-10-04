@@ -42,6 +42,9 @@ namespace DataAccess.Repositories
         {
 
             IQueryable<OrderEntity>? query = _context.Orders
+                .Include(order => order.Session)
+                .ThenInclude(session => session.Hall)
+                .ThenInclude(hall => hall.Cinema)
                 .Where(
                     order =>
                         !order.IsDeleted
@@ -50,13 +53,13 @@ namespace DataAccess.Repositories
             if (parameters.PastOrders)
             {
                 query = query.Where(
-                    order => order.RegistratedAt < DateTime.UtcNow
+                    order => order.Session.StartDateTime < DateTime.UtcNow
                 );
             }
             else
             {
                 query = query.Where(
-                    order => order.RegistratedAt >= DateTime.UtcNow
+                    order => order.Session.StartDateTime >= DateTime.UtcNow
                 );
             }
             List<OrderEntity> orders = await query.ToListAsync();
@@ -80,7 +83,8 @@ namespace DataAccess.Repositories
                     order =>
                         order.SessionId == sessionId
                         && _context.SeatOrders
-                            .Where(seatOrder => seatOrder.OrderId == order.Id)
+                            .Where(seatOrder => seatOrder.OrderId == order.Id
+                                && seatOrder.SeatId == seatId)
                             .Any()
                 )
                 .FirstOrDefaultAsync();

@@ -6,5 +6,6 @@ namespace DataAccess.Entities
     {
         public int SeatId { get; set; }
         public int OrderId { get; set; }
+        public SeatEntity Seat { get; set; } = null!;
     }
 }

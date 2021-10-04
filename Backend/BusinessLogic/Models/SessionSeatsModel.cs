@@ -6,9 +6,9 @@ namespace BusinessLogic.Models
     {
         public IReadOnlyCollection<SessionSeatModel> Value { get; set; } = new List<SessionSeatModel>();
 
-        public SessionSeatsModel(IReadOnlyCollection<SessionSeatModel> sessionSeats)
+        public SessionSeatsModel(IReadOnlyCollection<SessionSeatModel> value)
         {
-            Value = sessionSeats;
+            Value = value;
         }
     }
 }

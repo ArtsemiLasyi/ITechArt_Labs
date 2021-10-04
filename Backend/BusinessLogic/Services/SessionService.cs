@@ -22,9 +22,9 @@ namespace BusinessLogic.Services
             return _sessionRepository.CreateAsync(sessionEntity);
         }
 
-        public async Task<IReadOnlyCollection<SessionModel>> GetAllByAsync(int filmId)
+        public async Task<IReadOnlyCollection<SessionModel>> GetAllByAsync(int cinemaId)
         {
-            IReadOnlyCollection<SessionEntity> models = await _sessionRepository.GetAllByAsync(filmId);
+            IReadOnlyCollection<SessionEntity> models = await _sessionRepository.GetAllByAsync(cinemaId);
             return models.Adapt<IReadOnlyCollection<SessionModel>>();
         }
 

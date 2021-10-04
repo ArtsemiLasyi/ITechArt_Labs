@@ -1,52 +1,56 @@
-<div class="row row-cols-1 row-cols-md-2 g-4">
-    <div *ngFor="let cinema of cinemas | async" class="card mb-3">
-        <img 
-            src="{{getPhoto(cinema.id!)}}"
-            class="card-img-top"
-        >
-        <div class="card-body">
-            <h5 class="card-title">{{cinema.name}}</h5>
-            <h6 class="card-text">{{cinema.description}}</h6>
-            <a routerLink="/cinemas/{{cinema.id}}" class="btn btn-primary">Details</a>
+<div class="row row-cols-1 row-cols-md-1 g-4">
+    <div *ngFor="let cinema of cinemas" class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img 
+                    src="{{getPhoto(cinema.id!)}}"
+                    class="card-img-top"
+                >
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">{{cinema.name}}</h3>
+                    <h4 class="card-text">{{cinema.description}}</h4>
+                    <a routerLink="/cinemas/{{cinema.id}}" class="btn btn-primary btn-lg">
+                        Details
+                    </a>
+                </div>
+            </div>
         </div>
-        <div 
-            class="accordion" 
-            [id]="'accordionExample' + cinema.id"
-        >
+        <div class="accordion" [id]="'accordion' + cinema.id">
             <div class="accordion-item">
-                <h2 
-                    class="accordion-header" 
-                    [id]="'heading' + cinema.id"
-                >
-                <button 
-                    class="accordion-button" 
-                    type="button"
-                    data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#collapse' + cinema.id"
-                    aria-expanded="true"
-                    [attr.aria-controls]="'collapse' + cinema.id"
-                >
-                    Sessions
-                </button>
+                <h2 class="accordion-header" [id]="'heading' + cinema.id">
+                  <button 
+                        class="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        (click)="openCloseCollapse(cinema.id)"
+                        [attr.data-bs-target]="'#collapse' + cinema.id"
+                        [attr.aria-controls]="'collapse' + cinema.id"
+                    >
+                        Sessions
+                    </button>
                 </h2>
                 <div 
-                    [id]="'heading' + cinema.id"
-                    class="accordion-collapse collapse show"
+                    [id]="'collapse' + cinema.id"
+                    class="accordion-collapse collapse"
                     [attr.aria-labelledby]="'heading' + cinema.id"
-                    [attr.data-bs-parent]="'#accordionExample' + cinema.id"
+                    [attr.data-bs-parent]="'#accordion' + cinema.id"
                 >
-                    <div class="accordion-body">
-                        <ol class="list-group list-group-numbered">
-                            <a 
-                                class="list-group-item d-flex justify-content-between align-items-start"
-                                routerLink="/"
-                            >
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Time</div>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">14:30</span>
-                            </a>
-                        </ol>
+                    <div *ngIf="flags[cinema.id]" class="accordion-body">
+                        <a
+                            *ngFor="let session of sessions[cinema.id] | async" 
+                            class="list-group-item d-flex justify-content-between align-items-start"
+                            routerLink="/sessions/{{session.id}}"
+                        >
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{getDate(session)}}</div>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">
+                                {{getTime(session)}}
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

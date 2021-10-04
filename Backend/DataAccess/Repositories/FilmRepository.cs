@@ -99,6 +99,20 @@ namespace DataAccess.Repositories
                         );
             }
 
+            if (parameters.FreeSeatsNumber != null)
+            {
+                query = query.Where(
+                    film =>
+                        _context.Sessions
+                            .Where(
+                                session =>
+                                    parameters.FreeSeatsNumber <= session.FreeSeatsNumber
+                                        && session.FilmId == film.Id
+                            )
+                            .Any()
+                        );
+            }
+
             List<FilmEntity> films = await query.OrderByDescending(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

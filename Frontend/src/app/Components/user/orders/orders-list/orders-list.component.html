@@ -1,0 +1,63 @@
+<div>
+    <div align="center">
+        <h2>Orders</h2>
+    </div>
+    <form>
+        <div class="form-group form-inline">
+            <h4>
+                Past orders:
+                <input 
+                    class="form-check-input"
+                    type="checkbox"
+                    (click)=getOrders()
+                    [value]=pastOrders
+                /> 
+            </h4>
+        </div>
+    </form>
+    <div *ngFor="let order of orders | async">
+        <div class="accordion" [id]="'accordion' + order.id">
+            <div class="accordion-item">
+                <h2 class="accordion-header" [id]="'heading' + order.id">
+                <a class="" routerLink="../../cinemas/{{order.cinemaId}}">
+                    {{order.cinemaName}}
+                </a>
+                <p class="">
+                    {{order.hallName}}
+                </p>
+                <button 
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    aria-expanded="true"
+                    (click)="getOrderInfo(order.id)"
+                    [attr.data-bs-target]="'#collapse' + order.id"
+                    [attr.aria-controls]="'collapse' + order.id"
+                >
+                    {{order.sessionStart}}
+                </button>
+                </h2>
+                <div 
+                    [id]="'collapse' + order.id"
+                    class="accordion-collapse collapse"
+                    [attr.aria-labelledby]="'heading' + order.id"
+                    [attr.data-bs-parent]="'#accordion' + order.id"
+                >
+                    <div class="accordion-body">
+                        <div 
+                            class="card"
+                            *ngFor="let seatOrder of seatOrders[order.id] | async"
+                        >
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    Row: {{seatOrder.row}}
+                                    Place: {{seatOrder.place}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

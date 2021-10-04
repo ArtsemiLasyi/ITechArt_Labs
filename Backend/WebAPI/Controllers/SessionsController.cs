@@ -36,10 +36,10 @@ namespace WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("~/films/{filmId}/sessions")]
-        public async Task<IActionResult> GetAll(int filmId)
+        [HttpGet("~/cinemas/{cinemaId}/sessions")]
+        public async Task<IActionResult> GetAll(int cinemaId)
         {
-            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(filmId);
+            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(cinemaId);
             IReadOnlyCollection<SessionResponse> response = services.Adapt<IReadOnlyCollection<SessionResponse>>();
             return Ok(response);
         }

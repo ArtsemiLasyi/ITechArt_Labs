@@ -1,6 +1,7 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,13 +53,15 @@ namespace DataAccess.Repositories
             return sessions;
         }
 
-        public async Task<IReadOnlyCollection<SessionEntity>> GetAllByAsync(int filmId)
+        public async Task<IReadOnlyCollection<SessionEntity>> GetAllByAsync(int cinemaId)
         {
             List<SessionEntity> sessions = await _context.Sessions
+                .Include("Hall")
                 .Where(
                     session =>
                         !session.IsDeleted
-                        && session.FilmId == filmId
+                        && session.Hall.CinemaId == cinemaId
+                        && session.StartDateTime >= DateTime.UtcNow
                 )
                 .ToListAsync();
             return sessions;

@@ -68,6 +68,10 @@ import { SeatTypeService } from 'src/app/Services/SeatTypeService';
 import { SeatService } from 'src/app/Services/SeatService';
 import { HallSizeService } from 'src/app/Services/HallSizeService';
 import { HallDrawingService } from 'src/app/Services/HallDrawingService';
+import { SessionService } from 'src/app/Services/SessionService';
+import { OrderService } from 'src/app/Services/OrderService';
+import { SeatOrderService } from 'src/app/Services/SeatOrderService';
+import { OrdersListComponent } from 'src/app/Components/user/orders/orders-list/orders-list.component';
 
 @NgModule({
     declarations : [
@@ -85,6 +89,7 @@ import { HallDrawingService } from 'src/app/Services/HallDrawingService';
         SignInComponent,
         SignUpComponent,
         UserInfoComponent,
+        OrdersListComponent,
         AdminPanelComponent,
         AdminFilmInfoComponent,
         CinemaInfoComponent,
@@ -144,6 +149,9 @@ import { HallDrawingService } from 'src/app/Services/HallDrawingService';
         HallService,
         CurrencyService,
         ServiceService,
+        SessionService,
+        OrderService,
+        SeatOrderService,
         SeatService,
         HallSizeService,
         HallDrawingService,

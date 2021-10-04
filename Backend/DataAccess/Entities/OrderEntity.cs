@@ -10,6 +10,7 @@ namespace DataAccess.Entities
         public int CurrencyId { get; set; }
         public decimal Price { get; set; }
         public DateTime RegistratedAt { get; set; }
-        public bool IsDeleted { get; internal set; }
+        public bool IsDeleted { get; set; }
+        public SessionEntity Session { get; set; } = null!;
     }
 }

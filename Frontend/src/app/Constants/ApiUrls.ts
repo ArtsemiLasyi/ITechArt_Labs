@@ -11,6 +11,8 @@ export class ApiUrls {
     static readonly Currencies = Config.ApiUrl + UrlSegments.Currencies;
     static readonly Services = Config.ApiUrl + UrlSegments.Services;
     static readonly SeatTypes = Config.ApiUrl + UrlSegments.SeatTypes;
+    static readonly Sessions = Config.ApiUrl + UrlSegments.Sessions;
+    static readonly Orders = Config.ApiUrl + UrlSegments.Orders;
     static readonly SignIn = Config.ApiUrl 
         + UrlSegments.Authentification
         + UrlSegments.SignIn;
