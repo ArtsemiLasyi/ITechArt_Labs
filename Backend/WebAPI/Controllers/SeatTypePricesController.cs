@@ -3,13 +3,15 @@ using BusinessLogic.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebAPI.Requests;
+using WebAPI.Responses;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("sessions/{sessionId}/seat-types/{seatTypeId}")]
+    [Route("sessions/{sessionId}/seat-types")]
     public class SeatTypePricesController : ControllerBase
     {
         private readonly SeatTypePriceService _seatTypePriceService;
@@ -20,7 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("{seatTypeId}")]
         public async Task<IActionResult> Get(int sessionId, int seatTypeId)
         {
             SeatTypePriceModel? model = await _seatTypePriceService.GetByAsync(sessionId, seatTypeId);
@@ -28,10 +30,18 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(model.Adapt<SeatTypePriceResponse>());
         }
 
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int sessionId)
+        {
+            IReadOnlyCollection<SeatTypePriceModel> models = await _seatTypePriceService.GetAllByAsync(sessionId);
+            return Ok(models.Adapt<IReadOnlyCollection<SeatTypePriceResponse>>());
+        }
+
+        [HttpPost("{seatTypeId}")]
         public async Task<IActionResult> Create([FromBody] SeatTypePriceRequest request)
         {
             SeatTypePriceModel model = request.Adapt<SeatTypePriceModel>();
@@ -39,7 +49,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{seatTypeId}")]
         public async Task<IActionResult> Edit(int sessionId, int seatTypeId, [FromBody] SeatTypePriceRequest request)
         {
             SeatTypePriceModel model = request.Adapt<SeatTypePriceModel>();

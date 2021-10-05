@@ -1,20 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/internal/Observable';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
 import { SessionModel } from 'src/app/Models/SessionModel';
 import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
+import { SessionSearchRequest } from 'src/app/Requests/SessionSearchRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
 import { SessionService } from 'src/app/Services/SessionService';
+import { MakeOrderDialogComponent } from '../../orders/make-order-dialog/make-order-dialog.component';
 
 @Component({
     selector : 'cinemas-list',
     templateUrl : './cinemas-list.component.html',
     styleUrls : ['./cinemas-list.component.scss'],
-    providers : [
-        CinemaService
-    ]
+    providers : [CinemaService]
 })
 export class CinemasListComponent implements OnInit {
 
@@ -23,7 +24,13 @@ export class CinemasListComponent implements OnInit {
     cinemas : CinemaModel[] = [];
     city : CityModel = new CityModel();
 
+    firstSessionDate : Date | undefined;
+    lastSessionDate : Date | undefined;
+    freeSeatsNumber : number | undefined;
+    date : Date = new Date();
+
     constructor (
+        private dialog: MatDialog,
         private cinemaService : CinemaService,
         private sessionService : SessionService,
         private store : Store<{ city : CityModel }>
@@ -52,7 +59,11 @@ export class CinemasListComponent implements OnInit {
     }
 
     getSessions(cinemaId : number) {
-        this.sessions[cinemaId] = this.sessionService.getSessions(cinemaId);
+        let request = new SessionSearchRequest();
+        request.firstSessionDateTime = this.firstSessionDate;
+        request.lastSessionDateTime = this.lastSessionDate;
+        request.freeSeatsNumber = this.freeSeatsNumber;
+        this.sessions[cinemaId] = this.sessionService.getSessions(cinemaId, request);
     }
 
     openCloseCollapse(cinemaId : number) {
@@ -72,4 +83,17 @@ export class CinemasListComponent implements OnInit {
         return new Date(session.startDateTime).toLocaleDateString();
     }
 
+    openDialog(model : SessionModel) {
+        this.dialog.open(
+            MakeOrderDialogComponent, {
+                restoreFocus: true,
+                data : { 
+                    id : model.id,
+                    filmId : model.filmId,
+                    hallId : model.hallId,
+                    startDateTime : model.startDateTime 
+                }
+            }
+        );
+    }
 }

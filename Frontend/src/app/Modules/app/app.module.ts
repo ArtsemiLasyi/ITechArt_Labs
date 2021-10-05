@@ -72,6 +72,7 @@ import { SessionService } from 'src/app/Services/SessionService';
 import { OrderService } from 'src/app/Services/OrderService';
 import { SeatOrderService } from 'src/app/Services/SeatOrderService';
 import { OrdersListComponent } from 'src/app/Components/user/orders/orders-list/orders-list.component';
+import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
 
 @NgModule({
     declarations : [
@@ -156,6 +157,7 @@ import { OrdersListComponent } from 'src/app/Components/user/orders/orders-list/
         HallSizeService,
         HallDrawingService,
         CinemaServiceService,
+        SeatTypePriceService,
         StorageService,
         SeatTypeService,
         AccountStorageService,

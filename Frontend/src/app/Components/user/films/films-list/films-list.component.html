@@ -8,20 +8,6 @@
                 placeholder="Enter film name..."
                 [(ngModel)]="filmName"
             >
-            <h5 class="text-left">First session date</h5>
-            <input
-                type="date"
-                class="form-control form-control-dark"
-                [min]="date"
-                [(ngModel)]="firstSessionDate"
-            >
-            <h5 class="text-left">Last session date</h5>
-            <input
-                type="date"
-                class="form-control form-control-dark"
-                [min]="date"
-                [(ngModel)]="lastSessionDate"
-            >
             <button 
                 class="btn btn-primary"
                 (click)="searchFilms()"

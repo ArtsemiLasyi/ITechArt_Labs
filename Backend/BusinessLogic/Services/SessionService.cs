@@ -1,5 +1,7 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using DataAccess.Repositories;
 using Mapster;
 using System.Collections.Generic;
@@ -22,9 +24,12 @@ namespace BusinessLogic.Services
             return _sessionRepository.CreateAsync(sessionEntity);
         }
 
-        public async Task<IReadOnlyCollection<SessionModel>> GetAllByAsync(int cinemaId)
+        public async Task<IReadOnlyCollection<SessionModel>> GetAllByAsync(int cinemaId, SessionModelSearchParameters parameters)
         {
-            IReadOnlyCollection<SessionEntity> models = await _sessionRepository.GetAllByAsync(cinemaId);
+            IReadOnlyCollection<SessionEntity> models = await _sessionRepository.GetAllByAsync(
+                cinemaId,
+                parameters.Adapt<SessionEntitySearchParameters>()
+            );
             return models.Adapt<IReadOnlyCollection<SessionModel>>();
         }
 

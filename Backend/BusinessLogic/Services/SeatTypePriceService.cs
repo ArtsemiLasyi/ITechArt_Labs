@@ -45,9 +45,9 @@ namespace BusinessLogic.Services
             return model;
         }
 
-        public async Task<IReadOnlyCollection<SeatTypePriceModel>> GetAllByAsync(int cinemaId)
+        public async Task<IReadOnlyCollection<SeatTypePriceModel>> GetAllByAsync(int sessionId)
         {
-            IReadOnlyCollection<SeatTypePriceEntity> models = await _seatTypePriceRepository.GetAllByAsync(cinemaId);
+            IReadOnlyCollection<SeatTypePriceEntity> models = await _seatTypePriceRepository.GetAllByAsync(sessionId);
             return models.Adapt<IReadOnlyCollection<SeatTypePriceModel>>();
         }
 

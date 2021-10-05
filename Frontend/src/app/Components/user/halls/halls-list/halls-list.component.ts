@@ -36,8 +36,7 @@ export class HallsListComponent implements OnInit {
         this.getHalls(this.cinemaId);
     }
 
-    openDialog(model : HallModel) : void {
-
+    openDialog(model : HallModel) {
         this.dialog.open(
             HallViewDialogComponent, {
                 restoreFocus: true,
@@ -48,5 +47,5 @@ export class HallsListComponent implements OnInit {
                 }
             }
         );
-      }
+    }
 }

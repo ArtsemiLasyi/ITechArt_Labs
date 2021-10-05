@@ -54,12 +54,6 @@ export class FilmService {
         if (request.filmName) {
             params.filmName = request.filmName;
         }
-        if (request.firstSessionDateTime) {
-            params.firstSessionDateTime = request.firstSessionDateTime;
-        }
-        if (request.lastSessionDateTime) {
-            params.lastSessionDateTime = request.lastSessionDateTime;
-        }
         params.pageSize = pageSize.toString();
         params.pageNumber = pageNumber.toString();
         return params;

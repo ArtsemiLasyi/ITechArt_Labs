@@ -22,11 +22,8 @@ export class FilmsListComponent implements OnInit {
     oldFilms : FilmModel[] = [];
 
     filmName : string | undefined;
-    firstSessionDate : Date | undefined;
-    lastSessionDate : Date | undefined;
 
     allFilmsAreShown : boolean = false;
-    date : Date = new Date();
 
     constructor (
         private filmService: FilmService,
@@ -75,8 +72,6 @@ export class FilmsListComponent implements OnInit {
         this.pageService.clearPageNumber();
         let request = new FilmSearchRequest();
         request.filmName = this.filmName;
-        request.firstSessionDateTime = this.firstSessionDate;
-        request.lastSessionDateTime = this.lastSessionDate;
         this.getFilms(request);
     }
 }

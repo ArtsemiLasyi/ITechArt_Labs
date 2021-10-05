@@ -1,4 +1,29 @@
-<div class="row row-cols-1 row-cols-md-1 g-4">
+<div *ngIf="cinemas.length > 0" class="container row row-cols-1 row-cols-md-1 g-4">
+    <div>
+        <h5 class="text-left">First session date</h5>
+        <input
+            type="date"
+            class="form-control form-control-dark"
+            [min]="date"
+            [(ngModel)]="firstSessionDate"
+        >
+        <h5 class="text-left">Last session date</h5>
+        <input
+            type="date"
+            class="form-control form-control-dark"
+            [min]="date"
+            [(ngModel)]="lastSessionDate"
+        >
+        <h5 class="text-left">Number of free seats:</h5>
+        <input
+            type="number"
+            class="form-control form-control-dark"
+            [min]="0"
+            [(ngModel)]="freeSeatsNumber"
+        >
+    </div>
+</div>
+<div class="container row row-cols-1 row-cols-md-1 g-4">
     <div *ngFor="let cinema of cinemas" class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">

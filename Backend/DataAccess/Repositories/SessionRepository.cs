@@ -1,5 +1,6 @@
 ﻿using DataAccess.Contexts;
 using DataAccess.Entities;
+using DataAccess.Parameters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -53,17 +54,38 @@ namespace DataAccess.Repositories
             return sessions;
         }
 
-        public async Task<IReadOnlyCollection<SessionEntity>> GetAllByAsync(int cinemaId)
+        public async Task<IReadOnlyCollection<SessionEntity>> GetAllByAsync(int cinemaId, SessionEntitySearchParameters parameters)
         {
-            List<SessionEntity> sessions = await _context.Sessions
+            IQueryable<SessionEntity> query = _context.Sessions
                 .Include("Hall")
                 .Where(
                     session =>
                         !session.IsDeleted
                         && session.Hall.CinemaId == cinemaId
-                        && session.StartDateTime >= DateTime.UtcNow
-                )
-                .ToListAsync();
+                );
+
+            if (parameters.FirstSessionDateTime != null)
+            {
+                query = query.Where(
+                    session => session.StartDateTime >= parameters.FirstSessionDateTime
+                );
+            }
+
+            if (parameters.LastSessionDateTime != null)
+            {
+                query = query.Where(
+                    session => session.StartDateTime <= parameters.LastSessionDateTime
+                );
+            }
+
+            if (parameters.FreeSeatsNumber != null)
+            {
+                query = query.Where(
+                    session => session.FreeSeatsNumber >= parameters.FreeSeatsNumber
+                );
+            }
+
+            List<SessionEntity> sessions = await query.ToListAsync();
             return sessions;
         }
 

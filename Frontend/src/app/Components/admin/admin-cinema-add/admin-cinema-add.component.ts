@@ -18,13 +18,15 @@ import { CityService } from 'src/app/Services/CityService';
 export class AdminCinemaAddComponent {
 
     readonly defaultFileName : string = 'Add photo';
-
+    selectedFileName : string = this.defaultFileName;
     photo : File | undefined;
+
     model : CinemaModel = new CinemaModel();
     city : CityModel = new CityModel();
+    
     error : ErrorModel = new ErrorModel();
     success : SuccessModel = new SuccessModel();
-    selectedFileName : string = this.defaultFileName;
+
     cityName : string = "";
     term = new BehaviorSubject<string>(''); 
     cities : Observable<CityModel[]> = this.term.pipe(

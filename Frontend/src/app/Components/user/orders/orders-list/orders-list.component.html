@@ -8,9 +8,11 @@
                 Past orders:
                 <input 
                     class="form-check-input"
+                    name="orders"
                     type="checkbox"
-                    (click)=getOrders()
-                    [value]=pastOrders
+                    (change)=getOrders()
+                    checked
+                    [(ngModel)]="pastOrders"
                 /> 
             </h4>
         </div>
@@ -19,10 +21,10 @@
         <div class="accordion" [id]="'accordion' + order.id">
             <div class="accordion-item">
                 <h2 class="accordion-header" [id]="'heading' + order.id">
-                <a class="" routerLink="../../cinemas/{{order.cinemaId}}">
+                <a class="text-center text-dark" routerLink="../../cinemas/{{order.cinemaId}}">
                     {{order.cinemaName}}
                 </a>
-                <p class="">
+                <p class="text-center">
                     {{order.hallName}}
                 </p>
                 <button 
@@ -34,7 +36,8 @@
                     [attr.data-bs-target]="'#collapse' + order.id"
                     [attr.aria-controls]="'collapse' + order.id"
                 >
-                    {{order.sessionStart}}
+                    {{getDate(order.sessionStart)}}
+                    {{getTime(order.sessionStart)}}
                 </button>
                 </h2>
                 <div 

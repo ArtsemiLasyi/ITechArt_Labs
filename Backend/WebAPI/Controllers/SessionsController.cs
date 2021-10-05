@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using BusinessLogic.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebAPI.Constants;
+using WebAPI.Parameters;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
@@ -37,9 +39,12 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet("~/cinemas/{cinemaId}/sessions")]
-        public async Task<IActionResult> GetAll(int cinemaId)
+        public async Task<IActionResult> GetAll(int cinemaId, [FromQuery] SessionRequestSearchParameters parameters)
         {
-            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(cinemaId);
+            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(
+                cinemaId, 
+                parameters.Adapt<SessionModelSearchParameters>()
+            );
             IReadOnlyCollection<SessionResponse> response = services.Adapt<IReadOnlyCollection<SessionResponse>>();
             return Ok(response);
         }

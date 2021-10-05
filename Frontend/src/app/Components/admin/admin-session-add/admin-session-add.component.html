@@ -1,0 +1,84 @@
+<section class="form-signin text-center">
+    <div>
+        <form>
+            <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Add session</h1>
+            <div class="dropdown form-control">
+                <input
+                    type="search"
+                    class="form-control form-control-dark dropdown-toggle"
+                    name="filmName"
+                    placeholder="Choose film..."
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    (keyup)="getFilms()"
+                    (focus)="clearForm($event)"
+                    [(ngModel)]="filmName"
+                >
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li *ngFor="let film of films | async">
+                        <a class="dropdown-item" (click)="setFilm(film)">
+                            {{film.name}} ({{film.releaseYear}})
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown form-control">
+                <input
+                    type="search"
+                    class="form-control form-control-dark dropdown-toggle"
+                    name="cinemaName"
+                    placeholder="Choose cinema..."
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    (keyup)="getCinemas()"
+                    (focus)="clearForm($event)"
+                    [(ngModel)]="cinemaName"
+                >
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li *ngFor="let cinema of cinemas | async">
+                        <a class="dropdown-item" (click)="setCinema(cinema)">
+                            {{cinema.name}} ({{cinema.cityName}})
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <h5 class="text-left">Last session date</h5>
+            <input
+                type="datetime"
+                class="form-control form-control-dark"
+                min="new Date()"
+                [(ngModel)]="model.startDateTime"
+            >
+            <div class="container">
+                <div class="row" *ngFor="let seatType of seatTypes | async">
+                    <div class="col-sm">
+                        {{seatType.name}}
+                    </div>
+                    <div class="col-sm">
+                        <input
+                            type="number"
+                            class="form-control form-control-dark"
+                            [min]="0"
+                            [(ngModel)]="seatTypePrice"
+                        >
+                    </div>
+                    <div class="col-sm">
+                        One of three columns
+                    </div>
+                </div>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" (click)="addSession()">
+                Add
+            </button>
+            <div *ngIf="error.exists" class="alert alert-danger">
+                {{error.text}}
+            </div>
+            <div *ngIf="success.flag" class="alert alert-success">
+                {{success.text}}
+            </div>
+        </form>
+    </div>
+</section>

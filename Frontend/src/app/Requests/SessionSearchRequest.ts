@@ -1,6 +1,4 @@
-export class FilmSearchRequest {
-    filmName : string | undefined;
-    cinemaId : number | undefined;
+export class SessionSearchRequest {
     firstSessionDateTime : Date  | undefined;
     lastSessionDateTime : Date | undefined;
     freeSeatsNumber : number | undefined;
