@@ -31,13 +31,19 @@
                 </li>
             </ul>
             <div class="list-group">
-                <div *ngFor="let service of services" >
+                <div *ngFor="let service of orderServices" >
                     <a class="list-group-item list-group-item-action">
                         <strong>{{service.name}}</strong><br>
                         <strong>Price:</strong>
                         <small>{{service.price.value}}</small>
                         <small>{{service.price.currency.name}}</small>
                     </a>
+                    <button 
+                        class="btn-primary w-100"
+                        (click)="deleteService(service)"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>

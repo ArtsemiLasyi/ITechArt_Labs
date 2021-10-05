@@ -66,7 +66,7 @@ import { AdminSeatTypeSearchComponent } from 'src/app/Components/admin/admin-sea
 import { SeatTypeService } from 'src/app/Services/SeatTypeService';
 import { SeatService } from 'src/app/Services/SeatService';
 import { HallSizeService } from 'src/app/Services/HallSizeService';
-import { HallDrawingService } from 'src/app/Services/HallDrawingService';
+import { DrawingService } from 'src/app/Services/DrawingService';
 import { SessionService } from 'src/app/Services/SessionService';
 import { OrderService } from 'src/app/Services/OrderService';
 import { SeatOrderService } from 'src/app/Services/SeatOrderService';
@@ -166,7 +166,7 @@ import { MakeOrderDialogComponent } from 'src/app/Components/user/orders/make-or
         SeatOrderService,
         SeatService,
         HallSizeService,
-        HallDrawingService,
+        DrawingService,
         CinemaServiceService,
         SeatTypePriceService,
         StorageService,

@@ -454,6 +454,20 @@ namespace WebAPI
                     src => src.Hall.Name
                 );
 
+            TypeAdapterConfig<SessionSeatEntity, SessionSeatModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Row,
+                    src => src.Seat.Row
+                )
+                .Map(
+                    dest => dest.Place,
+                    src => src.Seat.Place
+                )
+                .Map(
+                    dest => dest.SeatTypeId,
+                    src => src.Seat.SeatTypeId
+                );
         }
     }
 }

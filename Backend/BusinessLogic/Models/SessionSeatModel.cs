@@ -9,5 +9,8 @@ namespace BusinessLogic.Models
         public int UserId { get; set; }
         public SessionSeatStatus Status { get; set; }
         public DateTime TakenAt { get; set; }
+        public int Row { get; set; }
+        public int Place { get; set; }
+        public int SeatTypeId { get; set; }
     }
 }

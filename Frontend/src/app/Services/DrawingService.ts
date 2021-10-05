@@ -5,10 +5,11 @@ import { HallSizeModel } from "../Models/HallSizeModel";
 import { SeatDrawModel } from "../Models/SeatDrawModel";
 import { SeatModel } from "../Models/SeatModel";
 import { SessionSeatModel } from "../Models/SessionSeatModel";
+import { SessionSeatStatuses } from "../Models/SessionSeatStatuses";
 import { HallSizeService } from "./HallSizeService";
 
 @Injectable()
-export class HallDrawingService {
+export class DrawingService {
     
     context! : CanvasRenderingContext2D | null;
 
@@ -32,8 +33,111 @@ export class HallDrawingService {
         return seatDrawModels;
     }
 
-    drawSessionSeats(sessionSeats : SessionSeatModel[]) {
+    private getX(place : number) {
+        return HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
+        + (place - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+    }
 
+    private getY(row : number) {
+        return HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3
+            + (row - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+    }
+
+    private drawSessionSeat(sessionSeat : SessionSeatModel) {
+        this.context!.beginPath();
+
+        let x = this.getX(sessionSeat.place);
+        let y = this.getY(sessionSeat.row);
+
+        if (sessionSeat.status === SessionSeatStatuses.Free) {
+            return;
+        }
+        
+        if (sessionSeat.status === SessionSeatStatuses.Ordered) {
+            let startAngle = HallDrawingParameters.MIN_ANGLE;
+            let endAngle = HallDrawingParameters.MAX_ANGLE;
+            this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
+
+            this.context!.arc(
+                x,
+                y,
+                HallDrawingParameters.SEAT_RADIUS / 2,
+                startAngle,
+                endAngle,
+                true
+            );
+            this.context!.fill();
+        }
+
+        if (sessionSeat.status === SessionSeatStatuses.Taken) {
+            this.context!.beginPath();
+
+            x = x - HallDrawingParameters.SEAT_RADIUS / 2;
+            y = y - HallDrawingParameters.SEAT_RADIUS / 2;
+
+            this.context!.moveTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+                y
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+                y
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+                y + HallDrawingParameters.SEAT_RADIUS,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+                y + HallDrawingParameters.SEAT_RADIUS,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            );
+            this.context!.lineTo(
+                x,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            );
+            this.context!.lineTo(
+                x,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            );
+            this.context!.lineTo(
+                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+                y
+            );
+            this.context!.fill();
+        }
+    }
+
+    drawSessionSeats(sessionSeats : SessionSeatModel[], size : HallSizeModel) {
+        for (let i = 1; i <= size.rowsNumber; i++) {
+            for (let j = 1; j <= size.placesNumber; j++) {
+                for (const sessionSeat of sessionSeats) {
+                    if (sessionSeat.row === i && sessionSeat.place === j) {
+                        this.drawSessionSeat(sessionSeat);
+                        break;
+                    }
+                }
+            }
+        }    
     }
 
     private drawSeats(seats : SeatModel[], size : HallSizeModel) : SeatDrawModel[] {
@@ -63,10 +167,8 @@ export class HallDrawingService {
         this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
         this.context!.beginPath();
 
-        let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
-            + (place - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
-        let y = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3
-            + (row - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+        let x = this.getX(place);
+        let y = this.getY(row);
 
         let startAngle = HallDrawingParameters.MIN_ANGLE;
         let endAngle = HallDrawingParameters.MAX_ANGLE;
@@ -93,10 +195,8 @@ export class HallDrawingService {
     drawSeat(seat : SeatModel) : SeatDrawModel {
         this.context!.beginPath();
 
-        let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
-            + (seat.place - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
-        let y = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3
-            + (seat.row - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+        let x = this.getX(seat.place);
+        let y = this.getY(seat.row);
 
         let startAngle = HallDrawingParameters.MIN_ANGLE;
         let endAngle = HallDrawingParameters.MAX_ANGLE;
@@ -158,10 +258,8 @@ export class HallDrawingService {
         this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
         this.context!.beginPath();
 
-        let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
-            + (place - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
-        let y = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3
-            + (row - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+        let x = this.getX(place);
+        let y = this.getY(row);
 
         let startAngle = HallDrawingParameters.MIN_ANGLE;
         let endAngle = HallDrawingParameters.MAX_ANGLE;
@@ -182,8 +280,7 @@ export class HallDrawingService {
         this.context!.font = "16px roboto";
         
         for (let i = 0; i < size.rowsNumber; i++) {
-            let y = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3  
-                + (i * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2);
+            let y = this.getY(i + 1);
             this.context!.fillText(
                 String(i + 1),
                 0,
@@ -197,8 +294,7 @@ export class HallDrawingService {
         this.context!.font = "16px roboto";
         
         for (let i = 0; i < size.placesNumber; i++) {
-            let x = HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 3 
-            + i * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
+            let x = this.getX(i + 1);
             this.context!.fillText(
                 String(i + 1),
                 x,

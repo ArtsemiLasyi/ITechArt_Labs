@@ -7,7 +7,7 @@ import { SeatDrawModel } from "src/app/Models/SeatDrawModel";
 import { SeatModel } from "src/app/Models/SeatModel";
 import { SeatsModel } from "src/app/Models/SeatsModel";
 import { SeatTypeModel } from "src/app/Models/SeatTypeModel";
-import { HallDrawingService } from "src/app/Services/HallDrawingService";
+import { DrawingService } from "src/app/Services/DrawingService";
 import { HallSizeService } from "src/app/Services/HallSizeService";
 import { SeatTypeService } from "src/app/Services/SeatTypeService";
 
@@ -31,7 +31,7 @@ export class AdminHallConstructorDialogComponent implements OnInit {
         private config : NgbModalConfig,
         private seatTypeService : SeatTypeService,
         private hallSizeService : HallSizeService,
-        private hallDrawingService : HallDrawingService,
+        private hallDrawingService : DrawingService,
         private dialogRef : MatDialogRef<AdminHallConstructorDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private seats : SeatsModel
     ) {

@@ -38,14 +38,21 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SessionSeatEntity>> GetAllByAsync(int sessionId)
         {
             List<SessionSeatEntity> seats = await _context.SessionSeats
-                .Where(seat => seat.SessionId == sessionId)
+                .Include(sessionSeat => sessionSeat.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .Where(sessionSeat => sessionSeat.SessionId == sessionId)
                 .ToListAsync();
             return seats;
         }
 
         public async Task<SessionSeatEntity?> GetByAsync(int sessionId, int seatId)
         {
-            SessionSeatEntity? entity = await _context.SessionSeats.FindAsync(sessionId, seatId);
+            SessionSeatEntity? entity = await _context.SessionSeats
+                .Include(sessionSeat => sessionSeat.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .FirstOrDefaultAsync(
+                    sessionSeat => sessionSeat.SessionId == sessionId && sessionSeat.SeatId == seatId
+                );
             return entity;
         }
 

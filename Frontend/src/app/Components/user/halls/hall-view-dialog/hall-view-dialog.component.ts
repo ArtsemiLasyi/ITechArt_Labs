@@ -3,13 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HallModel } from 'src/app/Models/HallModel';
 import { SeatDrawModel } from 'src/app/Models/SeatDrawModel';
 import { SeatsModel } from 'src/app/Models/SeatsModel';
-import { HallDrawingService } from 'src/app/Services/HallDrawingService';
+import { DrawingService } from 'src/app/Services/DrawingService';
 import { SeatService } from 'src/app/Services/SeatService';
 
 @Component({
     selector : 'hall-view-dialog',
     templateUrl : './hall-view-dialog.component.html',
-    providers: [HallDrawingService]
+    providers: [DrawingService]
 })
 export class HallViewDialogComponent implements OnInit {
     
@@ -21,7 +21,7 @@ export class HallViewDialogComponent implements OnInit {
     constructor(
         public dialogRef : MatDialogRef<HallViewDialogComponent>,
         private seatService : SeatService,
-        private hallDrawingService : HallDrawingService,
+        private hallDrawingService : DrawingService,
         @Inject(MAT_DIALOG_DATA) private model : HallModel
     ) { }
 

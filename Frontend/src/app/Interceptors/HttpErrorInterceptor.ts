@@ -28,13 +28,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             catchError(
                 (error : HttpErrorResponse) => {
 
+                    if (error.error.errorText) {
+                        return throwError(error.error.errorText);
+                    }
                     if (error.status === 401) {
                         this.router.navigate(['/account/signin']);
                         return throwError(error);
-                    }
-
-                    if (error.error.errorText) {
-                        return throwError(error.error.errorText);
                     }
                     if (error.error.errors) {
                         let message = '';
