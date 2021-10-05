@@ -1,0 +1,72 @@
+<div class="dialog-content">
+    <div class="modal-body canvas-container">
+        <canvas 
+            #canvas
+            width="900"
+            height="500px"
+            (click)="tryToTakeOrFreeSeat($event)"
+        ></canvas>
+    </div> 
+    <div class="modal-footer">
+        <div class="dropdown form-control">
+            <h5>Add service:</h5>
+            <input
+                readonly
+                type="search"
+                class="form-control form-control-dark dropdown-toggle"
+                placeholder="Click service to add it"  
+                id="dropdownMenu"
+                data-bs-toggle="dropdown"
+                aria-expanded="true"
+                (focus)="getCinemaServices()"
+            >
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li *ngFor="let cinemaService of cinemaServices | async">
+                    <a class="dropdown-item" (click)="addService(cinemaService)">
+                        <strong>{{cinemaService.name}}</strong><br>
+                        <strong>Price:</strong>
+                        <small>{{cinemaService.price.value}}</small>
+                        <small>{{cinemaService.price.currency.name}}</small>
+                    </a>
+                </li>
+            </ul>
+            <div class="list-group">
+                <div *ngFor="let service of services" >
+                    <a class="list-group-item list-group-item-action">
+                        <strong>{{service.name}}</strong><br>
+                        <strong>Price:</strong>
+                        <small>{{service.price.value}}</small>
+                        <small>{{service.price.currency.name}}</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="calculatedSum">
+            <strong>Sum:</strong>
+            <small>{{sum.value}}</small>
+            <small>{{sum.currency.name}}</small>
+        </div>
+        <button 
+            type="button"
+            class="btn btn-primary"
+            (click)="calculateSum()"
+        >
+            Calculate sum
+        </button>
+        <button 
+            type="button"
+            class="btn btn-primary"
+            (click)="makeOrder()"
+        >
+            Order
+        </button>
+        <button 
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            (click)="onNoClick()"
+        >
+            Close
+        </button>
+    </div>
+</div>

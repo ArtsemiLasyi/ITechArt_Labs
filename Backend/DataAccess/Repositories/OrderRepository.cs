@@ -42,6 +42,7 @@ namespace DataAccess.Repositories
         {
 
             IQueryable<OrderEntity>? query = _context.Orders
+                .Include(order => order.Currency)
                 .Include(order => order.Session)
                 .ThenInclude(session => session.Hall)
                 .ThenInclude(hall => hall.Cinema)
@@ -79,6 +80,10 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.Orders
+                .Include(order => order.Currency)
+                .Include(order => order.Session)
+                .ThenInclude(session => session.Hall)
+                .ThenInclude(hall => hall.Cinema)
                 .Where(
                     order =>
                         order.SessionId == sessionId

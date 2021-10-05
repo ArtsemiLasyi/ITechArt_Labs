@@ -45,6 +45,9 @@ export class SessionService {
         if (request.freeSeatsNumber) {
             params.freeSeatsNumber = request.freeSeatsNumber;
         }
+        if (request.filmId) {
+            params.filmId = request.filmId;
+        }
         return params;
     }
 }

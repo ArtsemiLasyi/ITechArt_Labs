@@ -12,5 +12,6 @@ namespace DataAccess.Entities
         public DateTime RegistratedAt { get; set; }
         public bool IsDeleted { get; set; }
         public SessionEntity Session { get; set; } = null!;
+        public CurrencyEntity Currency { get; set; } = null!;
     }
 }

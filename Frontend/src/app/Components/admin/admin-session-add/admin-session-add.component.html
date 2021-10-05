@@ -1,7 +1,6 @@
 <section class="form-signin text-center">
     <div>
         <form>
-            <img class="mb-4" src="assets/images/logo_small.png" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">Add session</h1>
             <div class="dropdown form-control">
                 <input
@@ -45,13 +44,37 @@
                     </li>
                 </ul>
             </div>
-            <h5 class="text-left">Last session date</h5>
-            <input
-                type="datetime"
-                class="form-control form-control-dark"
-                min="new Date()"
-                [(ngModel)]="model.startDateTime"
-            >
+            <div class="dropdown form-control">
+                <input
+                    readonly
+                    type="search"
+                    class="form-control form-control-dark dropdown-toggle"
+                    name="hallName"
+                    placeholder="Choose hall..."
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    (click)="getHalls()"
+                    (focus)="clearForm($event)"
+                    [(ngModel)]="hallName"
+                >
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li *ngFor="let hall of halls | async">
+                        <a class="dropdown-item" (click)="setHall(hall)">
+                            {{hall.name}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="form-control">
+                <h6 class="text-justify">Choose date and time</h6>
+                <input
+                    name="startDateTime"
+                    type="datetime-local"
+                    class="form-control form-control-dark"
+                    [(ngModel)]="model.startDateTime"
+                >
+            </div>
             <div class="container">
                 <div class="row" *ngFor="let seatType of seatTypes | async">
                     <div class="col-sm">
@@ -60,13 +83,33 @@
                     <div class="col-sm">
                         <input
                             type="number"
+                            name="value"
                             class="form-control form-control-dark"
                             [min]="0"
-                            [(ngModel)]="seatTypePrice"
+                            [(ngModel)]="values[seatType.id]"
                         >
                     </div>
                     <div class="col-sm">
-                        One of three columns
+                        <input
+                            required
+                            readonly
+                            type="search"
+                            name="currencyName"
+                            class="form-control"
+                            placeholder="Select currency"  
+                            id="dropdownMenuCurrency"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="true"
+                            (focus)="getCurrencies()"
+                            [(ngModel)]="currency.name"
+                        >
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuCurrency">
+                            <li *ngFor="let currency of currencies | async">
+                                <a class="dropdown-item" (click)="setCurrency(currency)">
+                                    {{currency.name}}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

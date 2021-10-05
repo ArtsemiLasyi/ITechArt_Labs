@@ -9,20 +9,30 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
-    constructor (private injector: Injector) { }
+    constructor (
+        private injector : Injector,
+        private router : Router,
+    ) { }
 
     intercept (
-        request: HttpRequest<any>,
-        next: HttpHandler) : Observable<HttpEvent<any>> {
+        request : HttpRequest<any>,
+        next : HttpHandler) : Observable<HttpEvent<any>> {
 
         return next.handle(request).pipe(
             retry(1),
             catchError(
                 (error : HttpErrorResponse) => {
+
+                    if (error.status === 401) {
+                        this.router.navigate(['/account/signin']);
+                        return throwError(error);
+                    }
+
                     if (error.error.errorText) {
                         return throwError(error.error.errorText);
                     }

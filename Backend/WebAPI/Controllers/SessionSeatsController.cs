@@ -45,15 +45,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SessionSeatRequest request)
-        {
-            SessionSeatModel model = request.Adapt<SessionSeatModel>();
-            await _sessionSeatService.CreateAsync(model);
-            return Ok();
-        }
-
-        [HttpPut]
+        [HttpPut("{seatId}")]
         public async Task<IActionResult> Take([FromBody] SessionSeatRequest request)
         {
             SessionSeatModel model = request.Adapt<SessionSeatModel>();
@@ -61,7 +53,7 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpDelete("{seatId}")]
         public async Task<IActionResult> Free([FromBody] SessionSeatRequest request)
         {
             SessionSeatModel model = request.Adapt<SessionSeatModel>();

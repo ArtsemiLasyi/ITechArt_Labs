@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { OrderModel } from 'src/app/Models/OrderModel';
 import { SeatOrderModel } from 'src/app/Models/SeatOrderModel';
 import { OrderSearchRequest } from 'src/app/Requests/OrderSearchRequest';
+import { DateTimeService } from 'src/app/Services/DateTimeService';
 import { OrderService } from 'src/app/Services/OrderService';
 import { SeatOrderService } from 'src/app/Services/SeatOrderService';
 
@@ -14,7 +15,8 @@ export class OrdersListComponent implements OnInit {
 
     constructor(
         private orderService : OrderService,
-        private seatOrderService : SeatOrderService
+        private seatOrderService : SeatOrderService,
+        private dateTimeService : DateTimeService
     ) { }
 
     orders : Observable<OrderModel[]> | undefined;
@@ -36,10 +38,10 @@ export class OrdersListComponent implements OnInit {
     }
 
     getTime(startDateTime : Date) {
-        return new Date(startDateTime).toLocaleTimeString();
+        return this.dateTimeService.getTime(startDateTime);
     }
 
     getDate(startDateTime : Date) {
-        return new Date(startDateTime).toLocaleDateString();
+        return this.dateTimeService.getDate(startDateTime);
     }
 }

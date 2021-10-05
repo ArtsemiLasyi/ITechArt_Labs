@@ -20,6 +20,9 @@ import { AdminSeatTypeSearchComponent } from 'src/app/Components/admin/admin-sea
 import { AdminServiceAddComponent } from 'src/app/Components/admin/admin-service-add/admin-service-add.component';
 import { AdminServiceInfoComponent } from 'src/app/Components/admin/admin-service-info/admin-service-info.component';
 import { AdminServiceSearchComponent } from 'src/app/Components/admin/admin-service-search/admin-service-search.component';
+import { AdminSessionAddComponent } from 'src/app/Components/admin/admin-session-add/admin-session-add.component';
+import { AdminSessionInfoComponent } from 'src/app/Components/admin/admin-session-info/admin-session-info.component';
+import { AdminSessionSearchComponent } from 'src/app/Components/admin/admin-session-search/admin-session-search.component';
 import { AdminUserAddComponent } from 'src/app/Components/admin/admin-user-add/admin-user-add.component';
 import { NotFoundComponent } from 'src/app/Components/main/notfound/notfound.component';
 import { AccountNodeComponent } from 'src/app/Components/user/account/accountnode/accountnode.component';
@@ -30,10 +33,10 @@ import { CinemasNodeComponent } from 'src/app/Components/user/cinemas/cinemas-no
 import { FilmInfoComponent } from 'src/app/Components/user/films/film-info/film-info.component';
 import { FilmsListComponent } from 'src/app/Components/user/films/films-list/films-list.component';
 import { FilmsNodeComponent } from 'src/app/Components/user/films/films-node/films-node.component';
+import { SessionsListComponent } from 'src/app/Components/user/sessions/sessions-list/sessions-list.component';
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
 import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
 import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
-import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
 
 const accountRoutes : Routes = [
     { path : 'signin', component : SignInComponent },
@@ -71,6 +74,9 @@ const adminRoutes : Routes = [
     { path : 'seat-types', component : AdminSeatTypeAddComponent },
     { path : 'seat-types/search', component : AdminSeatTypeSearchComponent },
     { path : 'seat-types/info/:id', component : AdminSeatTypeInfoComponent },
+    { path : 'sessions', component : AdminSessionAddComponent },
+    { path : 'sessions/search', component : AdminSessionSearchComponent },
+    { path : 'sessions/info/:id', component : AdminSessionInfoComponent },
     { path : '', component : UserInfoComponent }
 ];
 

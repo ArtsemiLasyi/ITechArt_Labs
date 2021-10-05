@@ -33,7 +33,6 @@ import { CinemaService } from 'src/app/Services/CinemaService';
 import { HallService } from 'src/app/Services/HallService';
 import { CinemaInfoComponent } from 'src/app/Components/user/cinemas/cinema-info/cinema-info.component';
 import { HallsListComponent } from 'src/app/Components/user/halls/halls-list/halls-list.component';
-import { CinemasListComponent } from 'src/app/Components/user/cinemas/cinemas-list/cinemas-list.component';
 import { StoreModule } from '@ngrx/store';
 import { cityReducer } from 'src/app/Reducers/city.reducer';
 import { CinemasNodeComponent } from 'src/app/Components/user/cinemas/cinemas-node/cinemas-node.component';
@@ -73,6 +72,13 @@ import { OrderService } from 'src/app/Services/OrderService';
 import { SeatOrderService } from 'src/app/Services/SeatOrderService';
 import { OrdersListComponent } from 'src/app/Components/user/orders/orders-list/orders-list.component';
 import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
+import { SessionSeatService } from 'src/app/Services/SessionSeatService';
+import { AdminSessionAddComponent } from 'src/app/Components/admin/admin-session-add/admin-session-add.component';
+import { AdminSessionInfoComponent } from 'src/app/Components/admin/admin-session-info/admin-session-info.component';
+import { AdminSessionSearchComponent } from 'src/app/Components/admin/admin-session-search/admin-session-search.component';
+import { DateTimeService } from 'src/app/Services/DateTimeService';
+import { SessionsListComponent } from 'src/app/Components/user/sessions/sessions-list/sessions-list.component';
+import { MakeOrderDialogComponent } from 'src/app/Components/user/orders/make-order-dialog/make-order-dialog.component';
 
 @NgModule({
     declarations : [
@@ -92,10 +98,11 @@ import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
         UserInfoComponent,
         OrdersListComponent,
         AdminPanelComponent,
+        MakeOrderDialogComponent,
         AdminFilmInfoComponent,
         CinemaInfoComponent,
         HallsListComponent,
-        CinemasListComponent,
+        SessionsListComponent,
         HallViewDialogComponent,
         AdminCinemaAddComponent,
         AdminCinemaSearchComponent,
@@ -115,7 +122,10 @@ import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
         AdminCinemaServiceInfoComponent,
         AdminSeatTypeAddComponent,
         AdminSeatTypeInfoComponent,
-        AdminSeatTypeSearchComponent
+        AdminSeatTypeSearchComponent,
+        AdminSessionAddComponent,
+        AdminSessionInfoComponent,
+        AdminSessionSearchComponent
     ],
     entryComponents : [
         HallViewDialogComponent
@@ -152,6 +162,7 @@ import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
         ServiceService,
         SessionService,
         OrderService,
+        SessionSeatService,
         SeatOrderService,
         SeatService,
         HallSizeService,
@@ -160,6 +171,7 @@ import { SeatTypePriceService } from 'src/app/Services/SeatTypePriceService';
         SeatTypePriceService,
         StorageService,
         SeatTypeService,
+        DateTimeService,
         AccountStorageService,
         {
             provide: ErrorHandler,

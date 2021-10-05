@@ -36,8 +36,9 @@
                     [attr.data-bs-target]="'#collapse' + order.id"
                     [attr.aria-controls]="'collapse' + order.id"
                 >
-                    {{getDate(order.sessionStart)}}
-                    {{getTime(order.sessionStart)}}
+                    Date: {{getDate(order.sessionStart)}}
+                    Time: {{getTime(order.sessionStart)}}
+                    Price: {{order.price.value}} {{order.price.currency.name}}
                 </button>
                 </h2>
                 <div 

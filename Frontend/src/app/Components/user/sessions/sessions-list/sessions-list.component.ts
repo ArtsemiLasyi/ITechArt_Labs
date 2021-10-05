@@ -8,16 +8,19 @@ import { SessionModel } from 'src/app/Models/SessionModel';
 import { CinemaSearchRequest } from 'src/app/Requests/CinemaSearchRequest';
 import { SessionSearchRequest } from 'src/app/Requests/SessionSearchRequest';
 import { CinemaService } from 'src/app/Services/CinemaService';
+import { DateTimeService } from 'src/app/Services/DateTimeService';
 import { SessionService } from 'src/app/Services/SessionService';
 import { MakeOrderDialogComponent } from '../../orders/make-order-dialog/make-order-dialog.component';
 
 @Component({
-    selector : 'cinemas-list',
-    templateUrl : './cinemas-list.component.html',
-    styleUrls : ['./cinemas-list.component.scss'],
-    providers : [CinemaService]
+    selector : 'sessions-list',
+    templateUrl : './sessions-list.component.html',
+    styleUrls : ['./sessions-list.component.scss'],
+    providers : []
 })
-export class CinemasListComponent implements OnInit {
+export class SessionsListComponent implements OnInit {
+
+    @Input() filmId = 0;
 
     sessions : Observable<SessionModel[]>[] = [];
     flags : boolean[] = [];
@@ -33,6 +36,7 @@ export class CinemasListComponent implements OnInit {
         private dialog: MatDialog,
         private cinemaService : CinemaService,
         private sessionService : SessionService,
+        private dateTimeService : DateTimeService,
         private store : Store<{ city : CityModel }>
     ) { }
 
@@ -60,6 +64,7 @@ export class CinemasListComponent implements OnInit {
 
     getSessions(cinemaId : number) {
         let request = new SessionSearchRequest();
+        request.filmId = this.filmId;
         request.firstSessionDateTime = this.firstSessionDate;
         request.lastSessionDateTime = this.lastSessionDate;
         request.freeSeatsNumber = this.freeSeatsNumber;
@@ -76,11 +81,11 @@ export class CinemasListComponent implements OnInit {
     }
 
     getTime(session : SessionModel) {
-        return new Date(session.startDateTime).toLocaleTimeString();
+        return this.dateTimeService.getTime(session.startDateTime);
     }
 
     getDate(session : SessionModel) {
-        return new Date(session.startDateTime).toLocaleDateString();
+        return this.dateTimeService.getDate(session.startDateTime);
     }
 
     openDialog(model : SessionModel) {

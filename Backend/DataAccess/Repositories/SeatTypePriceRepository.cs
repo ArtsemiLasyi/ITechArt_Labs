@@ -21,6 +21,8 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.SeatTypePrices
+                .Include(seatTypePrice => seatTypePrice.Currency)
+                .Include(seatTypePrice => seatTypePrice.SeatType)
                 .FirstOrDefaultAsync(
                     seatTypePrice =>
                         seatTypePrice.SeatTypeId == seatTypeId
@@ -32,14 +34,28 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SeatTypePriceEntity>> GetAllByAsync(int sessionId)
         {
             List<SeatTypePriceEntity> entities = await _context.SeatTypePrices
+                .Include(seatTypePrice => seatTypePrice.Currency)
+                .Include(seatTypePrice => seatTypePrice.SeatType)
                 .Where(seatTypePrice => seatTypePrice.SessionId == sessionId)
                 .ToListAsync();
             return entities;
         }
 
+        public Task CreateAsync(IReadOnlyCollection<SeatTypePriceEntity> entities)
+        {
+            _context.SeatTypePrices.AddRange(entities);
+            return _context.SaveChangesAsync();
+        }
+
         public Task CreateAsync(SeatTypePriceEntity entity)
         {
             _context.SeatTypePrices.Add(entity);
+            return _context.SaveChangesAsync();
+        }
+
+        public Task UpdateAsync(IReadOnlyCollection<SeatTypePriceEntity> entities)
+        {
+            _context.SeatTypePrices.UpdateRange(entities);
             return _context.SaveChangesAsync();
         }
 

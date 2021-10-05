@@ -5,7 +5,6 @@ namespace WebAPI.Requests
 {
     public class OrderRequest
     {
-        public int UserId { get; set; }
         public int SessionId { get; set; }
         public DateTime RegistratedAt { get; set; }
         public SessionSeatsRequest SessionSeats { get; set; } = null!;

@@ -19,10 +19,12 @@ namespace WebAPI.Controllers
     public class SessionsController : ControllerBase
     {
         private readonly SessionService _sessionService;
+        private readonly SeatTypePriceService _seatTypePriceService;
 
-        public SessionsController(SessionService sessionService)
+        public SessionsController(SessionService sessionService, SeatTypePriceService seatTypePriceService)
         {
             _sessionService = sessionService;
+            _seatTypePriceService = seatTypePriceService;
         }
 
         [AllowAnonymous]
@@ -34,7 +36,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(model.Adapt<SessionResponse>());
         }
 
         [AllowAnonymous]
@@ -53,8 +55,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] SessionRequest request)
         {
             SessionModel model = request.Adapt<SessionModel>();
-            await _sessionService.CreateAsync(model);
-            return Ok();
+            int id = await _sessionService.CreateAsync(model);
+
+            List<SeatTypePriceModel> seatTypePrices = request.SeatTypePrices
+                .Adapt<List<SeatTypePriceModel>>();
+            seatTypePrices.ForEach(seatTypePrice => seatTypePrice.SessionId = id);
+            await _seatTypePriceService.CreateAsync(seatTypePrices.AsReadOnly());
+
+            return Ok(id);
         }
 
         [HttpPut("{id}")]

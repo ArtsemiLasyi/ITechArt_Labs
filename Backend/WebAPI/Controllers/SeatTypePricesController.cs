@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("{seatTypeId}")]
-        public async Task<IActionResult> Create([FromBody] SeatTypePriceRequest request)
+        public async Task<IActionResult> Create([FromBody]SeatTypePriceRequest request)
         {
             SeatTypePriceModel model = request.Adapt<SeatTypePriceModel>();
             await _seatTypePriceService.CreateAsync(model);

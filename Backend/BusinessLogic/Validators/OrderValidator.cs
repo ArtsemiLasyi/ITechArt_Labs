@@ -10,8 +10,12 @@ namespace BusinessLogic.Validators
         public OrderValidator(PriceValidator priceValidator)
         {
             RuleFor(model => model.Price).SetValidator(priceValidator);
-            RuleFor(model => model.SessionSeats).NotNull();
-            RuleFor(model => model.CinemaServices).NotNull();
+            RuleFor(model => model.SessionSeats)
+                .NotNull()
+                .WithMessage("No seats were sent");
+            RuleFor(model => model.CinemaServices)
+                .NotNull()
+                .WithMessage("No services were sent");
         }
     }
 }

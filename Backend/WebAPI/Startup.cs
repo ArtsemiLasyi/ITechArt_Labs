@@ -116,6 +116,7 @@ namespace WebAPI
             services.AddTransient<SeatTypePriceValidator>();
             services.AddTransient<OrderValidator>();
             services.AddTransient<CurrencyValidator>();
+            services.AddTransient<SessionValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -215,6 +216,7 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<OrderRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<CurrencyRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SessionRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(
@@ -407,7 +409,51 @@ namespace WebAPI
                 .Map(
                     dest => dest.HallName,
                     src => src.Session.Hall.Name
+                )
+                .Map(
+                    dest => dest.Price,
+                    src => new PriceModel(
+                        src.Price,
+                        src.Currency.Adapt<CurrencyModel>()
+                    )
                 );
+
+            TypeAdapterConfig<SeatTypePriceModel, SeatTypePriceEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Value
+                )
+                .Map(
+                    dest => dest.CurrencyId,
+                    src => src.Price.Currency.Id
+                );
+
+            TypeAdapterConfig<SeatTypePriceEntity, SeatTypePriceModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.SeatTypeName,
+                    src => src.SeatType.Name
+                )
+                .Map(
+                    dest => dest.Price,
+                    src => new PriceModel(
+                        src.Price,
+                        src.Currency.Adapt<CurrencyModel>()
+                    )
+                );
+
+            TypeAdapterConfig<SessionEntity, SessionModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.FilmName,
+                    src => src.Film.Name
+                )
+                .Map(
+                    dest => dest.HallName,
+                    src => src.Hall.Name
+                );
+
         }
     }
 }

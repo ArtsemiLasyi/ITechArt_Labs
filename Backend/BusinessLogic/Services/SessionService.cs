@@ -18,7 +18,7 @@ namespace BusinessLogic.Services
             _sessionRepository = sessionRepository;
         }
 
-        public Task CreateAsync(SessionModel session)
+        public Task<int> CreateAsync(SessionModel session)
         {
             SessionEntity? sessionEntity = session.Adapt<SessionEntity>();
             return _sessionRepository.CreateAsync(sessionEntity);

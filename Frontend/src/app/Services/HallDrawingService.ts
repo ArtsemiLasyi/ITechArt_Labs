@@ -4,6 +4,7 @@ import { DrawModel } from "../Models/DrawModel";
 import { HallSizeModel } from "../Models/HallSizeModel";
 import { SeatDrawModel } from "../Models/SeatDrawModel";
 import { SeatModel } from "../Models/SeatModel";
+import { SessionSeatModel } from "../Models/SessionSeatModel";
 import { HallSizeService } from "./HallSizeService";
 
 @Injectable()
@@ -29,6 +30,10 @@ export class HallDrawingService {
         this.drawRowNumbers(canvas, size);
         this.drawPlaceNumbers(canvas, size);
         return seatDrawModels;
+    }
+
+    drawSessionSeats(sessionSeats : SessionSeatModel[]) {
+
     }
 
     private drawSeats(seats : SeatModel[], size : HallSizeModel) : SeatDrawModel[] {

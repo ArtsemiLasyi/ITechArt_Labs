@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(SessionEntity session)
+        public async Task<int> CreateAsync(SessionEntity session)
         {
             int freeSeatsNumber = await _context.Seats
                 .Where(seat => seat.HallId == session.HallId)
@@ -26,6 +26,7 @@ namespace DataAccess.Repositories
             session.FreeSeatsNumber = freeSeatsNumber;
             _context.Sessions.Add(session);
             await _context.SaveChangesAsync();
+            return session.Id;
         }
 
         public async Task<bool> DeleteByAsync(int id)
@@ -50,6 +51,9 @@ namespace DataAccess.Repositories
                         && session.HallId == hallId 
                         && session.FilmId == filmId
                 )
+                .Include(session => session.Hall)
+                .Include(session => session.Film)
+                .OrderBy(session => session.StartDateTime)
                 .ToListAsync();
             return sessions;
         }
@@ -57,7 +61,8 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SessionEntity>> GetAllByAsync(int cinemaId, SessionEntitySearchParameters parameters)
         {
             IQueryable<SessionEntity> query = _context.Sessions
-                .Include("Hall")
+                .Include(session => session.Hall)
+                .Include(session => session.Film)
                 .Where(
                     session =>
                         !session.IsDeleted
@@ -84,16 +89,25 @@ namespace DataAccess.Repositories
                     session => session.FreeSeatsNumber >= parameters.FreeSeatsNumber
                 );
             }
-
+            if (parameters.FilmId != null)
+            {
+                query = query.Where(
+                    session => session.FilmId == parameters.FilmId
+                );
+            }
+            query = query.OrderBy(session => session.StartDateTime);
             List<SessionEntity> sessions = await query.ToListAsync();
             return sessions;
         }
 
-        public ValueTask<SessionEntity?> GetByAsync(int id)
+        public Task<SessionEntity?> GetByAsync(int id)
         {
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
-            return _context.Sessions.FindAsync(id);
+            return _context.Sessions
+                .Include(session => session.Hall)
+                .Include(session => session.Film)
+                .FirstAsync(session => session.Id == id);
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 

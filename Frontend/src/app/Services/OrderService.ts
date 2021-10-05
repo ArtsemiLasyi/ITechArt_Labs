@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { ApiUrls } from "../Constants/ApiUrls";
 import { UrlSegments } from "../Constants/UrlSegments";
 import { OrderModel } from "../Models/OrderModel";
+import { PriceModel } from "../Models/PriceModel";
 import { OrderRequest } from "../Requests/OrderRequest";
 import { OrderSearchRequest } from "../Requests/OrderSearchRequest";
 
@@ -35,6 +36,6 @@ export class OrderService {
     }
 
     calculateSum(order : OrderRequest) {
-        return this.http.post(`${ApiUrls.Orders}`, order);
+        return this.http.post<PriceModel>(`${ApiUrls.Orders}/sum`, order);
     }
 }
