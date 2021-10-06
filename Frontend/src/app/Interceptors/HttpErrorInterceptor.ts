@@ -7,6 +7,7 @@ import {
     HttpResponse,
     HttpErrorResponse
 } from '@angular/common/http';
+import { StatusCodes } from 'http-status-codes';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
@@ -29,7 +30,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     if (error.error.errorText) {
                         return throwError(error.error.errorText);
                     }
-                    if (error.status === 401) {
+                    if (error.status === StatusCodes.UNAUTHORIZED) {
                         return throwError(error);
                     }
                     if (error.error.errors) {
