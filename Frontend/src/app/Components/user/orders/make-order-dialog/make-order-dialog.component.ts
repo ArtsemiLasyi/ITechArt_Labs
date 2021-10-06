@@ -2,7 +2,8 @@ import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 import { CinemaServiceModel } from 'src/app/Models/CinemaServiceModel';
 import { PriceModel } from 'src/app/Models/PriceModel';
 import { SeatDrawModel } from 'src/app/Models/SeatDrawModel';
@@ -62,6 +63,8 @@ export class MakeOrderDialogComponent implements OnInit {
     sum : PriceModel = new PriceModel();
     calculatedSum : boolean = false;
 
+    updateSubscription : Subscription | undefined;
+
     constructor(
         public dialogRef : MatDialogRef<MakeOrderDialogComponent>,
         private userService : UserService,
@@ -110,18 +113,26 @@ export class MakeOrderDialogComponent implements OnInit {
         this.drawHall();
 
         this.getCinemaServices();
-
-        this.sessionSeats.value.forEach(
-            sessionSeat => {
-                if (sessionSeat.userId === this.userId 
-                        && sessionSeat.status === SessionSeatStatuses.Taken) {
-                    this.orderSeats.value.push(sessionSeat);
-                }
-            }
-        );
         if (this.orderSeats.value.length > 0) {
             this.calculateSum();
         }
+
+        this.updateSubscription = interval(600 * 1000)
+            .pipe(
+                startWith(0),
+                switchMap(
+                    () => this.sessionSeatService.update(
+                        this.model.id,
+                        this.getSessionSeatsRequest(this.sessionSeats)
+                    )
+                )
+            )
+            .subscribe(
+                async () => {
+                    await this.getSessionSeats();
+                    this.drawHall();
+                } 
+            );
     }
     
     drawHall() {
@@ -147,6 +158,14 @@ export class MakeOrderDialogComponent implements OnInit {
         this.sessionSeats = await this.sessionSeatService
             .getSessionSeats(this.model.id)
             .toPromise();
+        this.sessionSeats.value.forEach(
+            sessionSeat => {
+                if (sessionSeat.userId === this.userId 
+                    && sessionSeat.status === SessionSeatStatuses.Taken) {
+                    this.orderSeats.value.push(sessionSeat);
+                }
+            }
+        );
     }
 
     async calculateSum() {
@@ -154,8 +173,8 @@ export class MakeOrderDialogComponent implements OnInit {
             new OrderRequest(
                 this.model.id,
                 new Date(),
-                this.getSessionSeatsRequest(),
-                this.getCinemaServicesRequest()
+                this.getSessionSeatsRequest(this.orderSeats),
+                this.getOrderCinemaServicesRequest()
             )
         )
         .toPromise();
@@ -186,13 +205,13 @@ export class MakeOrderDialogComponent implements OnInit {
                         sessionSeat.status = SessionSeatStatuses.Taken;
                         this.takeSeat(sessionSeat.seatId, request);
                         this.addSeat(sessionSeat);
-                        this.updateSessionSeats();    
+                        this.drawHall();   
                         return;
                     } else if (sessionSeat.status === SessionSeatStatuses.Taken) {
                         sessionSeat.status = SessionSeatStatuses.Free;
                         this.freeSeat(sessionSeat.seatId, request);
                         this.deleteSeat(sessionSeat);
-                        this.updateSessionSeats();
+                        this.drawHall();
                         return;
                     }
                 }
@@ -209,7 +228,7 @@ export class MakeOrderDialogComponent implements OnInit {
             sessionSeat.status = SessionSeatStatuses.Taken;
             this.sessionSeats.value.push(sessionSeat);
             
-            this.updateSessionSeats();
+            this.drawHall();
             this.sessionSeats.value.forEach(
                 sessionSeat => {
                     if (sessionSeat.seatId === this.seatDrawModels[index].seat!.id) {
@@ -226,8 +245,8 @@ export class MakeOrderDialogComponent implements OnInit {
                 new OrderRequest(
                     this.model.id,
                     new Date(),
-                    this.getSessionSeatsRequest(),
-                    this.getCinemaServicesRequest()
+                    this.getSessionSeatsRequest(this.orderSeats),
+                    this.getOrderCinemaServicesRequest()
                 )
             ).toPromise();
             this.modalService.open(content);
@@ -265,7 +284,7 @@ export class MakeOrderDialogComponent implements OnInit {
         this.orderServices.splice(index, 1);
     }
 
-    private getCinemaServicesRequest() : CinemaServiceRequest[] {
+    private getOrderCinemaServicesRequest() : CinemaServiceRequest[] {
         let request : CinemaServiceRequest[] = [];
         for (let service of this.orderServices) {
             request.push(
@@ -282,9 +301,9 @@ export class MakeOrderDialogComponent implements OnInit {
         return request;
     }
 
-    private getSessionSeatsRequest() : SessionSeatsRequest {
+    private getSessionSeatsRequest(sessionSeats : SessionSeatsModel) : SessionSeatsRequest {
         let value : SessionSeatRequest[] = [];
-        for (let seat of this.orderSeats.value) {
+        for (let seat of sessionSeats.value) {
             value.push(
                 new SessionSeatRequest(
                     seat.seatId,
@@ -317,9 +336,5 @@ export class MakeOrderDialogComponent implements OnInit {
             seatId,
             request
         ).toPromise();
-    }
-
-    private async updateSessionSeats() {
-        this.drawHall();
     }
 }

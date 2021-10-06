@@ -33,13 +33,14 @@ namespace BusinessLogic.Services
 
         public Task CreateAsync(SessionSeatsModel model)
         {
-            IReadOnlyCollection<SessionSeatEntity> entity = model.Value.Adapt<IReadOnlyCollection<SessionSeatEntity>>();
-            return _sessionSeatRepository.CreateAsync(entity);
+            IReadOnlyCollection<SessionSeatEntity> entities = model.Value.Adapt<IReadOnlyCollection<SessionSeatEntity>>();
+            return _sessionSeatRepository.CreateAsync(entities);
         }
 
-        public Task UpdateSeatStatusesAsync(SessionSeatsModel sessionSeats)
+        public Task UpdateSeatStatusesAsync(int sessionId, SessionSeatsModel sessionSeats)
         {
-            return _sessionSeatRepository.UpdateStatusesAsync();
+            IReadOnlyCollection<SessionSeatEntity> entities = sessionSeats.Value.Adapt<IReadOnlyCollection<SessionSeatEntity>>();
+            return _sessionSeatRepository.UpdateStatusesAsync(sessionId, entities);
         }
 
         public async Task<SessionSeatsModel> GetAllByAsync(int sessionId)

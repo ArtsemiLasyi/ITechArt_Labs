@@ -43,6 +43,10 @@ export class HeaderComponent {
     setCity(city : CityModel) {
         this.setNewActiveCity(city);
         this.saveCity(city);
+        const url = this.router.url;
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate([url]);
     }
 
     setNewActiveCity(city : CityModel) {
@@ -50,11 +54,6 @@ export class HeaderComponent {
         this.cityName = '';
         this.model = city;
         this.store.dispatch(saveCity({city}));
-        
-        const url = this.router.url;
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
-        this.router.navigate([url]);
     }
 
     saveCity(city : CityModel) {

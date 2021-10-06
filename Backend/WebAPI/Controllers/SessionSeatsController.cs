@@ -43,10 +43,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] SessionSeatsRequest request)
+        public async Task<IActionResult> Update(int sessionId, [FromBody] SessionSeatsRequest request)
         {
             SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
-            await _sessionSeatService.UpdateSeatStatusesAsync(model);
+            await _sessionSeatService.UpdateSeatStatusesAsync(sessionId, model);
             return Ok();
         }
 
