@@ -3,7 +3,7 @@
     [Id] INT IDENTITY(1,1) NOT NULL,
     [FilmId] INT NOT NULL,
     [HallId] INT NOT NULL,
-    [StartDateTime] DATETIME NOT NULL,
+    [StartDateTime] DATETIME2 NOT NULL,
     [FreeSeatsNumber] INT NOT NULL,
     [IsDeleted] BIT NOT NULL,
     CONSTRAINT [PK_Sessions] PRIMARY KEY ([Id]),
