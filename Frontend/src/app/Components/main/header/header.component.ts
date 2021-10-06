@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { props, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { saveCity } from 'src/app/Actions/city.actions';
@@ -26,6 +27,7 @@ export class HeaderComponent {
     constructor (
         private cityService : CityService,
         private storageService : StorageService,
+        private router : Router,
         private store : Store<{ city : CityModel }>
     ) {
         let city = storageService.getCurrentCity();
@@ -48,6 +50,11 @@ export class HeaderComponent {
         this.cityName = '';
         this.model = city;
         this.store.dispatch(saveCity({city}));
+        
+        const url = this.router.url;
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate([url]);
     }
 
     saveCity(city : CityModel) {

@@ -1,13 +1,25 @@
 <div class="dialog-content">
     <div class="modal-body canvas-container">
-        <canvas 
-            #canvas
-            width="900"
-            height="500px"
-            (click)="tryToTakeOrFreeSeat($event)"
-        ></canvas>
+        <div class="canvas-container">
+            <canvas 
+                #canvas 
+                width="900"
+                height="500px"
+                (click)="tryToTakeOrFreeSeat($event)"
+            ></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas #legend width="900" height="100px"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas #statuses width="900" height="100px"></canvas>
+        </div>
     </div> 
     <div class="modal-footer">
+        <div class="form-control" *ngIf="calculatedSum">
+            <h4>Sum of your order:</h4>
+            <h5>{{sum.value}} {{sum.currency.name}}</h5>
+        </div>
         <div class="dropdown form-control">
             <h5>Add service:</h5>
             <input
@@ -46,11 +58,6 @@
                     </button>
                 </div>
             </div>
-        </div>
-        <div *ngIf="calculatedSum">
-            <strong>Sum:</strong>
-            <strong>{{sum.value}}</strong>
-            <strong>{{sum.currency.name}}</strong>
         </div>
         <button 
             type="button"

@@ -7,6 +7,7 @@ import { CinemaServiceModel } from 'src/app/Models/CinemaServiceModel';
 import { PriceModel } from 'src/app/Models/PriceModel';
 import { SeatDrawModel } from 'src/app/Models/SeatDrawModel';
 import { SeatsModel } from 'src/app/Models/SeatsModel';
+import { SeatTypeModel } from 'src/app/Models/SeatTypeModel';
 import { SessionModel } from 'src/app/Models/SessionModel';
 import { SessionSeatModel } from 'src/app/Models/SessionSeatModel';
 import { SessionSeatsModel } from 'src/app/Models/SessionSeatsModel';
@@ -24,6 +25,7 @@ import { HallService } from 'src/app/Services/HallService';
 import { HallSizeService } from 'src/app/Services/HallSizeService';
 import { OrderService } from 'src/app/Services/OrderService';
 import { SeatService } from 'src/app/Services/SeatService';
+import { SeatTypeService } from 'src/app/Services/SeatTypeService';
 import { SessionSeatService } from 'src/app/Services/SessionSeatService';
 import { UserService } from 'src/app/Services/UserService';
 
@@ -36,11 +38,20 @@ export class MakeOrderDialogComponent implements OnInit {
     
     @ViewChild('canvas', { static: true }) 
     canvas! : ElementRef<HTMLCanvasElement>;
+
+    @ViewChild('legend', { static: true }) 
+    legend! : ElementRef<HTMLCanvasElement>;
+
+    @ViewChild('statuses', { static: true }) 
+    statuses! : ElementRef<HTMLCanvasElement>;
+
     seats : SeatsModel = new SeatsModel();
     seatDrawModels : SeatDrawModel[] = [];
 
     cinemaId : number = 0;
     userId : number = 0;
+
+    seatTypes : SeatTypeModel[] = [];
 
     cinemaServices : Observable<CinemaServiceModel[]> | undefined;
     sessionSeats : SessionSeatsModel = new SessionSeatsModel();
@@ -55,6 +66,7 @@ export class MakeOrderDialogComponent implements OnInit {
         public dialogRef : MatDialogRef<MakeOrderDialogComponent>,
         private userService : UserService,
         private hallSizeService : HallSizeService,
+        private seatTypeService : SeatTypeService,
         private seatService : SeatService,
         private hallService : HallService,
         private sessionSeatService : SessionSeatService,
@@ -79,6 +91,18 @@ export class MakeOrderDialogComponent implements OnInit {
 
         let hall = await this.hallService.getHall(this.model.hallId).toPromise();
         this.cinemaId = hall.cinemaId;
+
+        this.seatTypes = await this.seatTypeService
+            .getSeatTypes()
+            .toPromise();
+        this.hallDrawingService.init(this.legend.nativeElement);
+        this.hallDrawingService.drawSeatTypesLegend(
+            this.seatTypes,
+            this.legend.nativeElement
+        );
+
+        this.hallDrawingService.init(this.statuses.nativeElement);
+        this.hallDrawingService.drawSeatStatuses(this.statuses.nativeElement);
 
         this.seats = await this.seatService.getSeats(this.model.hallId).toPromise();
         await this.getSessionSeats();
@@ -197,16 +221,18 @@ export class MakeOrderDialogComponent implements OnInit {
     }
 
     async makeOrder(content : any) {
-        await this.orderService.addOrder(
-            new OrderRequest(
-                this.model.id,
-                new Date(),
-                this.getSessionSeatsRequest(),
-                this.getCinemaServicesRequest()
-            )
-        ).toPromise();
-        this.modalService.open(content);
-        this.onNoClick();
+        if (this.orderSeats.value.length > 0) {
+            await this.orderService.addOrder(
+                new OrderRequest(
+                    this.model.id,
+                    new Date(),
+                    this.getSessionSeatsRequest(),
+                    this.getCinemaServicesRequest()
+                )
+            ).toPromise();
+            this.modalService.open(content);
+            this.onNoClick();
+        }
     }
 
     addSeat(seat : SessionSeatModel) {

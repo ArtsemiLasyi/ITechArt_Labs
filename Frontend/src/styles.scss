@@ -16,11 +16,12 @@ $primary:       $primary-color !default;
 .canvas-container {
     width: 100%;
     text-align:center;
- }
+    display:inline-block;
+}
  
  canvas {
     display: inline;
- }
+}
 
 .content {
     min-height: calc(100vh - 150px);

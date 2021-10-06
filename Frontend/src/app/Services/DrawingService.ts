@@ -4,6 +4,7 @@ import { DrawModel } from "../Models/DrawModel";
 import { HallSizeModel } from "../Models/HallSizeModel";
 import { SeatDrawModel } from "../Models/SeatDrawModel";
 import { SeatModel } from "../Models/SeatModel";
+import { SeatTypeModel } from "../Models/SeatTypeModel";
 import { SessionSeatModel } from "../Models/SessionSeatModel";
 import { SessionSeatStatuses } from "../Models/SessionSeatStatuses";
 import { HallSizeService } from "./HallSizeService";
@@ -22,7 +23,8 @@ export class DrawingService {
     }
 
     drawHall(
-        seats : SeatModel[], canvas : HTMLCanvasElement,
+        seats : SeatModel[],
+        canvas : HTMLCanvasElement,
         size = this.hallSizeService.getHallSize(seats)
     ) : SeatDrawModel[] {
         this.setCanvasSize(canvas, size);
@@ -31,6 +33,97 @@ export class DrawingService {
         this.drawRowNumbers(canvas, size);
         this.drawPlaceNumbers(canvas, size);
         return seatDrawModels;
+    }
+
+    drawSeatStatuses(canvas : HTMLCanvasElement) {
+        const statusesNumber = 3;
+        canvas.height = 
+            (1) * 2 * HallDrawingParameters.SEAT_RADIUS * 2;
+        canvas.width = 
+            (statusesNumber * 3 + 2) * 2 * HallDrawingParameters.SEAT_RADIUS * 2;
+
+        for (let i = 0; i < statusesNumber; i++) {
+            let x = this.getX(i);
+            let y = this.getY(0);
+            x += HallDrawingParameters.SEAT_RADIUS * 6 * i;
+            
+            this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
+            this.context!.font = '24px roboto';
+            this.context!.textAlign = 'center';
+
+            if (i === SessionSeatStatuses.Taken) {
+                this.drawCross(x, y);
+                x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
+                this.context!.fillText(
+                    'Taken',
+                    x,
+                    y + 5,
+                    HallDrawingParameters.SEAT_RADIUS * 6
+                );
+            }
+
+            if (i === SessionSeatStatuses.Free) {
+                x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
+                this.context!.fillText(
+                    'Free',
+                    x,
+                    y + 5,
+                    HallDrawingParameters.SEAT_RADIUS * 6
+                );
+            }
+
+            if (i === SessionSeatStatuses.Ordered) {
+                this.context!.beginPath();
+                let startAngle = HallDrawingParameters.MIN_ANGLE;
+                let endAngle = HallDrawingParameters.MAX_ANGLE;
+                this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
+
+                this.context!.arc(
+                    x,
+                    y,
+                    HallDrawingParameters.SEAT_RADIUS / 2,
+                    startAngle,
+                    endAngle,
+                    true
+                );
+                this.context!.fill();
+                x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
+                this.context!.fillText(
+                    'Ordered',
+                    x,
+                    y + 5,
+                    HallDrawingParameters.SEAT_RADIUS * 6
+                );
+            }
+        }
+    }
+
+    drawSeatTypesLegend(
+        seatTypes : SeatTypeModel[],
+        canvas : HTMLCanvasElement,
+    ) {
+        canvas.height = 
+            (1) * 2 * HallDrawingParameters.SEAT_RADIUS * 2;
+        canvas.width = 
+            (seatTypes.length * 3 + 2) * 2 * HallDrawingParameters.SEAT_RADIUS * 2;
+
+        for (let i = 0; i < seatTypes.length; i++) {
+            let x = this.getX(i);
+            let y = this.getY(0);
+            x += HallDrawingParameters.SEAT_RADIUS * 6 * i;
+                   
+            this.drawFigure(x, y, seatTypes[i].colorRgb);
+            x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
+            this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
+            this.context!.font = '24px roboto';
+            this.context!.textAlign = 'center';
+            this.context!.fillText(
+                seatTypes[i].name,
+                x,
+                y + 5,
+                HallDrawingParameters.SEAT_RADIUS * 6
+            );
+        }
     }
 
     private getX(place : number) {
@@ -200,21 +293,11 @@ export class DrawingService {
         return new SeatDrawModel(drawing);
     }
 
-    drawSeat(seat : SeatModel) : SeatDrawModel {
+    drawFigure(x : number, y : number, colorRgb : string) {
         this.context!.beginPath();
-
-        let x = this.getX(seat.place);
-        let y = this.getY(seat.row);
 
         let startAngle = HallDrawingParameters.MIN_ANGLE;
         let endAngle = HallDrawingParameters.MAX_ANGLE;
-
-        let drawing = new DrawModel(
-            x,
-            y,
-            HallDrawingParameters.SEAT_RADIUS,
-            HallDrawingParameters.SEAT_RADIUS
-        );
 
         this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
 
@@ -229,7 +312,7 @@ export class DrawingService {
         
         this.context!.fill();
 
-        this.context!.fillStyle = seat.colorRgb;
+        this.context!.fillStyle = colorRgb;
 
         this.context!.arc(
             x,
@@ -240,6 +323,20 @@ export class DrawingService {
             true
         );
         this.context!.fill();
+    }
+
+    drawSeat(seat : SeatModel) : SeatDrawModel {
+        let x = this.getX(seat.place);
+        let y = this.getY(seat.row);
+
+        let drawing = new DrawModel(
+            x,
+            y,
+            HallDrawingParameters.SEAT_RADIUS,
+            HallDrawingParameters.SEAT_RADIUS
+        );
+
+        this.drawFigure(x, y, seat.colorRgb);
         return new SeatDrawModel(drawing, seat);
     }
 
