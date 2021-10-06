@@ -40,6 +40,7 @@ namespace DataAccess.Repositories
             List<SessionSeatEntity> seats = await _context.SessionSeats
                 .Include(sessionSeat => sessionSeat.Seat)
                 .ThenInclude(seat => seat.SeatType)
+                .AsNoTracking()
                 .Where(sessionSeat => sessionSeat.SessionId == sessionId)
                 .ToListAsync();
             return seats;
@@ -50,6 +51,7 @@ namespace DataAccess.Repositories
             SessionSeatEntity? entity = await _context.SessionSeats
                 .Include(sessionSeat => sessionSeat.Seat)
                 .ThenInclude(seat => seat.SeatType)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(
                     sessionSeat => sessionSeat.SessionId == sessionId && sessionSeat.SeatId == seatId
                 );
@@ -83,9 +85,23 @@ namespace DataAccess.Repositories
 
         public async Task UpdateAsync(SessionSeatEntity seat)
         {
+            SessionSeatEntity entity = await _context.SessionSeats
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    sessionSeat => 
+                        sessionSeat.SessionId == seat.SessionId && sessionSeat.SeatId == seat.SeatId
+                );
+            seat.TakenAt = entity.TakenAt;
             _context.SessionSeats.Update(seat);
             SessionEntity session = await _context.Sessions.FindAsync(seat.SessionId);
-            session.FreeSeatsNumber--;
+            if (seat.Status == 0)
+            {
+                session.FreeSeatsNumber++;
+            }
+            if (seat.Status == 1)
+            {
+                session.FreeSeatsNumber--;
+            }
             _context.Sessions.Update(session);
             await _context.SaveChangesAsync();
         }

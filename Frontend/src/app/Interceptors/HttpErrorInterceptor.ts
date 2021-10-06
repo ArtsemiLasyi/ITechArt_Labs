@@ -9,14 +9,12 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
     constructor (
-        private injector : Injector,
-        private router : Router,
+        private injector : Injector
     ) { }
 
     intercept (
@@ -32,7 +30,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                         return throwError(error.error.errorText);
                     }
                     if (error.status === 401) {
-                        this.router.navigate(['/account/signin']);
                         return throwError(error);
                     }
                     if (error.error.errors) {

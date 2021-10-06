@@ -39,13 +39,7 @@ namespace WebAPI
         {
             Configuration = configuration;
             ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en");
-            CultureInfo culture = new("en-Us", false)
-            {
-                DateTimeFormat =
-                {
-                    ShortDatePattern = "MM/dd/yyyy"
-                }
-            };
+            CultureInfo culture = new ("en-Us", false);
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
         }
@@ -416,6 +410,17 @@ namespace WebAPI
                         src.Price,
                         src.Currency.Adapt<CurrencyModel>()
                     )
+                );
+
+            TypeAdapterConfig<OrderModel, OrderEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Value
+                )
+                .Map(
+                    dest => dest.CurrencyId,
+                    src => src.Price.Currency.Id
                 );
 
             TypeAdapterConfig<SeatTypePriceModel, SeatTypePriceEntity>

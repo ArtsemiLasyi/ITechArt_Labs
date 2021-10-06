@@ -20,8 +20,9 @@ export class AdminSeatTypeInfoComponent implements OnInit {
     disabledButton : boolean = false;
 
     constructor (
-        private seatTypeService: SeatTypeService,
-        private activateRoute: ActivatedRoute
+        private seatTypeService : SeatTypeService,
+        private activateRoute : ActivatedRoute,
+        private router : Router
     ) { }
 
     ngOnInit() {
@@ -60,6 +61,10 @@ export class AdminSeatTypeInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                     this.disableButtons();
+                    this.router.navigate(
+                        ['../../search'], 
+                        { relativeTo: this.activateRoute }
+                    );
                 },
                 (error  : string) => {
                     this.error.exists = true;

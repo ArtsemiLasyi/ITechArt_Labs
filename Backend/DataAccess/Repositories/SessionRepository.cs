@@ -69,6 +69,14 @@ namespace DataAccess.Repositories
                         && session.Hall.CinemaId == cinemaId
                 );
 
+            if (parameters.FirstSessionDateTime == null
+                && parameters.LastSessionDateTime == null)
+            {
+                query = query.Where(
+                    session => session.StartDateTime >= DateTime.UtcNow
+                );
+            }
+
             if (parameters.FirstSessionDateTime != null)
             {
                 query = query.Where(

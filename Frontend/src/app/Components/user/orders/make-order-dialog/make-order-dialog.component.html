@@ -35,8 +35,8 @@
                     <a class="list-group-item list-group-item-action">
                         <strong>{{service.name}}</strong><br>
                         <strong>Price:</strong>
-                        <small>{{service.price.value}}</small>
-                        <small>{{service.price.currency.name}}</small>
+                        <strong>{{service.price.value}}</strong>
+                        <strong>{{service.price.currency.name}}</strong>
                     </a>
                     <button 
                         class="btn-primary w-100"
@@ -49,8 +49,8 @@
         </div>
         <div *ngIf="calculatedSum">
             <strong>Sum:</strong>
-            <small>{{sum.value}}</small>
-            <small>{{sum.currency.name}}</small>
+            <strong>{{sum.value}}</strong>
+            <strong>{{sum.currency.name}}</strong>
         </div>
         <button 
             type="button"
@@ -62,7 +62,7 @@
         <button 
             type="button"
             class="btn btn-primary"
-            (click)="makeOrder()"
+            (click)="makeOrder(content)"
         >
             Order
         </button>
@@ -76,3 +76,19 @@
         </button>
     </div>
 </div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Your order was successfully added</h4>
+    </div>
+    <div class="modal-body">
+        <strong>The sum of your order is:</strong>
+        <strong>{{sum.value}}</strong>
+        <strong>{{sum.currency.name}}</strong>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">
+          Close
+    </button>
+    </div>
+  </ng-template>

@@ -79,7 +79,6 @@ namespace WebAPI.Controllers
             }
             OrderModel model = request.Adapt<OrderModel>();
             model.UserId = id.Value;
-            PriceModel price = await _orderService.GetSumAsync(model);
             await _orderService.CreateAsync(model);
             return Ok();
         }

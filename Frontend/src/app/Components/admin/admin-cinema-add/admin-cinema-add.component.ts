@@ -30,7 +30,7 @@ export class AdminCinemaAddComponent {
     cityName : string = "";
     term = new BehaviorSubject<string>(''); 
     cities : Observable<CityModel[]> = this.term.pipe(
-        autocomplete(500, ((term: string) => this.cityService.getCities(term)))
+        autocomplete(100, ((term: string) => this.cityService.getCities(term)))
     ); 
 
     constructor(

@@ -1,6 +1,6 @@
   
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -28,7 +28,8 @@ export class AdminFilmInfoComponent implements OnInit {
 
     constructor (
         private filmService: FilmService,
-        private activateRoute: ActivatedRoute
+        private activateRoute: ActivatedRoute,
+        private router : Router
     ) { }
 
     loadPhoto(event : Event) : any {
@@ -85,6 +86,7 @@ export class AdminFilmInfoComponent implements OnInit {
             .toPromise();
         this.success.flag = true;
         this.disableButtons();
+        this.router.navigate(['../../search'], { relativeTo: this.activateRoute });
     }
 
     clearForm(event : Event) {

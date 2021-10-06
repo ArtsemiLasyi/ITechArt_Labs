@@ -43,6 +43,67 @@ export class DrawingService {
             + (row - 1) * HallDrawingParameters.INDENT_BETWEEN_SEATS * 2;
     }
 
+    private drawCross(x : number, y : number) {
+        this.context!.beginPath();
+
+        x = x - HallDrawingParameters.SEAT_RADIUS / 2;
+        y = y - HallDrawingParameters.SEAT_RADIUS / 2;
+
+        this.context!.moveTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            y
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            y
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+            y + HallDrawingParameters.SEAT_RADIUS,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            y + HallDrawingParameters.SEAT_RADIUS,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+        );
+        this.context!.lineTo(
+            x,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
+        );
+        this.context!.lineTo(
+            x,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+        );
+        this.context!.lineTo(
+            x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
+            y
+        );
+        this.context!.fill();
+    }
+
     private drawSessionSeat(sessionSeat : SessionSeatModel) {
         this.context!.beginPath();
 
@@ -70,60 +131,7 @@ export class DrawingService {
         }
 
         if (sessionSeat.status === SessionSeatStatuses.Taken) {
-            this.context!.beginPath();
-
-            x = x - HallDrawingParameters.SEAT_RADIUS / 2;
-            y = y - HallDrawingParameters.SEAT_RADIUS / 2;
-
-            this.context!.moveTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-                y
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-                y
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-                y + HallDrawingParameters.SEAT_RADIUS,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-                y + HallDrawingParameters.SEAT_RADIUS,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-            );
-            this.context!.lineTo(
-                x,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 + 2,
-            );
-            this.context!.lineTo(
-                x,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-                y + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-            );
-            this.context!.lineTo(
-                x + HallDrawingParameters.SEAT_RADIUS / 2 - 2,
-                y
-            );
-            this.context!.fill();
+            this.drawCross(x, y);
         }
     }
 

@@ -22,6 +22,12 @@ namespace DataAccess.Repositories
             return _context.SaveChangesAsync();
         }
 
+        public Task CreateAsync(IReadOnlyCollection<SeatOrderEntity> entities)
+        {
+            _context.SeatOrders.AddRange(entities);
+            return _context.SaveChangesAsync();
+        }
+
         public async Task<bool> DeleteByAsync(int orderId, int seatId)
         {
             SeatOrderEntity? entity = await GetByAsync(orderId, seatId);

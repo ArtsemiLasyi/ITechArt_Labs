@@ -1,7 +1,8 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaServiceModel } from 'src/app/Models/CinemaServiceModel';
 import { PriceModel } from 'src/app/Models/PriceModel';
 import { SeatDrawModel } from 'src/app/Models/SeatDrawModel';
@@ -11,6 +12,7 @@ import { SessionSeatModel } from 'src/app/Models/SessionSeatModel';
 import { SessionSeatsModel } from 'src/app/Models/SessionSeatsModel';
 import { SessionSeatStatuses } from 'src/app/Models/SessionSeatStatuses';
 import { UserModel } from 'src/app/Models/UserModel';
+import { autocomplete } from 'src/app/Operators/autocomplete.operator';
 import { CinemaServiceRequest } from 'src/app/Requests/CinemaServiceRequest';
 import { OrderRequest } from 'src/app/Requests/OrderRequest';
 import { PriceRequest } from 'src/app/Requests/PriceRequest';
@@ -38,7 +40,7 @@ export class MakeOrderDialogComponent implements OnInit {
     seatDrawModels : SeatDrawModel[] = [];
 
     cinemaId : number = 0;
-    user : UserModel = new UserModel();
+    userId : number = 0;
 
     cinemaServices : Observable<CinemaServiceModel[]> | undefined;
     sessionSeats : SessionSeatsModel = new SessionSeatsModel();
@@ -59,24 +61,43 @@ export class MakeOrderDialogComponent implements OnInit {
         private orderService : OrderService,
         private cinemaServiceService : CinemaServiceService,
         private hallDrawingService : DrawingService,
+        private modalService : NgbModal,
+        private router : Router,
         @Inject(MAT_DIALOG_DATA) private model : SessionModel
     ) { }
 
     async ngOnInit() {
-        this.user = await this.userService.getCurrentUser().toPromise();
+        this.userService.getCurrentUser().subscribe(
+            (user : UserModel) => {
+                this.userId = user.id;
+            },
+            (error : Error) => {
+                this.router.navigate(['account/signin']);
+                this.dialogRef.close();
+            }
+        );
 
         let hall = await this.hallService.getHall(this.model.hallId).toPromise();
         this.cinemaId = hall.cinemaId;
 
         this.seats = await this.seatService.getSeats(this.model.hallId).toPromise();
-        this.sessionSeats = await this.sessionSeatService
-            .getSessionSeats(this.model.id)
-            .toPromise();
-
+        await this.getSessionSeats();
         this.hallDrawingService.init(this.canvas.nativeElement);
         this.drawHall();
 
         this.getCinemaServices();
+
+        this.sessionSeats.value.forEach(
+            sessionSeat => {
+                if (sessionSeat.userId === this.userId 
+                        && sessionSeat.status === SessionSeatStatuses.Taken) {
+                    this.orderSeats.value.push(sessionSeat);
+                }
+            }
+        );
+        if (this.orderSeats.value.length > 0) {
+            this.calculateSum();
+        }
     }
     
     drawHall() {
@@ -96,6 +117,12 @@ export class MakeOrderDialogComponent implements OnInit {
 
     getCinemaServices() {
         this.cinemaServices = this.cinemaServiceService.getCinemaServices(this.cinemaId);
+    }
+
+    async getSessionSeats() {
+        this.sessionSeats = await this.sessionSeatService
+            .getSessionSeats(this.model.id)
+            .toPromise();
     }
 
     async calculateSum() {
@@ -121,7 +148,7 @@ export class MakeOrderDialogComponent implements OnInit {
             let request = new SessionSeatRequest(
                 this.seatDrawModels[index].seat!.id,
                 this.model.id,
-                this.user.id
+                this.userId
             );
 
             for (let sessionSeat of this.sessionSeats.value) {
@@ -132,58 +159,54 @@ export class MakeOrderDialogComponent implements OnInit {
                     } 
 
                     if (sessionSeat.status === SessionSeatStatuses.Free) {
-                        await this.sessionSeatService.take(
-                            this.model.id,
-                            sessionSeat.seatId,
-                            request
-                        ).toPromise();
+                        sessionSeat.status = SessionSeatStatuses.Taken;
+                        this.takeSeat(sessionSeat.seatId, request);
                         this.addSeat(sessionSeat);
-                        this.drawHall();
-                        this.calculateSum();
+                        this.updateSessionSeats();    
                         return;
                     } else if (sessionSeat.status === SessionSeatStatuses.Taken) {
-                        await this.sessionSeatService.free(
-                            this.model.id,
-                            sessionSeat.seatId,
-                            request
-                        ).toPromise();
+                        sessionSeat.status = SessionSeatStatuses.Free;
+                        this.freeSeat(sessionSeat.seatId, request);
                         this.deleteSeat(sessionSeat);
-                        this.drawHall();
-                        this.calculateSum();
+                        this.updateSessionSeats();
                         return;
                     }
                 }
             }
-            await this.sessionSeatService.take(
-                this.model.id,
-                this.seatDrawModels[index].seat!.id,
-                request
-            ).toPromise();
-            this.addSeat(
-                await this.sessionSeatService
-                    .getSessionSeat(
-                        this.model.id,
-                        this.seatDrawModels[index].seat!.id
-                    )
-                    .toPromise()
-            );
-            this.sessionSeats = await this.sessionSeatService
-                .getSessionSeats(this.model.id)
-                .toPromise();
-            this.drawHall();
-            this.calculateSum();
+            this.takeSeat(this.seatDrawModels[index].seat!.id, request);
+
+            let sessionSeat = new SessionSeatModel();
+            sessionSeat.place = this.seatDrawModels[index].seat!.place;
+            sessionSeat.row = this.seatDrawModels[index].seat!.row;
+            sessionSeat.seatTypeId = this.seatDrawModels[index].seat!.seatTypeId;
+            sessionSeat.seatId = this.seatDrawModels[index].seat!.id;
+            sessionSeat.sessionId = this.model.id;
+            sessionSeat.userId = this.userId;
+            sessionSeat.status = SessionSeatStatuses.Taken;
+            this.sessionSeats.value.push(sessionSeat);
+            
+            this.updateSessionSeats();
+            this.sessionSeats.value.forEach(
+                sessionSeat => {
+                    if (sessionSeat.seatId === this.seatDrawModels[index].seat!.id) {
+                        this.addSeat(sessionSeat);
+                    }
+                }
+            )
         }
     }
 
-    makeOrder() {
-        this.orderService.addOrder(
+    async makeOrder(content : any) {
+        await this.orderService.addOrder(
             new OrderRequest(
                 this.model.id,
                 new Date(),
                 this.getSessionSeatsRequest(),
                 this.getCinemaServicesRequest()
             )
-        );
+        ).toPromise();
+        this.modalService.open(content);
+        this.onNoClick();
     }
 
     addSeat(seat : SessionSeatModel) {
@@ -193,7 +216,7 @@ export class MakeOrderDialogComponent implements OnInit {
     deleteSeat(seat : SessionSeatModel) {
         let index = 0;
         for (let i = 0; i < this.orderSeats.value.length; i++) {
-            if (this.orderSeats.value[i] === seat) {
+            if (this.orderSeats.value[i].seatId === seat.seatId) {
                 index = i;
                 break;
             }
@@ -240,11 +263,37 @@ export class MakeOrderDialogComponent implements OnInit {
                 new SessionSeatRequest(
                     seat.seatId,
                     seat.sessionId,
-                    this.user.id
+                    this.userId
                 )
             );
         }
         let request = new SessionSeatsRequest(value);
         return request;
+    }
+
+    private async takeSeat(
+        seatId : number,
+        request : SessionSeatRequest
+    ) {
+        await this.sessionSeatService.take(
+            this.model.id,
+            seatId,
+            request
+        ).toPromise();
+    }
+
+    private async freeSeat(
+        seatId : number,
+        request : SessionSeatRequest
+    ) {
+        await this.sessionSeatService.free(
+            this.model.id,
+            seatId,
+            request
+        ).toPromise();
+    }
+
+    private async updateSessionSeats() {
+        this.drawHall();
     }
 }

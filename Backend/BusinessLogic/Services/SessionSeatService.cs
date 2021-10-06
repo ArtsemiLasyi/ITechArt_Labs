@@ -54,16 +54,12 @@ namespace BusinessLogic.Services
             return _sessionSeatRepository.GetNumberOfFreeSeatsAsync(sessionId);
         }
 
-        public Task OrderAsync(SessionSeatsModel sessionSeats)
+        public async Task OrderAsync(SessionSeatsModel sessionSeats)
         {
-            return Task.WhenAll(
-                sessionSeats.Value.Select(
-                    sessionSeat =>
-                    {
-                        return OrderAsync(sessionSeat);
-                    }
-                )
-            );
+            foreach (var sessionSeat in sessionSeats.Value)
+            {
+                await OrderAsync(sessionSeat);
+            }
         }
 
         public async Task<SessionSeatModel?> GetByAsync(int sessionId, int seatId)
