@@ -7,6 +7,7 @@ import { SignInModel } from 'src/app/Models/SignInModel';
 import { SignInRequest } from 'src/app/Requests/SignInRequest';
 import { AccountStorageService } from 'src/app/Services/AccountStorageService';
 import { AuthentificationService } from 'src/app/Services/AuthentificationService';
+import { StorageService } from 'src/app/Services/StorageService';
 
 @Component({
     selector : 'account-signin',
@@ -22,6 +23,7 @@ export class SignInComponent {
     constructor(
         private service : AuthentificationService,
         private acccountStorage : AccountStorageService,
+        private storageService : StorageService,
         private router : Router
     ) { }
 
@@ -35,6 +37,7 @@ export class SignInComponent {
                 (data : any) => {
                     let token = data.token;
                     this.acccountStorage.saveToken(token);
+                    this.storageService.saveEmail(this.model.email);
                     this.router.navigate(['']);
                 },
                 (error  : string) => {

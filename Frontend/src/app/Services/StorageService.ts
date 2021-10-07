@@ -5,6 +5,18 @@ import { CityModel } from "../Models/CityModel";
 @Injectable()
 export class StorageService {
 
+    getCurrentEmail() : string | null {
+        return localStorage.getItem(StorageKeyNames.CURRENT_EMAIL);
+    }
+
+    saveEmail(email : string) {
+        localStorage.setItem(StorageKeyNames.CURRENT_EMAIL, email);
+    }
+
+    deleteEmail() {
+        localStorage.removeItem(StorageKeyNames.CURRENT_EMAIL);
+    }
+
     getCurrentCity() : CityModel | null {
         let name = sessionStorage.getItem(StorageKeyNames.CURRENT_CITY_NAME);
         let id = sessionStorage.getItem(StorageKeyNames.CURRENT_CITY_ID);

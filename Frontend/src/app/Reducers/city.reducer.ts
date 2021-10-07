@@ -5,8 +5,8 @@ import { CityModel } from '../Models/CityModel';
 export const initialState = new CityModel();
  
 const _cityReducer = createReducer<CityModel>(
-  initialState,
-  on(saveCity, (state, { city }) => ({id : city.id, name : city.name}))
+    initialState,
+    on(saveCity, (state, { city }) => ({id : city.id, name : city.name}))
 );
  
 export function cityReducer(

@@ -18,7 +18,7 @@
     </div>
     <div class="card-group row row-cols-1 row-cols-md-3 g-5">
         <div class="col" *ngFor="let film of films | async">
-            <div class="card">
+            <div class="card border-0">
                 <img class="card-img-top" src="{{getPoster(film.id!)}}">
                 <div class="card-body">
                     <h3 class="card-title text-center">
@@ -27,7 +27,7 @@
                     <h5 class="card-text text-center">
                         {{film.releaseYear}}
                     </h5>
-                    <a routerLink="/films/{{film.id}}" class="card-text text-center">
+                    <a routerLink="/films/{{film.id}}" class="card-link">
                         More...
                     </a>
                 </div>

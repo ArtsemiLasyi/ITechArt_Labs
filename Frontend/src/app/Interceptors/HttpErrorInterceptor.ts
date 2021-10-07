@@ -10,11 +10,13 @@ import {
 import { StatusCodes } from 'http-status-codes';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import { StorageService } from '../Services/StorageService';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
     constructor (
+        private storageService : StorageService,
         private injector : Injector
     ) { }
 
@@ -31,12 +33,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                         return throwError(error.error.errorText);
                     }
                     if (error.status === StatusCodes.UNAUTHORIZED) {
+                        this.storageService.deleteEmail();
                         return throwError(error);
                     }
                     if (error.error.errors) {
                         let message = '';
                         for (let key in error.error.errors) {
-                            message += error.error.errors[key] + '\r\n';
+                            message += error.error.errors[key] + '.';
                         }
                         return throwError(message);
                     }

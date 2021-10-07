@@ -24,15 +24,27 @@ export class HeaderComponent {
     activeCityName : string = 'No city selected'; 
     cityName : string = '';
 
+    readonly defaultEmailCaption = 'Sign in';
+    emailCaption : string = this.defaultEmailCaption;
+
     constructor (
         private cityService : CityService,
         private storageService : StorageService,
         private router : Router,
-        private store : Store<{ city : CityModel }>
+        private cityStore : Store<{ city : CityModel }>
     ) {
         let city = storageService.getCurrentCity();
         if (city) {
             this.setNewActiveCity(city);
+        }
+    }
+
+    ngAfterViewChecked() {
+        let email = this.storageService.getCurrentEmail();
+        if (email) {
+            this.emailCaption = email;
+        } else {
+            this.emailCaption = this.defaultEmailCaption;
         }
     }
 
@@ -53,7 +65,7 @@ export class HeaderComponent {
         this.activeCityName = city.name;
         this.cityName = '';
         this.model = city;
-        this.store.dispatch(saveCity({city}));
+        this.cityStore.dispatch(saveCity({city}));
     }
 
     saveCity(city : CityModel) {
