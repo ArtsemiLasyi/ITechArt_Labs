@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { FilmModel } from 'src/app/Models/FilmModel';
@@ -21,7 +20,9 @@ export class AdminFilmAddComponent {
     success : SuccessModel = new SuccessModel();
     selectedFileName : string = this.defaultFileName;
 
-    constructor(private filmService : FilmService) { }
+    constructor(
+        private filmService : FilmService
+    ) { }
 
     loadPhoto(event : Event) : any {
         this.poster = (event.target as HTMLInputElement).files![0];

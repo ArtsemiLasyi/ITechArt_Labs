@@ -23,6 +23,8 @@ export class OrdersListComponent implements OnInit {
     seatOrders : Observable<SeatOrderModel[]>[] = [];
     pastOrders : boolean = false;
 
+    ordersNumber : number = 0;
+
     ngOnInit() {
         this.getOrders();
     }
@@ -31,6 +33,11 @@ export class OrdersListComponent implements OnInit {
         let request = new OrderSearchRequest();
         request.pastOrders = this.pastOrders;
         this.orders = this.orderService.getOrders(request);
+        this.orders.subscribe(
+            (orders : OrderModel[]) => {
+                this.ordersNumber = orders.length;
+            }
+        )
     }
 
     getOrderInfo(orderId : number) {

@@ -83,7 +83,6 @@ export class AdminSessionInfoComponent implements OnInit {
         private cinemaService : CinemaService,
         private hallService : HallService,
         private pageService : PageService,
-        private seatTypeService : SeatTypeService,
         private seatTypePriceService : SeatTypePriceService,
         private currencyService : CurrencyService,
         private store : Store<{ city : CityModel }>

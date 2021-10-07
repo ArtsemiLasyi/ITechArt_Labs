@@ -1,17 +1,8 @@
-<section>
-    <h5>Search seat type:</h5>
-    <div class="dropdown form-control">
-        <input
-            readonly
-            type="search"
-            class="form-control form-control-dark dropdown-toggle"
-            placeholder="Select seat type for getting more info..."  
-            id="dropdownMenu"
-            data-bs-toggle="dropdown"
-            aria-expanded="true"
-        >
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-            <li *ngFor="let seatType of seatTypes | async">
+<section class="container p-3">
+    <h5>Click seat type to get more info:</h5>
+    <div class="form-control">
+        <ul class="list-group" *ngFor="let seatType of seatTypes | async">
+            <li class="list-group-item">
                 <a class="dropdown-item" routerLink="../info/{{seatType.id}}">
                     {{seatType.name}}
                 </a>

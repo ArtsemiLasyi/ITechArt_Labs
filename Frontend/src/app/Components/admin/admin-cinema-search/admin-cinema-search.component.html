@@ -1,6 +1,6 @@
 <section>
-    <h5>Search cinema:</h5>
-    <form>
+    <form class="p-3">
+        <h5>Search cinema:</h5>
         <input 
             type="search"
             name="search"
@@ -10,25 +10,31 @@
             [(ngModel)]="cinemaName"
         >
     </form>
-    <br><br>
     <div class="card-group row row-cols-4 row-cols-md-3 g-4">
         <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
-            <div class="col" *cdkVirtualFor="let cinema of cinemas | async" >
-                <div class="card" >
-                    <img class="card-img-top" src="{{getPhoto(cinema.id!)}}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">
-                            {{cinema.name}}
-                        </h5>
-                        <h6 class="card-title text-center">
-                            {{cinema.cityName}}
-                        </h6>
-                        <p class="card-text text-center">
-                            {{cinema.description}}
-                        </p>
-                        <a routerLink="../info/{{cinema.id}}" class="btn btn-lg btn-primary">
-                            Details
-                        </a>
+            <div class="card mb-3" *cdkVirtualFor="let cinema of cinemas | async">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img 
+                            src="{{getPhoto(cinema.id!)}}"
+                            class="card-img-top"
+                        >
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title text-left">
+                                {{cinema.name}}
+                            </h3>
+                            <h4 class="card-title text-left">
+                                {{cinema.cityName}}
+                            </h4>
+                            <h5 class="card-text text-left">
+                                {{cinema.description}}
+                            </h5>
+                            <a routerLink="../info/{{cinema.id}}" class="btn btn-lg btn-primary">
+                                Details
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

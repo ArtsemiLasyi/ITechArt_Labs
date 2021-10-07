@@ -22,7 +22,7 @@ export class AdminFilmSearchComponent implements OnInit {
     term = new BehaviorSubject<FilmSearchRequest>(new FilmSearchRequest());
     films : Observable<FilmModel[]> = this.term.pipe(
         autocomplete(
-            500, 
+            200, 
             (request : FilmSearchRequest) => 
                 this.filmService.getFilms(
                     this.pageService.getPageNumber(),

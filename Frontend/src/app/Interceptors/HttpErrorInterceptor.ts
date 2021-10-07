@@ -39,6 +39,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     if (error.error.errors) {
                         let message = '';
                         for (let key in error.error.errors) {
+                            if (key === 'request') {
+                                message += 'Invalid data';
+                                continue;
+                            }
+                            if (key.startsWith('$')) {
+                                continue;
+                            }
                             message += error.error.errors[key] + '.';
                         }
                         return throwError(message);

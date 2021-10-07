@@ -17,8 +17,6 @@ import { FilmInfoComponent } from 'src/app/Components/user/films/film-info/film-
 import { FilmsListComponent } from 'src/app/Components/user/films/films-list/films-list.component';
 import { FilmsNodeComponent } from 'src/app/Components/user/films/films-node/films-node.component';
 import { UserInfoComponent } from 'src/app/Components/user/users/user-info/user-info.component';
-import { AdminPanelGuard } from 'src/app/Guards/admin-panel.guard';
-import { UserInfoGuard } from 'src/app/Guards/user-info.guard';
 import { AuthInterceptor } from 'src/app/Interceptors/AuthInterceptor';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
@@ -38,7 +36,6 @@ import { cityReducer } from 'src/app/Reducers/city.reducer';
 import { CinemasNodeComponent } from 'src/app/Components/user/cinemas/cinemas-node/cinemas-node.component';
 import { HallViewDialogComponent } from 'src/app/Components/user/halls/hall-view-dialog/hall-view-dialog.component';
 import { MatDialog, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
-import { Overlay } from '@angular/cdk/overlay';
 import { AdminCinemaAddComponent } from 'src/app/Components/admin/admin-cinema-add/admin-cinema-add.component';
 import { AdminCinemaSearchComponent } from 'src/app/Components/admin/admin-cinema-search/admin-cinema-search.component';
 import { AdminCinemaInfoComponent } from 'src/app/Components/admin/admin-cinema-info/admin-cinema-info.component';

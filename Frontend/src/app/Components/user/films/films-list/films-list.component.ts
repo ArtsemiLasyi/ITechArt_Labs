@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, reduce, scan } from 'rxjs/operators';
 import { FilmModel } from 'src/app/Models/FilmModel';
+import { autocomplete } from 'src/app/Operators/autocomplete.operator';
 import { FilmSearchRequest } from 'src/app/Requests/FilmSearchRequest';
 import { FilmService } from 'src/app/Services/FilmService';
 import { PageService } from 'src/app/Services/pageservice';
@@ -18,7 +19,29 @@ import { PageService } from 'src/app/Services/pageservice';
 })
 export class FilmsListComponent implements OnInit {
 
-    films : Observable<FilmModel[]> | undefined;
+    term = new BehaviorSubject<FilmSearchRequest>(new FilmSearchRequest());
+    films : Observable<FilmModel[]> = this.term.pipe(
+        autocomplete(
+            100, 
+            (request : FilmSearchRequest) => 
+                this.filmService.getFilms(
+                    this.pageService.getPageNumber(),
+                    this.pageService.getPageSize(),
+                    request
+                ).pipe(
+                    map(
+                        (films) => {
+                            if (!films.length) {
+                                this.allFilmsAreShown = true;
+                            }
+                            films = this.oldFilms.concat(films);
+                            this.oldFilms = films;
+                            return films;
+                        }
+                    )
+                )
+        )
+    );
     oldFilms : FilmModel[] = [];
 
     filmName : string | undefined;
@@ -31,24 +54,7 @@ export class FilmsListComponent implements OnInit {
     ) { }
 
     getFilms(request = new FilmSearchRequest()) {
-        this.films = this.filmService
-            .getFilms(
-                this.pageService.getPageNumber(),
-                this.pageService.getPageSize(),
-                request
-            )
-            .pipe(
-                map(
-                    (films) => {
-                        if (!films.length) {
-                            this.allFilmsAreShown = true;
-                        }
-                        films = this.oldFilms.concat(films);
-                        this.oldFilms = films;
-                        return films;
-                    }
-                )
-            );
+        this.term.next(request);
     }
 
     getPoster(id : number) {

@@ -107,16 +107,6 @@ export class MakeOrderDialogComponent implements OnInit {
         this.hallDrawingService.init(this.statuses.nativeElement);
         this.hallDrawingService.drawSeatStatuses(this.statuses.nativeElement);
 
-        this.seats = await this.seatService.getSeats(this.model.hallId).toPromise();
-        await this.getSessionSeats();
-        this.hallDrawingService.init(this.canvas.nativeElement);
-        this.drawHall();
-
-        this.getCinemaServices();
-        if (this.orderSeats.value.length > 0) {
-            this.calculateSum();
-        }
-
         this.updateSubscription = interval(600 * 1000)
             .pipe(
                 startWith(0),
@@ -133,6 +123,14 @@ export class MakeOrderDialogComponent implements OnInit {
                     this.drawHall();
                 } 
             );
+
+        this.seats = await this.seatService.getSeats(this.model.hallId).toPromise();
+        this.hallDrawingService.init(this.canvas.nativeElement);
+
+        this.getCinemaServices();
+        if (this.orderSeats.value.length > 0) {
+            await this.calculateSum();
+        }
     }
     
     drawHall() {
@@ -203,20 +201,19 @@ export class MakeOrderDialogComponent implements OnInit {
 
                     if (sessionSeat.status === SessionSeatStatuses.Free) {
                         sessionSeat.status = SessionSeatStatuses.Taken;
-                        this.takeSeat(sessionSeat.seatId, request);
                         this.addSeat(sessionSeat);
+                        this.takeSeat(sessionSeat.seatId, request);
                         this.drawHall();   
                         return;
                     } else if (sessionSeat.status === SessionSeatStatuses.Taken) {
                         sessionSeat.status = SessionSeatStatuses.Free;
-                        this.freeSeat(sessionSeat.seatId, request);
                         this.deleteSeat(sessionSeat);
+                        this.freeSeat(sessionSeat.seatId, request);
                         this.drawHall();
                         return;
                     }
                 }
             }
-            this.takeSeat(this.seatDrawModels[index].seat!.id, request);
 
             let sessionSeat = new SessionSeatModel();
             sessionSeat.place = this.seatDrawModels[index].seat!.place;
@@ -228,6 +225,8 @@ export class MakeOrderDialogComponent implements OnInit {
             sessionSeat.status = SessionSeatStatuses.Taken;
             this.sessionSeats.value.push(sessionSeat);
             
+            this.takeSeat(this.seatDrawModels[index].seat!.id, request);
+
             this.drawHall();
             this.sessionSeats.value.forEach(
                 sessionSeat => {

@@ -63,6 +63,7 @@ export class DrawingService {
             }
 
             if (i === SessionSeatStatuses.Free) {
+                this.drawFigure(x, y, "#ffffff");
                 x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
                 this.context!.fillText(
                     'Free',
@@ -296,6 +297,8 @@ export class DrawingService {
     drawFigure(x : number, y : number, colorRgb : string) {
         this.context!.beginPath();
 
+        const fillStyle = this.context!.fillStyle;
+
         let startAngle = HallDrawingParameters.MIN_ANGLE;
         let endAngle = HallDrawingParameters.MAX_ANGLE;
 
@@ -323,6 +326,8 @@ export class DrawingService {
             true
         );
         this.context!.fill();
+
+        this.context!.fillStyle = fillStyle;
     }
 
     drawSeat(seat : SeatModel) : SeatDrawModel {

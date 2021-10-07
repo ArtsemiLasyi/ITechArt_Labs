@@ -5,7 +5,12 @@ import { SessionModel } from "../Models/SessionModel";
 export class DateTimeService {
 
     getTime(date : Date) {
-        return new Date(date).toLocaleTimeString();
+        return new Date(date).toLocaleTimeString(
+            [], {
+                hour : '2-digit',
+                minute :'2-digit'
+            }
+        );
     }
 
     getDate(date : Date) {

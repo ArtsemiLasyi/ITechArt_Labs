@@ -4,7 +4,7 @@
     </div>
     <form>
         <div class="form-group form-inline">
-            <h4>
+            <h3>
                 Past orders:
                 <input 
                     class="form-check-input"
@@ -14,9 +14,14 @@
                     checked
                     [(ngModel)]="pastOrders"
                 /> 
-            </h4>
+            </h3>
         </div>
     </form>
+    <div *ngIf="ordersNumber === 0">
+        <h4>
+            You have no orders
+        </h4>
+    </div>
     <div *ngFor="let order of orders | async">
         <div class="accordion" [id]="'accordion' + order.id">
             <div class="accordion-item">

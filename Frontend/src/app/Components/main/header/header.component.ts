@@ -48,6 +48,10 @@ export class HeaderComponent {
         }
     }
 
+    signedIn() {
+        return this.emailCaption === this.defaultEmailCaption;
+    }
+
     getCities() {
         this.term.next(this.cityName);
     }

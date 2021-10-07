@@ -73,12 +73,17 @@
                             (click)="openDialog(session)"
                         >
                             <div class="ms-2 me-auto">
-                                <div class="fw-bold">{{getDate(session)}}</div>
-                                <h6>{{session.hallName}}</h6>
+                                <div class="fw-bold">
+                                    <h6>Hall name: {{session.hallName}}</h6>
+                                </div>
+                                <h6>Start date: {{getDate(session)}}</h6>
                             </div>
-                            <span class="badge bg-primary rounded-pill">
-                                {{getTime(session)}}
-                            </span>
+                            <h6>
+                                Start time:
+                                <span class="badge bg-primary rounded-pill">
+                                    {{getTime(session)}}
+                                </span>
+                            </h6>
                         </a>
                     </div>
                 </div>
