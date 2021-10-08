@@ -9,7 +9,7 @@ import { CinemaService } from 'src/app/Services/CinemaService';
 @Component({
     selector : 'cinemas-cinemainfo',
     templateUrl : './cinema-info.component.html',
-    styleUrls : ['./cinema-info.component.scss'],
+    styleUrls : [],
     providers : [CinemaService, GlobalErrorHandler]
 })
 export class CinemaInfoComponent implements OnInit {

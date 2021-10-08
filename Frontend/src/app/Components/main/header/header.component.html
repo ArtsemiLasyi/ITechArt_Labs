@@ -1,65 +1,76 @@
-<header class="p-3 text-white">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <ul class="nav brand col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li>
-                <a href="#" class="navbar-brand">
-                    <img 
-                        src="assets/images/logo_small.png"
-                        width="35"
-                        alt=""
-                        class="d-inline-block align-middle mr-2"
-                    >
-                    <span class="text-uppercase text-white">
-                        CinemaBoo
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link px-2 text-white">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a routerLink="/users/current" class="nav-link px-2 text-white">
-                    Account
-                </a>
-            </li>
-        </ul>
-
-        <button type="button" class="btn btn-primary">{{activeCityName}}</button>
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-            <div class="dropdown">
-                <input
-                    type="search"
-                    class="form-control form-control-dark dropdown-toggle"
-                    name="cityName" 
-                    placeholder="Choose your city..."
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    (input)="getCities()"
-                    [(ngModel)]="cityName"
-                >
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li *ngFor="let city of cities | async">
-                        <a class="dropdown-item" (click)="setCity(city)">
-                            {{city.name}}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </form>
-        <div class="text-end">
-            <a routerLink="/account/signin" type="button" class="btn btn-outline-light me-2">
-                {{emailCaption}}
-            </a>
-            <a
-                *ngIf="signedIn()"
-                routerLink="/account/signup"
-                class="btn btn-outline-light me-3"
+<nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand">
+            <img 
+                src="assets/images/logo_small.png"
+                width="35"
+                alt=""
+                class="d-inline-block align-middle mr-2"
             >
-                Sign up
-            </a>
+            <span class="text-uppercase text-white">
+                CinemaBoo
+            </span>
+        </a>
+        <button 
+            class="navbar-toggler bg-light" 
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li>
+                    <a routerLink="/" class="nav-link px-2 text-white">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/users/current" class="nav-link px-2 text-white">
+                        Account
+                    </a>
+                </li>
+            </ul>
+        
+            <form class="d-flex">
+                <button type="button" class="btn btn-primary">{{activeCityName}}</button>
+                <div class="dropdown">
+                    <input
+                        type="search"
+                        class="form-control form-control-dark dropdown-toggle"
+                        name="cityName" 
+                        placeholder="Choose your city..."
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        (input)="getCities()"
+                        [(ngModel)]="cityName"
+                    >
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li *ngFor="let city of cities | async">
+                            <a class="dropdown-item" (click)="setCity(city)">
+                                {{city.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+
+            <div class="text-end">
+                <a routerLink="/account/signin" type="button" class="btn btn-outline-light me-2">
+                    {{emailCaption}}
+                </a>
+                <a
+                    *ngIf="signedIn()"
+                    routerLink="/account/signup"
+                    class="btn btn-outline-light me-3"
+                >
+                    Sign up
+                </a>
+            </div>
         </div>
     </div>
-</header>
+</nav>

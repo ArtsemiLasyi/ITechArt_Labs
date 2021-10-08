@@ -55,6 +55,11 @@ $primary:       $primary-color !default;
     padding: 8px;
 }
 
+.canvas-container {
+    width: fit-content;
+    height: fit-content;
+}
+
 .dropbtn {
     background-color: $primary-color;
     color: white;

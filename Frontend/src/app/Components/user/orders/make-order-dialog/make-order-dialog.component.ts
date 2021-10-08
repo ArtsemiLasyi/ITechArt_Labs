@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { CinemaServiceModel } from 'src/app/Models/CinemaServiceModel';
+import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { PriceModel } from 'src/app/Models/PriceModel';
 import { SeatDrawModel } from 'src/app/Models/SeatDrawModel';
 import { SeatsModel } from 'src/app/Models/SeatsModel';
@@ -64,6 +65,8 @@ export class MakeOrderDialogComponent implements OnInit {
     calculatedSum : boolean = false;
 
     updateSubscription : Subscription | undefined;
+
+    error : ErrorModel = new ErrorModel();
 
     constructor(
         public dialogRef : MatDialogRef<MakeOrderDialogComponent>,
@@ -180,6 +183,9 @@ export class MakeOrderDialogComponent implements OnInit {
     }
 
     async tryToTakeOrFreeSeat(event : MouseEvent) {
+
+        this.error.exists = false;
+
         let x = event.offsetX;
         let y = event.offsetY;
 
@@ -202,10 +208,17 @@ export class MakeOrderDialogComponent implements OnInit {
                     if (sessionSeat.status === SessionSeatStatuses.Free) {
                         sessionSeat.status = SessionSeatStatuses.Taken;
                         this.addSeat(sessionSeat);
-                        this.takeSeat(sessionSeat.seatId, request);
+                        if (!await this.takeSeat(this.seatDrawModels[index].seat!.id, request)) {
+                            this.error.exists = true;
+                            this.error.text = 'Sorry. Seat has already taken by another user';
+                            this.deleteSeat(sessionSeat);
+                        };
                         this.drawHall();   
                         return;
                     } else if (sessionSeat.status === SessionSeatStatuses.Taken) {
+                        if (sessionSeat.userId !== this.userId) {
+                            return;
+                        }
                         sessionSeat.status = SessionSeatStatuses.Free;
                         this.deleteSeat(sessionSeat);
                         this.freeSeat(sessionSeat.seatId, request);
@@ -225,7 +238,11 @@ export class MakeOrderDialogComponent implements OnInit {
             sessionSeat.status = SessionSeatStatuses.Taken;
             this.sessionSeats.value.push(sessionSeat);
             
-            this.takeSeat(this.seatDrawModels[index].seat!.id, request);
+            if (!await this.takeSeat(this.seatDrawModels[index].seat!.id, request)) {
+                this.error.exists = true;
+                this.error.text = 'Sorry. Seat has already taken by another user';
+                this.deleteSeat(sessionSeat);
+            };
 
             this.drawHall();
             this.sessionSeats.value.forEach(
@@ -318,12 +335,18 @@ export class MakeOrderDialogComponent implements OnInit {
     private async takeSeat(
         seatId : number,
         request : SessionSeatRequest
-    ) {
-        await this.sessionSeatService.take(
-            this.model.id,
-            seatId,
-            request
-        ).toPromise();
+    ) : Promise<boolean> {
+        let flag = true;
+        let status = await this.sessionSeatService
+            .take(
+                this.model.id,
+                seatId,
+                request
+            ).toPromise();
+        if (parseInt(status.toString()) > 0) {
+            flag = false;
+        }
+        return flag;
     }
 
     private async freeSeat(

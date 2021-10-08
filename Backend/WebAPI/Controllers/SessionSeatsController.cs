@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
+using BusinessLogic.Statuses;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,8 @@ namespace WebAPI.Controllers
             {
                 if (parameters.Take.Value)
                 {
-                    await _sessionSeatService.TakeAsync(model);
+                    SeatTakeStatus status = await _sessionSeatService.TakeAsync(model);
+                    return Ok(status);
                 }
             }
             if (parameters.Free != null)

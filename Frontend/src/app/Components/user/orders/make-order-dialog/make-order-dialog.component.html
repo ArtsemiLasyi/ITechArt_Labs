@@ -1,5 +1,8 @@
 <mat-dialog-content class="dialog-content">
     <div class="modal-body canvas-container">
+        <div *ngIf="error.exists" class="alert alert-warning" role="alert">
+            {{error.text}}
+        </div>
         <div class="canvas-container">
             <canvas 
                 #canvas 

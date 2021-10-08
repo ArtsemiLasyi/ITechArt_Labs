@@ -48,7 +48,8 @@ export class DrawingService {
             x += HallDrawingParameters.SEAT_RADIUS * 6 * i;
             
             this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
-            this.context!.font = '24px roboto';
+            this.context!.font = 
+                (HallDrawingParameters.SEAT_RADIUS * 1.2).toString() + 'px roboto';
             this.context!.textAlign = 'center';
 
             if (i === SessionSeatStatuses.Taken) {
@@ -116,7 +117,8 @@ export class DrawingService {
             this.drawFigure(x, y, seatTypes[i].colorRgb);
             x += HallDrawingParameters.SEAT_RADIUS * 9 / 2;
             this.context!.fillStyle = HallDrawingParameters.COMMON_COLOR_RGB;
-            this.context!.font = '24px roboto';
+            this.context!.font = 
+                (HallDrawingParameters.SEAT_RADIUS * 1.2).toString() + 'px roboto';
             this.context!.textAlign = 'center';
             this.context!.fillText(
                 seatTypes[i].name,
@@ -386,8 +388,10 @@ export class DrawingService {
     }
 
     private drawRowNumbers(canvas : HTMLCanvasElement, size : HallSizeModel) {
+        let oldFillStyle = this.context!.fillStyle;
         this.context!.fillStyle = "rgb(0, 0, 200)";
-        this.context!.font = "16px roboto";
+        this.context!.font = 
+                (HallDrawingParameters.SEAT_RADIUS * 1.2).toString() + 'px roboto';
         
         for (let i = 0; i < size.rowsNumber; i++) {
             let y = this.getY(i + 1);
@@ -397,11 +401,15 @@ export class DrawingService {
                 y
             );
         }
+        this.context!.fillStyle = oldFillStyle;
     }
 
     private drawPlaceNumbers(canvas : HTMLCanvasElement, size : HallSizeModel) {
+        let oldFillStyle = this.context!.fillStyle;
+
         this.context!.fillStyle = "rgb(0, 0, 200)";
-        this.context!.font = "16px roboto";
+        this.context!.font = 
+                (HallDrawingParameters.SEAT_RADIUS * 1.2).toString() + 'px roboto';
         
         for (let i = 0; i < size.placesNumber; i++) {
             let x = this.getX(i + 1);
@@ -411,6 +419,7 @@ export class DrawingService {
                 HallDrawingParameters.INDENT_BETWEEN_SEAT_AND_HALL_BORDER * 2 / 3
             );
         }
+        this.context!.fillStyle = oldFillStyle;
     }
 
     private checkSeat(
