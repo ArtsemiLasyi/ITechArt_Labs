@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceModel } from 'src/app/Models/ServiceModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -20,8 +20,9 @@ export class AdminServiceInfoComponent implements OnInit {
     disabledButton : boolean = false;
 
     constructor (
-        private serviceService: ServiceService,
-        private activateRoute: ActivatedRoute
+        private serviceService : ServiceService,
+        private activateRoute : ActivatedRoute,
+        private router : Router,
     ) { }
 
     ngOnInit() {
@@ -59,6 +60,10 @@ export class AdminServiceInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                     this.disableButtons();
+                    this.router.navigate(
+                        ['../../search'], 
+                        { relativeTo: this.activateRoute }
+                    );
                 },
                 (error  : string) => {
                     this.error.exists = true;

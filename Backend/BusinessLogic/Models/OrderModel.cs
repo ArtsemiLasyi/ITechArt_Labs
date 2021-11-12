@@ -12,5 +12,10 @@ namespace BusinessLogic.Models
         public DateTime RegistratedAt { get; set; }
         public SessionSeatsModel SessionSeats { get; set; } = null!;
         public IReadOnlyCollection<CinemaServiceModel> CinemaServices { get; set; } = null!;
+        public DateTime SessionStart { get; set; }
+        public int CinemaId { get; set; }
+        public string CinemaName { get; set; } = null!;
+        public int HallId { get; set; }
+        public string HallName { get; set; } = null!;
     }
 }

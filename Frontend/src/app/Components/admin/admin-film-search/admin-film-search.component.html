@@ -1,6 +1,6 @@
 <section>
-    <h5>Search film:</h5>
-    <form>
+    <form class="p-3">
+        <h5>Search film:</h5>
         <input 
             type="search"
             name="search"
@@ -10,22 +10,28 @@
             [(ngModel)]="filmName"
         >
     </form>
-    <br><br>
     <div class="card-group row row-cols-4 row-cols-md-3 g-4">
         <cdk-virtual-scroll-viewport [itemSize]="10" class="viewport">
-            <div class="col" *cdkVirtualFor="let film of films | async" >
-                <div class="card" >
-                    <img class="card-img-top" src="{{getPoster(film.id!)}}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">
-                            {{film.name}}
-                        </h5>
-                        <p class="card-text text-center">
-                            {{film.releaseYear}}
-                        </p>
-                        <a routerLink="../info/{{film.id}}" class="btn btn-lg btn-primary">
-                            Details
-                        </a>
+            <div class="card mb-3" *cdkVirtualFor="let film of films | async">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img 
+                            src="{{getPoster(film.id!)}}"
+                            class="card-img-top"
+                        >
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title text-left">
+                                {{film.name}}
+                            </h3>
+                            <h4 class="card-title text-left">
+                                Year: {{film.releaseYear}}
+                            </h4>
+                            <a routerLink="../info/{{film.id}}" class="btn btn-lg btn-primary">
+                                Details
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

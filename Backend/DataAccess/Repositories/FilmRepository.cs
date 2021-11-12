@@ -53,52 +53,6 @@ namespace DataAccess.Repositories
                 }
             }
 
-            if (parameters.CinemaId != null)
-            {
-                query = query.Where(
-                    film =>
-                        _context.Sessions
-                            .Where(
-                                session =>
-                                    session.FilmId == film.Id
-                                        && _context.Halls
-                                            .Where(
-                                                hall => hall.CinemaId == parameters.CinemaId
-                                            )
-                                            .Any()
-                            )
-                            .Any()
-                        );
-            }
-
-            if (parameters.FirstSessionDateTime != null)
-            {
-                query = query.Where(
-                    film => 
-                        _context.Sessions
-                            .Where(
-                                session => 
-                                    parameters.FirstSessionDateTime >= session.StartDateTime
-                                        && session.FilmId == film.Id
-                            )
-                            .Any()
-                        );
-            }
-
-            if (parameters.LastSessionDateTime != null)
-            {
-                query = query.Where(
-                    film =>
-                        _context.Sessions
-                            .Where(
-                                session =>
-                                    parameters.LastSessionDateTime <= session.StartDateTime
-                                        && session.FilmId == film.Id
-                            )
-                            .Any()
-                        );
-            }
-
             List<FilmEntity> films = await query.OrderByDescending(on => on.ReleaseYear)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

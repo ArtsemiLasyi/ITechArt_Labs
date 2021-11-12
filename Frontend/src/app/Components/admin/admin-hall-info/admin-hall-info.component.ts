@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
@@ -43,6 +43,7 @@ export class AdminHallInfoComponent {
         private dialog : MatDialog,
         private seatService : SeatService,
         private activateRoute: ActivatedRoute,
+        private router : Router,
         private store : Store<{ city : CityModel }>
     ) { }
 
@@ -122,6 +123,10 @@ export class AdminHallInfoComponent {
         await this.seatService.deleteSeats(this.model.id).toPromise();
         this.success.flag = true;
         this.disableButtons();
+        this.router.navigate(
+            ['../../search'], 
+            { relativeTo: this.activateRoute }
+        );
     }
 
     editSeats() {

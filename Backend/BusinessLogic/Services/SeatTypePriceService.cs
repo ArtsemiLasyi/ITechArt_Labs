@@ -28,6 +28,12 @@ namespace BusinessLogic.Services
             return entity.Adapt<SeatTypePriceModel>();
         }
 
+        public Task CreateAsync(IReadOnlyCollection<SeatTypePriceModel> model)
+        {
+            IReadOnlyCollection<SeatTypePriceEntity> entities = model.Adapt<IReadOnlyCollection<SeatTypePriceEntity>>();
+            return _seatTypePriceRepository.CreateAsync(entities);
+        }
+
         public async Task<SeatTypePriceModel?> GetByAsync(int sessionId, int seatTypeId)
         {
             SeatTypePriceEntity? entity = await _seatTypePriceRepository.GetByAsync(sessionId, seatTypeId);
@@ -45,10 +51,16 @@ namespace BusinessLogic.Services
             return model;
         }
 
-        public async Task<IReadOnlyCollection<SeatTypePriceModel>> GetAllByAsync(int cinemaId)
+        public async Task<IReadOnlyCollection<SeatTypePriceModel>> GetAllByAsync(int sessionId)
         {
-            IReadOnlyCollection<SeatTypePriceEntity> models = await _seatTypePriceRepository.GetAllByAsync(cinemaId);
+            IReadOnlyCollection<SeatTypePriceEntity> models = await _seatTypePriceRepository.GetAllByAsync(sessionId);
             return models.Adapt<IReadOnlyCollection<SeatTypePriceModel>>();
+        }
+
+        public Task EditAsync(IReadOnlyCollection<SeatTypePriceModel> models)
+        {
+            IReadOnlyCollection<SeatTypePriceEntity> entities = models.Adapt<IReadOnlyCollection<SeatTypePriceEntity>>();
+            return _seatTypePriceRepository.UpdateAsync(entities);
         }
 
         public Task EditAsync(SeatTypePriceModel model)

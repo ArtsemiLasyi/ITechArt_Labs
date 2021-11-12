@@ -37,11 +37,18 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("sum")]
         public async Task<IActionResult> CalculateSum([FromBody] OrderRequest request)
         {
-            PriceModel price = await _orderService.GetSumAsync(request.Adapt<OrderModel>());
-            return Ok(price);
+            int? id = HttpContext.User.Identity.GetUserId();
+            if (id == null)
+            {
+                return Unauthorized();
+            }
+            OrderModel model = request.Adapt<OrderModel>();
+            model.UserId = id.Value;
+            PriceModel price = await _orderService.GetSumAsync(model);
+            return Ok(price.Adapt<PriceResponse>());
         }
 
         [HttpGet]
@@ -53,20 +60,25 @@ namespace WebAPI.Controllers
                 return Unauthorized();
             }
 
-            IReadOnlyCollection<OrderModel> services = await _orderService
+            IReadOnlyCollection<OrderModel> orders = await _orderService
                 .GetAllByAsync(
                     userId.Value,
                     parameters.Adapt<OrderModelSearchParameters>()
                 );
-            IReadOnlyCollection<OrderResponse> response = services.Adapt<IReadOnlyCollection<OrderResponse>>();
+            IReadOnlyCollection<OrderResponse> response = orders.Adapt<IReadOnlyCollection<OrderResponse>>();
             return Ok(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] OrderRequest request)
         {
+            int? id = HttpContext.User.Identity.GetUserId();
+            if (id == null)
+            {
+                return Unauthorized();
+            }
             OrderModel model = request.Adapt<OrderModel>();
-            PriceModel price = await _orderService.GetSumAsync(request.Adapt<OrderModel>());
+            model.UserId = id.Value;
             await _orderService.CreateAsync(model);
             return Ok();
         }

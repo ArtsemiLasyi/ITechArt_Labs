@@ -33,6 +33,9 @@ export class AdminPanelGuard implements CanActivate{
                         if (this.model.role === UserRoles.Administrator) {
                             flag = true;
                         }
+                        if (!flag) {
+                            this.router.navigate(['/account/signin']);
+                        }
                         return flag;
                     }
                 ),

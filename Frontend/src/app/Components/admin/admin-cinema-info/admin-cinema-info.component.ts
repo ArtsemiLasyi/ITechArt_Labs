@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CinemaModel } from 'src/app/Models/CinemaModel';
 import { CityModel } from 'src/app/Models/CityModel';
@@ -38,6 +38,7 @@ export class AdminCinemaInfoComponent {
     disabledButton : boolean = false;
 
     constructor(
+        private router : Router,
         private cityService : CityService,
         private cinemaService : CinemaService,
         private activateRoute: ActivatedRoute) { }
@@ -113,6 +114,10 @@ export class AdminCinemaInfoComponent {
                     this.success.flag = true;
                     this.clearModel();
                     this.disableButtons();
+                    this.router.navigate(
+                        ['../../search'], 
+                        { relativeTo: this.activateRoute }
+                    );
                 },
                 (error : string) => {
                     this.error.exists = true;

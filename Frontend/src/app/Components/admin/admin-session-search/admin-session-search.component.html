@@ -1,0 +1,69 @@
+<section>
+    <h5>Search session:</h5>
+    <div class="dropdown form-control">
+        <input
+            type="search"
+            class="form-control form-control-dark dropdown-toggle"
+            name="filmName"
+            (keyup)="getFilms()"
+            placeholder="Choose film..."
+            [(ngModel)]="filmName"
+            id="dropdownFilmButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+        >
+        <ul class="dropdown-menu" aria-labelledby="dropdownFilmButton">
+            <li *ngFor="let film of films | async">
+                <a 
+                    class="dropdown-item" 
+                    (click)="setFilm(film)"
+                >
+                    {{film.name}} ({{film.releaseYear}})
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown form-control">
+        <input
+            type="search"
+            class="form-control form-control-dark dropdown-toggle"
+            name="cinemaName"
+            (keyup)="getCinemas()"
+            placeholder="Choose cinema..."
+            [(ngModel)]="cinemaName"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+        >
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li *ngFor="let cinema of cinemas | async">
+                <a 
+                    class="dropdown-item" 
+                    (click)="setCinema(cinema)"
+                >
+                    {{cinema.name}} ({{cinema.cityName}})
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="dropdown form-control">
+        <input
+            readonly
+            type="search"
+            class="form-control form-control-dark dropdown-toggle"
+            placeholder="Select session for getting more info..."  
+            id="dropdownMenu"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+            (focus)="getSessions()"
+        >
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+            <li *ngFor="let session of sessions | async">
+                <a class="dropdown-item" routerLink="../info/{{session.id}}">
+                    {{getDate(session.startDateTime)}}
+                    {{getTime(session.startDateTime)}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>

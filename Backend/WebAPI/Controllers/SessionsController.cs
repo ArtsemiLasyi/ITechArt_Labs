@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Models;
+using BusinessLogic.Parameters;
 using BusinessLogic.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebAPI.Constants;
+using WebAPI.Parameters;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
@@ -17,10 +19,12 @@ namespace WebAPI.Controllers
     public class SessionsController : ControllerBase
     {
         private readonly SessionService _sessionService;
+        private readonly SeatTypePriceService _seatTypePriceService;
 
-        public SessionsController(SessionService sessionService)
+        public SessionsController(SessionService sessionService, SeatTypePriceService seatTypePriceService)
         {
             _sessionService = sessionService;
+            _seatTypePriceService = seatTypePriceService;
         }
 
         [AllowAnonymous]
@@ -32,14 +36,17 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(model.Adapt<SessionResponse>());
         }
 
         [AllowAnonymous]
-        [HttpGet("~/films/{filmId}/sessions")]
-        public async Task<IActionResult> GetAll(int filmId)
+        [HttpGet("~/cinemas/{cinemaId}/sessions")]
+        public async Task<IActionResult> GetAll(int cinemaId, [FromQuery] SessionRequestSearchParameters parameters)
         {
-            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(filmId);
+            IReadOnlyCollection<SessionModel> services = await _sessionService.GetAllByAsync(
+                cinemaId, 
+                parameters.Adapt<SessionModelSearchParameters>()
+            );
             IReadOnlyCollection<SessionResponse> response = services.Adapt<IReadOnlyCollection<SessionResponse>>();
             return Ok(response);
         }
@@ -48,8 +55,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create([FromBody] SessionRequest request)
         {
             SessionModel model = request.Adapt<SessionModel>();
-            await _sessionService.CreateAsync(model);
-            return Ok();
+            int id = await _sessionService.CreateAsync(model);
+
+            List<SeatTypePriceModel> seatTypePrices = request.SeatTypePrices
+                .Adapt<List<SeatTypePriceModel>>();
+            seatTypePrices.ForEach(seatTypePrice => seatTypePrice.SessionId = id);
+            await _seatTypePriceService.CreateAsync(seatTypePrices.AsReadOnly());
+
+            return Ok(id);
         }
 
         [HttpPut("{id}")]

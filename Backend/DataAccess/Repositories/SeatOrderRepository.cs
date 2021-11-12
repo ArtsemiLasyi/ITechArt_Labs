@@ -2,6 +2,7 @@
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -18,6 +19,12 @@ namespace DataAccess.Repositories
         public Task CreateAsync(SeatOrderEntity entity)
         {
             _context.SeatOrders.Add(entity);
+            return _context.SaveChangesAsync();
+        }
+
+        public Task CreateAsync(IReadOnlyCollection<SeatOrderEntity> entities)
+        {
+            _context.SeatOrders.AddRange(entities);
             return _context.SaveChangesAsync();
         }
 
@@ -38,6 +45,7 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.SeatOrders
+                .Include("Seat")
                 .FirstOrDefaultAsync(
                     seatOrder => seatOrder.SeatId == seatId && seatOrder.OrderId == orderId
                 );
@@ -47,6 +55,8 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SeatOrderEntity>> GetAllByAsync(int orderId)
         {
             List<SeatOrderEntity> entities = await _context.SeatOrders
+                .Include("Seat")
+                .Where(seatOrder => seatOrder.OrderId == orderId)
                 .ToListAsync();
             return entities;
         }

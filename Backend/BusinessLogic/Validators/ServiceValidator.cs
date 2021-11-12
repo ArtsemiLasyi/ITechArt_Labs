@@ -7,7 +7,10 @@ namespace BusinessLogic.Validators
     {
         public ServiceValidator()
         {
-            RuleFor(model => model.Name).NotNull().MaximumLength(50);
+            RuleFor(model => model.Name)
+                .NotNull()
+                .MaximumLength(50)
+                .WithMessage("Service name must not be greater then 50 letters");
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { props, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { saveCity } from 'src/app/Actions/city.actions';
@@ -23,15 +24,32 @@ export class HeaderComponent {
     activeCityName : string = 'No city selected'; 
     cityName : string = '';
 
+    readonly defaultEmailCaption = 'Sign in';
+    emailCaption : string = this.defaultEmailCaption;
+
     constructor (
         private cityService : CityService,
         private storageService : StorageService,
-        private store : Store<{ city : CityModel }>
+        private router : Router,
+        private cityStore : Store<{ city : CityModel }>
     ) {
         let city = storageService.getCurrentCity();
         if (city) {
             this.setNewActiveCity(city);
         }
+    }
+
+    ngAfterViewChecked() {
+        let email = this.storageService.getCurrentEmail();
+        if (email) {
+            this.emailCaption = email;
+        } else {
+            this.emailCaption = this.defaultEmailCaption;
+        }
+    }
+
+    signedIn() {
+        return this.emailCaption === this.defaultEmailCaption;
     }
 
     getCities() {
@@ -41,13 +59,17 @@ export class HeaderComponent {
     setCity(city : CityModel) {
         this.setNewActiveCity(city);
         this.saveCity(city);
+        const url = this.router.url;
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate([url]);
     }
 
     setNewActiveCity(city : CityModel) {
         this.activeCityName = city.name;
         this.cityName = '';
         this.model = city;
-        this.store.dispatch(saveCity({city}));
+        this.cityStore.dispatch(saveCity({city}));
     }
 
     saveCity(city : CityModel) {

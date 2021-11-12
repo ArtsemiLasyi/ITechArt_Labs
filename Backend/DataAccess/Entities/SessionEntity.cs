@@ -10,5 +10,7 @@ namespace DataAccess.Entities
         public DateTime StartDateTime { get; set; }
         public int FreeSeatsNumber { get; set; }
         public bool IsDeleted { get; set; }
+        public HallEntity Hall { get; set; } = null!;
+        public FilmEntity Film { get; set; } = null!;
     }
 }

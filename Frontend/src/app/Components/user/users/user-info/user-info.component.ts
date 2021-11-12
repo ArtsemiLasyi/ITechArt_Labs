@@ -6,6 +6,7 @@ import { SuccessModel } from 'src/app/Models/SuccessModel';
 import { UserModel } from 'src/app/Models/UserModel';
 import { UserRequest } from 'src/app/Requests/UserRequest';
 import { AccountStorageService } from 'src/app/Services/AccountStorageService';
+import { StorageService } from 'src/app/Services/StorageService';
 import { UserService } from 'src/app/Services/UserService';
 
 @Component({
@@ -20,6 +21,7 @@ export class UserInfoComponent {
 
     constructor(
         private service : UserService,
+        private storageService : StorageService,
         private accountStorageService : AccountStorageService,
         private router : Router
     ) { }
@@ -67,6 +69,7 @@ export class UserInfoComponent {
     }
 
     signOut() {
+        this.storageService.deleteEmail();
         this.accountStorageService.deleteToken();
         this.router.navigate(['/']);
     }

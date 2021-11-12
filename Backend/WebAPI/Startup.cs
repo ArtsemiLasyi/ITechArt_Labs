@@ -39,13 +39,7 @@ namespace WebAPI
         {
             Configuration = configuration;
             ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en");
-            CultureInfo culture = new("en-Us", false)
-            {
-                DateTimeFormat =
-                {
-                    ShortDatePattern = "MM/dd/yyyy"
-                }
-            };
+            CultureInfo culture = new ("en-Us", false);
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
         }
@@ -116,6 +110,7 @@ namespace WebAPI
             services.AddTransient<SeatTypePriceValidator>();
             services.AddTransient<OrderValidator>();
             services.AddTransient<CurrencyValidator>();
+            services.AddTransient<SessionValidator>();
 
             services.AddSingleton<JwtService>();
 
@@ -215,6 +210,7 @@ namespace WebAPI
                         fv.RegisterValidatorsFromAssemblyContaining<SeatTypePriceRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<OrderRequestValidator>();
                         fv.RegisterValidatorsFromAssemblyContaining<CurrencyRequestValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<SessionRequestValidator>();
                     }
                 );
             services.AddDbContext<CinemabooContext>(
@@ -373,6 +369,109 @@ namespace WebAPI
                 .Map(
                     dest => dest.Price,
                     src => src.Price.Adapt<PriceModel>()
+                );
+
+            TypeAdapterConfig<SeatOrderEntity, SeatOrderModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Place,
+                    src => src.Seat.Place
+                )
+                .Map(
+                    dest => dest.Row,
+                    src => src.Seat.Row
+                );
+
+            TypeAdapterConfig<OrderEntity, OrderModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.SessionStart,
+                    src => src.Session.StartDateTime
+                )
+                .Map(
+                    dest => dest.CinemaId,
+                    src => src.Session.Hall.CinemaId
+                )
+                .Map(
+                    dest => dest.CinemaName,
+                    src => src.Session.Hall.Cinema.Name
+                )
+                .Map(
+                    dest => dest.HallId,
+                    src => src.Session.HallId
+                )
+                .Map(
+                    dest => dest.HallName,
+                    src => src.Session.Hall.Name
+                )
+                .Map(
+                    dest => dest.Price,
+                    src => new PriceModel(
+                        src.Price,
+                        src.Currency.Adapt<CurrencyModel>()
+                    )
+                );
+
+            TypeAdapterConfig<OrderModel, OrderEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Value
+                )
+                .Map(
+                    dest => dest.CurrencyId,
+                    src => src.Price.Currency.Id
+                );
+
+            TypeAdapterConfig<SeatTypePriceModel, SeatTypePriceEntity>
+                .NewConfig()
+                .Map(
+                    dest => dest.Price,
+                    src => src.Price.Value
+                )
+                .Map(
+                    dest => dest.CurrencyId,
+                    src => src.Price.Currency.Id
+                );
+
+            TypeAdapterConfig<SeatTypePriceEntity, SeatTypePriceModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.SeatTypeName,
+                    src => src.SeatType.Name
+                )
+                .Map(
+                    dest => dest.Price,
+                    src => new PriceModel(
+                        src.Price,
+                        src.Currency.Adapt<CurrencyModel>()
+                    )
+                );
+
+            TypeAdapterConfig<SessionEntity, SessionModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.FilmName,
+                    src => src.Film.Name
+                )
+                .Map(
+                    dest => dest.HallName,
+                    src => src.Hall.Name
+                );
+
+            TypeAdapterConfig<SessionSeatEntity, SessionSeatModel>
+                .NewConfig()
+                .Map(
+                    dest => dest.Row,
+                    src => src.Seat.Row
+                )
+                .Map(
+                    dest => dest.Place,
+                    src => src.Seat.Place
+                )
+                .Map(
+                    dest => dest.SeatTypeId,
+                    src => src.Seat.SeatTypeId
                 );
         }
     }

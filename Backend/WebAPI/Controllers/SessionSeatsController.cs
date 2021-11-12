@@ -1,10 +1,12 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services;
+using BusinessLogic.Statuses;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebAPI.Constants;
+using WebAPI.Parameters;
 using WebAPI.Requests;
 using WebAPI.Responses;
 
@@ -29,52 +31,57 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SessionSeatsRequest request)
+        [HttpGet("{seatId}")]
+        public async Task<IActionResult> Get(int sessionId, int seatId)
+        {
+            SessionSeatModel? model = await _sessionSeatService.GetByAsync(sessionId, seatId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            SessionSeatResponse response = model.Adapt<SessionSeatResponse>();
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(int sessionId, [FromBody] SessionSeatsRequest request)
         {
             SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
-            await _sessionSeatService.CreateAsync(model);
+            await _sessionSeatService.UpdateSeatStatusesAsync(sessionId, model);
             return Ok();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] SessionSeatsRequest request)
+        [HttpPut("{seatId}")]
+        public async Task<IActionResult> Modify(
+            [FromQuery] SessionSeatRequestQueryParameters parameters, 
+            [FromBody] SessionSeatRequest request)
         {
-            SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
-            await _sessionSeatService.UpdateSeatStatusesAsync(model);
-            return Ok();
-        }
+            if (parameters.Free == null && parameters.Take == null)
+            {
+                return BadRequest(new { errortext = "There is no option selected" });
+            }
+            if (parameters.Free != null && parameters.Take != null)
+            {
+                return BadRequest(new { errorText = "Only one option allowed" });
+            }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SessionSeatRequest request)
-        {
             SessionSeatModel model = request.Adapt<SessionSeatModel>();
-            await _sessionSeatService.CreateAsync(model);
-            return Ok();
-        }
+            if (parameters.Take != null)
+            {
+                if (parameters.Take.Value)
+                {
+                    SeatTakeStatus status = await _sessionSeatService.TakeAsync(model);
+                    return Ok(status);
+                }
+            }
+            if (parameters.Free != null)
+            {
+                if (parameters.Free.Value)
+                {
+                    await _sessionSeatService.FreeAsync(model);
+                }
+            }
 
-        [HttpPut]
-        public async Task<IActionResult> Take([FromBody] SessionSeatRequest request)
-        {
-            SessionSeatModel model = request.Adapt<SessionSeatModel>();
-            await _sessionSeatService.TakeAsync(model);
-            return Ok();
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Free([FromBody] SessionSeatRequest request)
-        {
-            SessionSeatModel model = request.Adapt<SessionSeatModel>();
-            await _sessionSeatService.FreeAsync(model);
-            return Ok();
-        }
-
-        [Authorize(Policy = PolicyNames.Administrator)]
-        [HttpPut]
-        public async Task<IActionResult> Edit(int sessionId, [FromBody] SessionSeatsRequest request)
-        {
-            SessionSeatsModel model = request.Adapt<SessionSeatsModel>();
-            await _sessionSeatService.EditAsync(sessionId, model);
             return Ok();
         }
     }

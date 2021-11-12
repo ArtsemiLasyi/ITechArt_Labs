@@ -10,5 +10,7 @@ export class UrlSegments {
     static readonly Currencies : string = '/currencies';
     static readonly Services : string = '/services';
     static readonly SeatTypes : string = '/seat-types';
-    static Seats: string = '/seats';
+    static readonly Seats : string = '/seats';
+    static readonly Sessions : string = '/sessions';
+    static readonly Orders : string = '/orders';
 }

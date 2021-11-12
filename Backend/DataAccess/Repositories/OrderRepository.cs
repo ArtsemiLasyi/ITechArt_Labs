@@ -42,6 +42,10 @@ namespace DataAccess.Repositories
         {
 
             IQueryable<OrderEntity>? query = _context.Orders
+                .Include(order => order.Currency)
+                .Include(order => order.Session)
+                .ThenInclude(session => session.Hall)
+                .ThenInclude(hall => hall.Cinema)
                 .Where(
                     order =>
                         !order.IsDeleted
@@ -50,13 +54,13 @@ namespace DataAccess.Repositories
             if (parameters.PastOrders)
             {
                 query = query.Where(
-                    order => order.RegistratedAt < DateTime.UtcNow
+                    order => order.Session.StartDateTime < DateTime.UtcNow
                 );
             }
             else
             {
                 query = query.Where(
-                    order => order.RegistratedAt >= DateTime.UtcNow
+                    order => order.Session.StartDateTime >= DateTime.UtcNow
                 );
             }
             List<OrderEntity> orders = await query.ToListAsync();
@@ -76,11 +80,16 @@ namespace DataAccess.Repositories
             // This measure is temporary. The directive will be removed with the release of EF 6.0
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return _context.Orders
+                .Include(order => order.Currency)
+                .Include(order => order.Session)
+                .ThenInclude(session => session.Hall)
+                .ThenInclude(hall => hall.Cinema)
                 .Where(
                     order =>
                         order.SessionId == sessionId
                         && _context.SeatOrders
-                            .Where(seatOrder => seatOrder.OrderId == order.Id)
+                            .Where(seatOrder => seatOrder.OrderId == order.Id
+                                && seatOrder.SeatId == seatId)
                             .Any()
                 )
                 .FirstOrDefaultAsync();

@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'colors.scss';
+
+// Your variable overrides
+$primary:       $primary-color !default;
+
+@import "node_modules/bootstrap/scss/bootstrap";
 
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
@@ -12,11 +16,12 @@
 .canvas-container {
     width: 100%;
     text-align:center;
- }
+    display:inline-block;
+}
  
  canvas {
     display: inline;
- }
+}
 
 .content {
     min-height: calc(100vh - 150px);
@@ -48,6 +53,11 @@
     width: 50%;
     margin: 0 auto;
     padding: 8px;
+}
+
+.canvas-container {
+    width: fit-content;
+    height: fit-content;
 }
 
 .dropbtn {

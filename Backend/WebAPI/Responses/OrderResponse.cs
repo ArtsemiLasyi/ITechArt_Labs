@@ -8,6 +8,10 @@ namespace WebAPI.Responses
         public int UserId { get; set; }
         public int SessionId { get; set; }
         public PriceResponse Price { get; set; } = null!;
-        public DateTime DateTime { get; set; }
+        public DateTime SessionStart { get; set; }
+        public int CinemaId { get; set; }
+        public string CinemaName { get; set; } = null!;
+        public int HallId { get; set; }
+        public string HallName { get; set; } = null!;
     }
 }

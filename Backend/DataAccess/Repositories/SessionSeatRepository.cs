@@ -38,14 +38,23 @@ namespace DataAccess.Repositories
         public async Task<IReadOnlyCollection<SessionSeatEntity>> GetAllByAsync(int sessionId)
         {
             List<SessionSeatEntity> seats = await _context.SessionSeats
-                .Where(seat => seat.SessionId == sessionId)
+                .Include(sessionSeat => sessionSeat.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .AsNoTracking()
+                .Where(sessionSeat => sessionSeat.SessionId == sessionId)
                 .ToListAsync();
             return seats;
         }
 
         public async Task<SessionSeatEntity?> GetByAsync(int sessionId, int seatId)
         {
-            SessionSeatEntity? entity = await _context.SessionSeats.FindAsync(sessionId, seatId);
+            SessionSeatEntity? entity = await _context.SessionSeats
+                .Include(sessionSeat => sessionSeat.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    sessionSeat => sessionSeat.SessionId == sessionId && sessionSeat.SeatId == seatId
+                );
             return entity;
         }
 
@@ -76,23 +85,47 @@ namespace DataAccess.Repositories
 
         public async Task UpdateAsync(SessionSeatEntity seat)
         {
+            SessionSeatEntity entity = await _context.SessionSeats
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    sessionSeat => 
+                        sessionSeat.SessionId == seat.SessionId && sessionSeat.SeatId == seat.SeatId
+                );
+            seat.TakenAt = DateTime.UtcNow;
             _context.SessionSeats.Update(seat);
             SessionEntity session = await _context.Sessions.FindAsync(seat.SessionId);
-            session.FreeSeatsNumber--;
+            if (seat.Status == 0)
+            {
+                session.FreeSeatsNumber++;
+            }
+            if (seat.Status == 1)
+            {
+                session.FreeSeatsNumber--;
+            }
             _context.Sessions.Update(session);
             await _context.SaveChangesAsync();
         }
 
-        public Task UpdateStatusesAsync()
+        public async Task UpdateStatusesAsync(int sessionId, IReadOnlyCollection<SessionSeatEntity> entities)
         {
-            IQueryable<SessionSeatEntity> seats = _context.SessionSeats
+            TimeSpan interval = _seatSnapshotOptions.SeatOccupancyInterval;
+           
+            List<SessionSeatEntity> seats = await _context.SessionSeats
                 .Where(
                     sessionSeat => 
                         sessionSeat.Status == 1
-                            && DateTime.UtcNow - sessionSeat.TakenAt > _seatSnapshotOptions.SeatOccupancyInterval
-                 );
+                            && sessionSeat.SessionId == sessionId
+                 )
+                .ToListAsync();
+            foreach (SessionSeatEntity seat in seats)
+            {
+                if (DateTime.UtcNow - seat.TakenAt >= interval)
+                {
+                    seat.Status = 0;
+                }
+            }
             _context.SessionSeats.UpdateRange(seats);
-            return _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

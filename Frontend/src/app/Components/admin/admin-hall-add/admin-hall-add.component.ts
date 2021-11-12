@@ -24,16 +24,18 @@ import { AdminHallConstructorDialogComponent } from '../admin-hall-constructor-d
 export class AdminHallAddComponent {
 
     readonly defaultFileName : string = 'Add photo';
-
     photo : File | undefined;
+    selectedFileName : string = this.defaultFileName;
+
     cinemas : Observable<CinemaModel[]> | undefined;
     model : HallModel = new HallModel();
-    error : ErrorModel = new ErrorModel();
+    
     city : CityModel = new CityModel();
-    success : SuccessModel = new SuccessModel();
-    selectedFileName : string = this.defaultFileName;
     cinemaName : string = '';
     seats : SeatsModel = new SeatsModel();
+
+    success : SuccessModel = new SuccessModel();
+    error : ErrorModel = new ErrorModel();
 
     constructor(
         private hallService : HallService,

@@ -1,88 +1,91 @@
-<div 
-    class="offcanvas offcanvas-start"
-    tabindex="-1"
-    id="offcanvas"
-    aria-labelledby="offcanvasLabel"
->
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasLabel">Admin panel</h5>
-        <button
+<nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container-fluid">
+        <button 
+            class="navbar-toggler bg-light" 
             type="button"
-            class="btn-close text-reset"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-        ></button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row">
-            <div class="dropdown">
-                <button class="dropbtn">Users</button>
-                <div class="dropdown-content">
-                    <a routerLink="./users">Add user</a>
-                    <a routerLink="./users/current">Settings</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Films</button>
-                <div class="dropdown-content">
-                    <a routerLink="./films">Add film</a>
-                    <a routerLink="./films/search">Search film</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Cinemas</button>
-                <div class="dropdown-content">
-                    <a routerLink="./cinemas">Add cinema</a>
-                    <a routerLink="./cinemas/search">Search cinema</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Halls</button>
-                <div class="dropdown-content">
-                    <a routerLink="./halls">Add hall</a>
-                    <a routerLink="./halls/search">Search hall</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Sessions</button>
-                <div class="dropdown-content">
-                    <a routerLink="./sessions">Add session</a>
-                    <a routerLink="./sessions/search">Search session</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Services</button>
-                <div class="dropdown-content">
-                    <a routerLink="./services">Add service</a>
-                    <a routerLink="./services/search">Search service</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Currencies</button>
-                <div class="dropdown-content">
-                    <a routerLink="./currencies">Add currency</a>
-                    <a routerLink="./currencies/search">Search currencies</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">Seat types</button>
-                <div class="dropdown-content">
-                    <a routerLink="./seat-types">Add seat type</a>
-                    <a routerLink="./seat-types/search">Search seat types</a>
-                </div>
-            </div>
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2">
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Users</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./users">Add user</a>
+                            <a routerLink="./users/current">Settings</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Cinemas</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./cinemas">Add cinema</a>
+                            <a routerLink="./cinemas/search">Search cinema</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Films</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./films">Add film</a>
+                            <a routerLink="./films/search">Search film</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Halls</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./halls">Add hall</a>
+                            <a routerLink="./halls/search">Search hall</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Sessions</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./sessions">Add session</a>
+                            <a routerLink="./sessions/search">Search session</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Services</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./services">Add service</a>
+                            <a routerLink="./services/search">Search service</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Currencies</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./currencies">Add currency</a>
+                            <a routerLink="./currencies/search">Search currencies</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">Seat types</button>
+                        <div class="dropdown-content">
+                            <a routerLink="./seat-types">Add seat type</a>
+                            <a routerLink="./seat-types/search">Search seat types</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
-<header class="admin-panel d-flex justify-content-center py-3">
-    <button 
-        class="btn btn-primary btn-lg"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvas"
-        aria-controls="offcanvas"
-    >
-        Click to open admin panel
-    </button>
-</header>
+</nav>
 <router-outlet></router-outlet>

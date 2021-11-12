@@ -8,5 +8,7 @@ namespace DataAccess.Entities
         public int SessionId { get; set; }
         public int CurrencyId { get; set; }
         public decimal Price { get; set; }
+        public CurrencyEntity Currency { get; set; } = null!;
+        public SeatTypeEntity SeatType { get; set; } = null!;
     }
 }

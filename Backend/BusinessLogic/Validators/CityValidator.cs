@@ -10,7 +10,8 @@ namespace BusinessLogic.Validators
             RuleFor(city => city.Name)
                 .NotNull()
                 .NotEmpty()
-                .MaximumLength(50);
+                .MaximumLength(50)
+                .WithMessage("City name must not be greater than 50 letters");
         }
     }
 }

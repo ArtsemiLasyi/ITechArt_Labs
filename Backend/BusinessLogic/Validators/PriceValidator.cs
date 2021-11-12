@@ -9,7 +9,10 @@ namespace BusinessLogic.Validators
         public PriceValidator(CurrencyValidator validator)
         {
             RuleFor(model => model.Currency).SetValidator(validator);
-            RuleFor(model => model.Value).NotNull().GreaterThanOrEqualTo(0);
+            RuleFor(model => model.Value)
+                .NotNull()
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Price can not be less than 0");
         }
     }
 }

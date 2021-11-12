@@ -37,8 +37,8 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int orderId)
         {
-            IReadOnlyCollection<SeatOrderModel> services = await _seatOrderService.GetAllByAsync(orderId);
-            IReadOnlyCollection<SeatOrderResponse> response = services.Adapt<IReadOnlyCollection<SeatOrderResponse>>();
+            IReadOnlyCollection<SeatOrderModel> seatOrders = await _seatOrderService.GetAllByAsync(orderId);
+            IReadOnlyCollection<SeatOrderResponse> response = seatOrders.Adapt<IReadOnlyCollection<SeatOrderResponse>>();
             return Ok(response);
         }
     }

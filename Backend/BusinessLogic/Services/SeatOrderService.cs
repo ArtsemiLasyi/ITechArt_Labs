@@ -10,42 +10,42 @@ namespace BusinessLogic.Services
 {
     public class SeatOrderService
     {
-        private readonly SeatOrderRepository _cinemaServiceRepository;
+        private readonly SeatOrderRepository _seatOrderRepository;
 
         public SeatOrderService(SeatOrderRepository cinemaServiceRepository)
         {
-            _cinemaServiceRepository = cinemaServiceRepository;
+            _seatOrderRepository = cinemaServiceRepository;
         }
 
         public async Task<SeatOrderModel> CreateAsync(SeatOrderModel model)
         {
             SeatOrderEntity entity = model.Adapt<SeatOrderEntity>();
-            await _cinemaServiceRepository.CreateAsync(entity);
+            await _seatOrderRepository.CreateAsync(entity);
             return entity.Adapt<SeatOrderModel>();
         }
 
         public Task CreateAsync(int orderId, SessionSeatsModel sessionSeats)
         {
-            return Task.WhenAll(
-                sessionSeats.Value.Select(
+            IReadOnlyCollection<SeatOrderEntity> seatOrders = sessionSeats.Value
+                .Select(
                     sessionSeat =>
                     {
-                        return CreateAsync(
-                            new SeatOrderModel()
-                            {
-                                OrderId = orderId,
-                                SeatId = sessionSeat.SeatId
-                            }
-                        );
+                        return new SeatOrderModel()
+                        {
+                            OrderId = orderId,
+                            SeatId = sessionSeat.SeatId
+                        };
                     }
                 )
-            ); 
-
+                .ToList()
+                .AsReadOnly()
+                .Adapt<IReadOnlyCollection<SeatOrderEntity>>();
+            return _seatOrderRepository.CreateAsync(seatOrders);
         }
 
         public async Task<SeatOrderModel?> GetByAsync(int orderId, int seatId)
         {
-            SeatOrderEntity? entity = await _cinemaServiceRepository.GetByAsync(orderId, seatId);
+            SeatOrderEntity? entity = await _seatOrderRepository.GetByAsync(orderId, seatId);
             if (entity == null)
             {
                 return null;
@@ -56,7 +56,7 @@ namespace BusinessLogic.Services
 
         public async Task<IReadOnlyCollection<SeatOrderModel>> GetAllByAsync(int orderId)
         {
-            IReadOnlyCollection<SeatOrderEntity> models = await _cinemaServiceRepository.GetAllByAsync(orderId);
+            IReadOnlyCollection<SeatOrderEntity> models = await _seatOrderRepository.GetAllByAsync(orderId);
             return models.Adapt<IReadOnlyCollection<SeatOrderModel>>();
         }
     }

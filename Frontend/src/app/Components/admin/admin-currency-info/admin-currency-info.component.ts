@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyModel } from 'src/app/Models/CurrencyModel';
 import { ErrorModel } from 'src/app/Models/ErrorModel';
 import { SuccessModel } from 'src/app/Models/SuccessModel';
@@ -20,6 +20,7 @@ export class AdminCurrencyInfoComponent implements OnInit {
     disabledButton : boolean = false;
 
     constructor (
+        private router : Router,
         private currencyService: CurrencyService,
         private activateRoute: ActivatedRoute
     ) { }
@@ -59,6 +60,10 @@ export class AdminCurrencyInfoComponent implements OnInit {
                 () => {
                     this.success.flag = true;
                     this.disableButtons();
+                    this.router.navigate(
+                        ['../../search'], 
+                        { relativeTo: this.activateRoute }
+                    );
                 },
                 (error) => {
                     this.error.exists = true;
